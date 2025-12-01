@@ -6,14 +6,13 @@
 
 1. **Go to [vercel.com](https://vercel.com)** and sign in
 2. Click **"Add New..."** → **"Project"**
-3. **Import your repository**:
-   - If your code is in GitHub/GitLab/Bitbucket: Connect the repo and select it
-   - If not: Click **"Deploy"** and drag & drop your project folder
-4. **Configure** (usually auto-detected):
+3. **Import your repository**: Connect to `https://github.com/jonnyterrero/5amClub`
+4. **Configure**:
    - Framework Preset: **Other**
-   - Root Directory: `.` (root)
+   - Root Directory: **`jonny study`** (if files are in subfolder) OR **`.`** (if files are in root)
    - Build Command: Leave empty
-   - Output Directory: `.` (root)
+   - Output Directory: Leave empty
+   - Install Command: Leave empty
 5. Click **"Deploy"**
 6. Wait ~30 seconds for deployment to complete
 7. Your site is live! 🎉
