@@ -1,0 +1,1923 @@
+{
+    "tracks": [
+        {
+            "id": "se",
+            "name": "Software Engineering",
+            "icon": "laptop",
+            "order": 0
+        },
+        {
+            "id": "cs",
+            "name": "Computer Science",
+            "icon": "terminal",
+            "order": 1
+        },
+        {
+            "id": "neuro",
+            "name": "Neural Engineering",
+            "icon": "brain",
+            "order": 2
+        },
+        {
+            "id": "math",
+            "name": "Mathematics",
+            "icon": "calculator",
+            "order": 3
+        },
+        {
+            "id": "chem",
+            "name": "Chemistry",
+            "icon": "flask-conical",
+            "order": 4
+        },
+        {
+            "id": "ee",
+            "name": "Electrical Engineering",
+            "icon": "zap",
+            "order": 5
+        },
+        {
+            "id": "misc",
+            "name": "Misc / Extras",
+            "icon": "folder",
+            "order": 6
+        }
+    ],
+    "courses": [
+        {
+            "id": 101,
+            "trackId": "se",
+            "title": "Full Stack Open",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 102,
+            "trackId": "se",
+            "title": "CS50 Web Programming",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 103,
+            "trackId": "se",
+            "title": "DevOps with Docker",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 104,
+            "trackId": "se",
+            "title": "Backend Engineering",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 201,
+            "trackId": "cs",
+            "title": "Nand2Tetris",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 202,
+            "trackId": "cs",
+            "title": "Algorithms (MIT 6.006)",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 203,
+            "trackId": "cs",
+            "title": "Operating Systems",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 204,
+            "trackId": "cs",
+            "title": "Compilers",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 205,
+            "trackId": "cs",
+            "title": "Digital Systems & Architecture",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 206,
+            "trackId": "cs",
+            "title": "Computer Networks",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 207,
+            "trackId": "cs",
+            "title": "Computer Architecture",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 208,
+            "trackId": "cs",
+            "title": "Intro to CS (Python)",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 209,
+            "trackId": "cs",
+            "title": "Programming Language Library + Resources",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 301,
+            "trackId": "neuro",
+            "title": "Intro to Neuroscience",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 302,
+            "trackId": "neuro",
+            "title": "Sensory Systems",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 303,
+            "trackId": "neuro",
+            "title": "Neural Engineering",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 304,
+            "trackId": "neuro",
+            "title": "Neural Signal Acquisition",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 305,
+            "trackId": "neuro",
+            "title": "Neural Data Analysis",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 401,
+            "trackId": "math",
+            "title": "Linear Algebra",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 402,
+            "trackId": "math",
+            "title": "Statistics 110 (Probability)",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 403,
+            "trackId": "math",
+            "title": "Multivariable Calculus",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 404,
+            "trackId": "math",
+            "title": "Single Variable Calculus",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 405,
+            "trackId": "math",
+            "title": "Differential Equations",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 406,
+            "trackId": "math",
+            "title": "Partial Differential Equations",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 407,
+            "trackId": "math",
+            "title": "Numerical Analysis",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 408,
+            "trackId": "math",
+            "title": "Math Foundations (Proofs)",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 501,
+            "trackId": "chem",
+            "title": "Organic Chemistry I & II",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 502,
+            "trackId": "chem",
+            "title": "Biochemistry",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 503,
+            "trackId": "chem",
+            "title": "Physical Chemistry",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 504,
+            "trackId": "chem",
+            "title": "Inorganic Chemistry",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 505,
+            "trackId": "chem",
+            "title": "Thermodynamics",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 601,
+            "trackId": "ee",
+            "title": "Circuits & Electronics",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 602,
+            "trackId": "ee",
+            "title": "Signals and Systems",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 603,
+            "trackId": "ee",
+            "title": "Intro to Biomedical Engineering",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 604,
+            "trackId": "ee",
+            "title": "Bioinstrumentation",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        },
+        {
+            "id": 605,
+            "trackId": "ee",
+            "title": "Medical Imaging / BME Design",
+            "status": "Not Started",
+            "progress": 0,
+            "goals": []
+        }
+    ],
+    "resources": [
+        {
+            "id": 1000,
+            "title": "Full Stack Open",
+            "url": "https://fullstackopen.com",
+            "type": "Course",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1001,
+            "title": "Full Stack Open \u2013 Next.js, Node, TS, etc.",
+            "url": "https://tanstack.com/query",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1002,
+            "title": "Full Stack Open \u2013 Next.js, Node, TS, etc.",
+            "url": "https://tailwindcss.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1003,
+            "title": "Full Stack Open \u2013 Next.js, Node, TS, etc.",
+            "url": "https://www.prisma.io",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1004,
+            "title": "Full Stack Open \u2013 Next.js, Node, TS, etc.",
+            "url": "https://authjs.dev",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1005,
+            "title": "React Ecosystem",
+            "url": "https://mui.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1006,
+            "title": "React Ecosystem",
+            "url": "https://ui.shadcn.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1007,
+            "title": "React Ecosystem",
+            "url": "https://react-hook-form.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1008,
+            "title": "React Ecosystem",
+            "url": "https://github.com/brillout/awesome-react-components",
+            "type": "Repo",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1009,
+            "title": "Node.js Backend",
+            "url": "https://expressjs.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1010,
+            "title": "Node.js Backend",
+            "url": "https://socket.io",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1011,
+            "title": "Node.js Backend",
+            "url": "https://nodemon.io",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1012,
+            "title": "Tooling & Lang Support",
+            "url": "https://www.typescriptlang.org/docs/handbook",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1013,
+            "title": "Tooling & Lang Support",
+            "url": "https://use-the-index-luke.com/sql",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1014,
+            "title": "Tooling & Lang Support",
+            "url": "https://github.com/fffaraz/awesome-cpp",
+            "type": "Repo",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1015,
+            "title": "Tooling & Lang Support",
+            "url": "https://learn.microsoft.com/dotnet/csharp",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1016,
+            "title": "Tooling & Lang Support",
+            "url": "https://docs.flutter.dev",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1017,
+            "title": "Tooling & Lang Support",
+            "url": "https://docs.swift.org/swift-book",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 101
+        },
+        {
+            "id": 1018,
+            "title": "CS50 Web Programming",
+            "url": "https://cs50.harvard.edu/web/",
+            "type": "Course",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 1019,
+            "title": "Django & Python Web",
+            "url": "https://www.djangoproject.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 1020,
+            "title": "Django & Python Web",
+            "url": "https://docs.djangoproject.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 1021,
+            "title": "Django & Python Web",
+            "url": "https://automatetheboringstuff.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 1022,
+            "title": "Frontend Stack",
+            "url": "https://mui.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 1023,
+            "title": "Frontend Stack",
+            "url": "https://ui.shadcn.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 1024,
+            "title": "Frontend Stack",
+            "url": "https://github.com/brillout/awesome-react-components",
+            "type": "Repo",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 1025,
+            "title": "SQL + ORM",
+            "url": "https://www.sqlalchemy.org",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 1026,
+            "title": "SQL + ORM",
+            "url": "https://www.prisma.io",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 1027,
+            "title": "DevOps / Docker Context",
+            "url": "https://fullstackopen.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 103
+        },
+        {
+            "id": 1028,
+            "title": "CI/CD & Pipelines",
+            "url": "https://github.com/prakhar1989/awesome-courses",
+            "type": "Repo",
+            "trackId": "se",
+            "courseId": 103
+        },
+        {
+            "id": 1029,
+            "title": "CI/CD & Pipelines",
+            "url": "https://github.com/ossu/computer-science",
+            "type": "Repo",
+            "trackId": "se",
+            "courseId": 103
+        },
+        {
+            "id": 1030,
+            "title": "Deployments",
+            "url": "https://www.netlify.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 103
+        },
+        {
+            "id": 1031,
+            "title": "Deployments",
+            "url": "https://vercel.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 103
+        },
+        {
+            "id": 1032,
+            "title": "Node Backend",
+            "url": "https://expressjs.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 104
+        },
+        {
+            "id": 1033,
+            "title": "Node Backend",
+            "url": "https://socket.io",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 104
+        },
+        {
+            "id": 1034,
+            "title": "Python Backend",
+            "url": "https://www.djangoproject.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 104
+        },
+        {
+            "id": 1035,
+            "title": "Python Backend",
+            "url": "https://fastapi.tiangolo.com",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 104
+        },
+        {
+            "id": 1036,
+            "title": "Databases",
+            "url": "https://www.prisma.io",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 104
+        },
+        {
+            "id": 1037,
+            "title": "Databases",
+            "url": "https://www.sqlalchemy.org",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 104
+        },
+        {
+            "id": 1038,
+            "title": "Databases",
+            "url": "https://use-the-index-luke.com/sql",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 104
+        },
+        {
+            "id": 1039,
+            "title": "General \u201cbackend+systems\u201d",
+            "url": "https://github.com/ossu/computer-science",
+            "type": "Repo",
+            "trackId": "se",
+            "courseId": 104
+        },
+        {
+            "id": 1040,
+            "title": "General \u201cbackend+systems\u201d",
+            "url": "https://github.com/prakhar1989/awesome-courses",
+            "type": "Repo",
+            "trackId": "se",
+            "courseId": 104
+        },
+        {
+            "id": 1041,
+            "title": "Nand2Tetris",
+            "url": "https://www.nand2tetris.org/",
+            "type": "Course",
+            "trackId": "cs",
+            "courseId": 201
+        },
+        {
+            "id": 1042,
+            "title": "Supporting CS curricula",
+            "url": "https://github.com/ossu/computer-science",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 201
+        },
+        {
+            "id": 1043,
+            "title": "University course list",
+            "url": "https://github.com/prakhar1989/awesome-courses",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 201
+        },
+        {
+            "id": 1044,
+            "title": "Video course aggregator",
+            "url": "https://github.com/Developer-Y/cs-video-courses",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 201
+        },
+        {
+            "id": 1045,
+            "title": "MIT 6.006",
+            "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
+            "type": "Course",
+            "trackId": "cs",
+            "courseId": 202
+        },
+        {
+            "id": 1046,
+            "title": "MIT 6.046J",
+            "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 202
+        },
+        {
+            "id": 1047,
+            "title": "Stanford Algorithms (Roughgarden)",
+            "url": "https://www.coursera.org/specializations/algorithms",
+            "type": "Course",
+            "trackId": "cs",
+            "courseId": 202
+        },
+        {
+            "id": 1048,
+            "title": "Princeton Algorithms I & II",
+            "url": "https://www.coursera.org/learn/algorithms-part1",
+            "type": "Course",
+            "trackId": "cs",
+            "courseId": 202
+        },
+        {
+            "id": 1049,
+            "title": "Princeton Algorithms I & II",
+            "url": "https://www.coursera.org/learn/algorithms-part2",
+            "type": "Course",
+            "trackId": "cs",
+            "courseId": 202
+        },
+        {
+            "id": 1050,
+            "title": "Meta GitHub lists",
+            "url": "https://github.com/ossu/computer-science",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 202
+        },
+        {
+            "id": 1051,
+            "title": "Meta GitHub lists",
+            "url": "https://github.com/prakhar1989/awesome-courses",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 202
+        },
+        {
+            "id": 1052,
+            "title": "Fundamentals of OS",
+            "url": "https://www.youtube.com/playlist?list=PLW1yb8L3S1ngGmtKlI5XYcTNQQ1r3xZvq",
+            "type": "Video",
+            "trackId": "cs",
+            "courseId": 203
+        },
+        {
+            "id": 1053,
+            "title": "Operating Systems",
+            "url": "https://www.youtube.com/playlist?list=PLBlnK6fEyqRhqJPDXcvYlLfXPh37L89g3",
+            "type": "Video",
+            "trackId": "cs",
+            "courseId": 203
+        },
+        {
+            "id": 1054,
+            "title": "Operating Systems (alt)",
+            "url": "https://www.youtube.com/playlist?list=PLWPirh4EWFpHr_1ZCkuF9ToYUrmujv9Aa",
+            "type": "Video",
+            "trackId": "cs",
+            "courseId": 203
+        },
+        {
+            "id": 1055,
+            "title": "Practice / theory source",
+            "url": "https://github.com/ossu/computer-science",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 203
+        },
+        {
+            "id": 1056,
+            "title": "Compiler Design",
+            "url": "https://www.youtube.com/playlist?list=PLBlnK6fEyqRjT3oJxFXRgjPNzeS-LFY-q",
+            "type": "Video",
+            "trackId": "cs",
+            "courseId": 204
+        },
+        {
+            "id": 1057,
+            "title": "Extra CS courses (compilers)",
+            "url": "https://github.com/prakhar1989/awesome-courses",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 204
+        },
+        {
+            "id": 1058,
+            "title": "Computer Org & Arch",
+            "url": "https://www.youtube.com/playlist?list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q",
+            "type": "Video",
+            "trackId": "cs",
+            "courseId": 205
+        },
+        {
+            "id": 1059,
+            "title": "Digital Design & Computer Arch",
+            "url": "https://www.youtube.com/playlist?list=PL5Q2soXY2Zi9Eo29LMgKVcaydS7V1zZW3",
+            "type": "Video",
+            "trackId": "cs",
+            "courseId": 205
+        },
+        {
+            "id": 1060,
+            "title": "Computer Networks",
+            "url": "https://www.youtube.com/playlist?list=PLBlnK6fEyqRgLLlzdgiTUKULKJPYc0A4q",
+            "type": "Video",
+            "trackId": "cs",
+            "courseId": 206
+        },
+        {
+            "id": 1061,
+            "title": "Digital Design & Arch (ETH)",
+            "url": "https://www.youtube.com/playlist?list=PL5Q2soXY2Zi9Eo29LMgKVcaydS7V1zZW3",
+            "type": "Video",
+            "trackId": "cs",
+            "courseId": 207
+        },
+        {
+            "id": 1062,
+            "title": "Nand2Tetris",
+            "url": "https://www.nand2tetris.org/",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 207
+        },
+        {
+            "id": 1063,
+            "title": "MIT 6.0001",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP62wNcIMfinU64CAfreShjpt",
+            "type": "Video",
+            "trackId": "cs",
+            "courseId": 208
+        },
+        {
+            "id": 1064,
+            "title": "MIT OCW page",
+            "url": "https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 208
+        },
+        {
+            "id": 1065,
+            "title": "Alternative intro",
+            "url": "https://ocw.mit.edu/courses/6-100l-introduction-to-cs-and-programming-using-python-fall-2022/",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 208
+        },
+        {
+            "id": 1066,
+            "title": "React",
+            "url": "https://mui.com",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1067,
+            "title": "React",
+            "url": "https://ui.shadcn.com",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1068,
+            "title": "React",
+            "url": "https://github.com/brillout/awesome-react-components",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1069,
+            "title": "React",
+            "url": "https://tanstack.com/query",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1070,
+            "title": "Next.js",
+            "url": "https://github.com/unicodeveloper/awesome-nextjs",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1071,
+            "title": "Node.js",
+            "url": "https://expressjs.com",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1072,
+            "title": "Node.js",
+            "url": "https://socket.io",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1073,
+            "title": "Node.js",
+            "url": "https://nodemon.io",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1074,
+            "title": "Python",
+            "url": "https://www.djangoproject.com",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1075,
+            "title": "Python",
+            "url": "https://fastapi.tiangolo.com",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1076,
+            "title": "Python",
+            "url": "https://numpy.org",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1077,
+            "title": "Python",
+            "url": "https://pandas.pydata.org",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1078,
+            "title": "MATLAB",
+            "url": "http://www.chebfun.org",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1079,
+            "title": "MATLAB",
+            "url": "https://github.com/fieldtrip/fieldtrip",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1080,
+            "title": "TypeScript",
+            "url": "https://gcanti.github.io/fp-ts",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1081,
+            "title": "TypeScript",
+            "url": "https://millsp.github.io/ts-toolbelt",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1082,
+            "title": "TypeScript",
+            "url": "https://github.com/jellydn/awesome-typesafe",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1083,
+            "title": "C / C++",
+            "url": "https://github.com/srdja/Collections-C",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1084,
+            "title": "C / C++",
+            "url": "https://github.com/fffaraz/awesome-cpp",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1085,
+            "title": "C / C++",
+            "url": "http://eigen.tuxfamily.org",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1086,
+            "title": "C#",
+            "url": "https://learn.microsoft.com/dotnet/csharp",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1087,
+            "title": "C#",
+            "url": "https://github.com/dotnet-architecture/eShopOnWeb",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1088,
+            "title": "Flutter",
+            "url": "https://riverpod.dev",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1089,
+            "title": "Flutter",
+            "url": "https://pub.dev/packages/dio",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1090,
+            "title": "Flutter",
+            "url": "https://github.com/Solido/awesome-flutter",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1091,
+            "title": "Swift",
+            "url": "https://github.com/Alamofire/Alamofire",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1092,
+            "title": "Swift",
+            "url": "https://github.com/matteocrippa/awesome-swift",
+            "type": "Repo",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1093,
+            "title": "SQL",
+            "url": "https://use-the-index-luke.com/sql",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 209
+        },
+        {
+            "id": 1094,
+            "title": "MIT 9.01",
+            "url": "https://ocw.mit.edu/courses/9-01-introduction-to-neuroscience-fall-2007/",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 301
+        },
+        {
+            "id": 1095,
+            "title": "Intro Neuroscience (YouTube)",
+            "url": "https://www.youtube.com/playlist?list=PL-gZOJYtyiEaPcGJO63zFLWDc1Ft4WadG",
+            "type": "Video",
+            "trackId": "neuro",
+            "courseId": 301
+        },
+        {
+            "id": 1096,
+            "title": "Intro Neuroscience (YouTube)",
+            "url": "https://www.youtube.com/playlist?list=PLCHBxApHO4-I8ahFS0dflGURuXnT7PNtV",
+            "type": "Video",
+            "trackId": "neuro",
+            "courseId": 301
+        },
+        {
+            "id": 1097,
+            "title": "Stanford Neuroscience",
+            "url": "https://www.youtube.com/playlist?list=PLtdr2qSB8H94jFZJUwk99gPgK2Utv8RR1",
+            "type": "Video",
+            "trackId": "neuro",
+            "courseId": 301
+        },
+        {
+            "id": 1098,
+            "title": "Neuroscience Online",
+            "url": "https://nba.uth.tmc.edu/neuroscience/",
+            "type": "Book",
+            "trackId": "neuro",
+            "courseId": 301
+        },
+        {
+            "id": 1099,
+            "title": "Open textbooks",
+            "url": "https://open.umn.edu/opentextbooks/textbooks/1303",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 301
+        },
+        {
+            "id": 1100,
+            "title": "Open textbooks",
+            "url": "https://pressbooks.atlanticoer-relatlantique.ca/intropsychneuro/",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 301
+        },
+        {
+            "id": 1101,
+            "title": "Harvard Fundamentals of Neuroscience",
+            "url": "https://pll.harvard.edu/course/fundamentals-neuroscience-part-1-electrical-properties-neuron",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 301
+        },
+        {
+            "id": 1102,
+            "title": "MIT 9.04 Sensory Systems",
+            "url": "https://ocw.mit.edu/courses/9-04-sensory-systems-fall-2013/",
+            "type": "Course",
+            "trackId": "neuro",
+            "courseId": 302
+        },
+        {
+            "id": 1103,
+            "title": "Stanford/others \u2013 systems",
+            "url": "https://www.youtube.com/playlist?list=PLtdr2qSB8H94jFZJUwk99gPgK2Utv8RR1",
+            "type": "Video",
+            "trackId": "neuro",
+            "courseId": 302
+        },
+        {
+            "id": 1104,
+            "title": "Neural Science for Engineers",
+            "url": "https://www.youtube.com/playlist?list=PLYHaXvNA5JrevMbLhoazFQbDdw8pfCm-O",
+            "type": "Video",
+            "trackId": "neuro",
+            "courseId": 303
+        },
+        {
+            "id": 1105,
+            "title": "Neural Engineering Framework",
+            "url": "https://www.youtube.com/playlist?list=PLX-XEf1yTMrnjFt30RQ7X6k-dfhL1fIGq",
+            "type": "Video",
+            "trackId": "neuro",
+            "courseId": 303
+        },
+        {
+            "id": 1106,
+            "title": "Textbook",
+            "url": "https://compneuro.uwaterloo.ca/files/Eliasmith.Anderson.2003.Neural.Engineering.Full.Book.pdf",
+            "type": "Book",
+            "trackId": "neuro",
+            "courseId": 303
+        },
+        {
+            "id": 1107,
+            "title": "Edited Volume",
+            "url": "https://download.e-bookshelf.de/download/0003/9465/88/L-G-0003946588-0013326467.pdf",
+            "type": "Book",
+            "trackId": "neuro",
+            "courseId": 303
+        },
+        {
+            "id": 1108,
+            "title": "MIT 9.40",
+            "url": "https://ocw.mit.edu/courses/9-40-introduction-to-neural-computation-spring-2018/",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 303
+        },
+        {
+            "id": 1109,
+            "title": "PEC303: Biomedical Signal Processing",
+            "url": "https://www.youtube.com/playlist?list=PLeefXVKiX48rcnK0TentV2rXrQoIhuqpy",
+            "type": "Video",
+            "trackId": "neuro",
+            "courseId": 304
+        },
+        {
+            "id": 1110,
+            "title": "Neural Signal Processing & Analysis",
+            "url": "https://www.youtube.com/playlist?list=PL6Q1zmN6V-zF3gWS1aXIX7fT5oMnmCyRV",
+            "type": "Video",
+            "trackId": "neuro",
+            "courseId": 304
+        },
+        {
+            "id": 1111,
+            "title": "Biomedical Instrumentation (theory)",
+            "url": "https://www.bharathuniv.ac.in/colleges1/downloads/courseware_eee/Notes/NE2/BEE007%20BIO%20MEDICAL%20INSTRUMENTATION.pdf",
+            "type": "Book",
+            "trackId": "neuro",
+            "courseId": 304
+        },
+        {
+            "id": 1112,
+            "title": "Biomedical Instrumentation (course)",
+            "url": "https://sist.sathyabama.ac.in/sist_coursematerial/uploads/SIC1311.pdf",
+            "type": "Book",
+            "trackId": "neuro",
+            "courseId": 304
+        },
+        {
+            "id": 1113,
+            "title": "Biomedical Instrumentation (course)",
+            "url": "https://kanchiuniv.ac.in/wp-content/uploads/2022/02/III-YEAR-MECHATRONICS-BMI-Course-Material-.pdf",
+            "type": "Book",
+            "trackId": "neuro",
+            "courseId": 304
+        },
+        {
+            "id": 1114,
+            "title": "Intro to BME instrumentation",
+            "url": "https://www.egr.msu.edu/classes/ece445/mason/Files/2-Basics_ch1.pdf",
+            "type": "Book",
+            "trackId": "neuro",
+            "courseId": 304
+        },
+        {
+            "id": 1115,
+            "title": "Biomedical Signal Processing (MATLAB)",
+            "url": "https://github.com/mendes-davi/biomedical-signal-processing",
+            "type": "Repo",
+            "trackId": "neuro",
+            "courseId": 305
+        },
+        {
+            "id": 1116,
+            "title": "Biomedical Signal Processing (Python)",
+            "url": "https://github.com/parvathi25/Biomedical-Signal-Processing",
+            "type": "Repo",
+            "trackId": "neuro",
+            "courseId": 305
+        },
+        {
+            "id": 1117,
+            "title": "PhysioNet / Open BSP",
+            "url": "https://peterhcharlton.github.io/post/open_bsp/",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 305
+        },
+        {
+            "id": 1118,
+            "title": "FieldTrip Toolbox",
+            "url": "https://www.fieldtriptoolbox.org/",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 305
+        },
+        {
+            "id": 1119,
+            "title": "Computational Neuroscience Textbook",
+            "url": "https://mrgreene09.github.io/computational-neuroscience-textbook/",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 305
+        },
+        {
+            "id": 1120,
+            "title": "Open Comp Neuro Resources",
+            "url": "https://github.com/asoplata/open-computational-neuroscience-resources",
+            "type": "Repo",
+            "trackId": "neuro",
+            "courseId": 305
+        },
+        {
+            "id": 1121,
+            "title": "MIT 18.06",
+            "url": "https://www.youtube.com/playlist?list=PL49CF3715CB9EF31D",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 401
+        },
+        {
+            "id": 1122,
+            "title": "MIT 18.06SC",
+            "url": "https://www.youtube.com/playlist?list=PL221E2BBF13BECF6C",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 401
+        },
+        {
+            "id": 1123,
+            "title": "Visual Linear Algebra",
+            "url": "https://www.youtube.com/playlist?list=PLHXZ9OQGMqxfUl0tcqPNTJsb7R6BqSLo6",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 401
+        },
+        {
+            "id": 1124,
+            "title": "Matrix Methods",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP63oMNUHXqIUcrkS2PivhN3k",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 401
+        },
+        {
+            "id": 1125,
+            "title": "Strang textbook resources",
+            "url": "https://math.mit.edu/~gs/linearalgebra/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 401
+        },
+        {
+            "id": 1126,
+            "title": "Statistics 110",
+            "url": "https://projects.iq.harvard.edu/stat110/home",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 402
+        },
+        {
+            "id": 1127,
+            "title": "MIT 6.041",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP61MdtwGTqZA0MreSaDybji8",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 402
+        },
+        {
+            "id": 1128,
+            "title": "MIT RES.6-012",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP60hI9ATjSFgLZpbNJ7myAg6",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 402
+        },
+        {
+            "id": 1129,
+            "title": "Probability Bootcamp",
+            "url": "https://www.youtube.com/playlist?list=PLMrJAkhIeNNR3sNYvfgiKgcStwuPSts9V",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 402
+        },
+        {
+            "id": 1130,
+            "title": "MIT 18.02",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP60hI9ATjSFgLZpbNJ7myAg6",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 403
+        },
+        {
+            "id": 1131,
+            "title": "MIT 18.01",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP61MdtwGTqZA0MreSaDybji8",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 404
+        },
+        {
+            "id": 1132,
+            "title": "MIT 18.03",
+            "url": "https://www.youtube.com/playlist?list=PLEC88901EBADDD980",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 405
+        },
+        {
+            "id": 1133,
+            "title": "DE Notes",
+            "url": "https://tutorial.math.lamar.edu/Classes/DE/DE.aspx",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 405
+        },
+        {
+            "id": 1134,
+            "title": "PDEs",
+            "url": "https://www.youtube.com/playlist?list=PLdgVBOaXkb9Ab7UM8sCfQWgdbzxkXTNVD",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 406
+        },
+        {
+            "id": 1135,
+            "title": "PDEs (theory)",
+            "url": "https://www.youtube.com/playlist?list=PLF6061160B55B0203",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 406
+        },
+        {
+            "id": 1136,
+            "title": "PDEs (more examples)",
+            "url": "https://www.youtube.com/playlist?list=PLy8CVak7-Br5zGIVL-gaZxnR9ojM3GxNA",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 406
+        },
+        {
+            "id": 1137,
+            "title": "Vector Calc + PDE",
+            "url": "https://www.youtube.com/playlist?list=PLMrJAkhIeNNQromC4WswpU1krLOq5Ro6S",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 406
+        },
+        {
+            "id": 1138,
+            "title": "MIT 18.152",
+            "url": "https://ocw.mit.edu/courses/18-152-introduction-to-partial-differential-equations-fall-2011/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 406
+        },
+        {
+            "id": 1139,
+            "title": "Numerical Analysis",
+            "url": "https://www.youtube.com/playlist?list=PLDea8VeK4MUTppAXQzHBNz3KiyEd9SQms",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 407
+        },
+        {
+            "id": 1140,
+            "title": "MIT 18.330",
+            "url": "https://ocw.mit.edu/courses/18-330-introduction-to-numerical-analysis-spring-2012/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 407
+        },
+        {
+            "id": 1141,
+            "title": "MIT 18.335J",
+            "url": "https://ocw.mit.edu/courses/18-335j-introduction-to-numerical-methods-spring-2019/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 407
+        },
+        {
+            "id": 1142,
+            "title": "MATLAB libs",
+            "url": "http://www.chebfun.org",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 407
+        },
+        {
+            "id": 1143,
+            "title": "MATLAB libs",
+            "url": "https://github.com/caomw/awesome-matlab-1",
+            "type": "Repo",
+            "trackId": "math",
+            "courseId": 407
+        },
+        {
+            "id": 1144,
+            "title": "MIT 6.042J",
+            "url": "https://www.youtube.com/playlist?list=PLB7540DEDD482705B",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 408
+        },
+        {
+            "id": 1145,
+            "title": "Logic & Proofs",
+            "url": "https://www.youtube.com/playlist?list=PL-VBs-MiT7rO0mBGFCDZlXDAfv0hogq0y",
+            "type": "Video",
+            "trackId": "math",
+            "courseId": 408
+        },
+        {
+            "id": 1146,
+            "title": "Organic II",
+            "url": "https://www.youtube.com/playlist?list=PLB572BA3ED0F700F1",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 501
+        },
+        {
+            "id": 1147,
+            "title": "O-Chem Texts",
+            "url": "https://chem.libretexts.org/Bookshelves/Organic_Chemistry",
+            "type": "Web",
+            "trackId": "chem",
+            "courseId": 501
+        },
+        {
+            "id": 1148,
+            "title": "O-Chem Texts",
+            "url": "https://open.umn.edu/opentextbooks/textbooks/organic-chemistry-with-a-biological-emphasis-volume-i",
+            "type": "Web",
+            "trackId": "chem",
+            "courseId": 501
+        },
+        {
+            "id": 1149,
+            "title": "Biochemistry 2",
+            "url": "https://www.youtube.com/playlist?list=PLgDm_hcCyvqtfBKa4mOuIifYkv52kxsqW",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 502
+        },
+        {
+            "id": 1150,
+            "title": "Biochem & Genetics",
+            "url": "https://www.youtube.com/playlist?list=PL5rTEahBdxV6prB_iWNU8N2-L5XAktld8",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 502
+        },
+        {
+            "id": 1151,
+            "title": "MIT 7.05",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP62wNcIMfinU64CAfreShjpt",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 502
+        },
+        {
+            "id": 1152,
+            "title": "MIT 7.05",
+            "url": "https://ocw.mit.edu/courses/7-05-general-biochemistry-spring-2020/",
+            "type": "Web",
+            "trackId": "chem",
+            "courseId": 502
+        },
+        {
+            "id": 1153,
+            "title": "OSU Biochem Free & Easy",
+            "url": "https://open.oregonstate.education/biochemistry/",
+            "type": "Web",
+            "trackId": "chem",
+            "courseId": 502
+        },
+        {
+            "id": 1154,
+            "title": "MIT 5.60 / 5.61 group",
+            "url": "https://www.youtube.com/playlist?list=PLB1273C507BDE28DC",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 503
+        },
+        {
+            "id": 1155,
+            "title": "MIT 5.60 / 5.61 group",
+            "url": "https://www.youtube.com/playlist?list=PLA62087102CC93765",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 503
+        },
+        {
+            "id": 1156,
+            "title": "MIT 5.60 / 5.61 group",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP62RsEHXe48Imi9-87FzQaJg",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 503
+        },
+        {
+            "id": 1157,
+            "title": "Physical Chem I",
+            "url": "https://www.youtube.com/playlist?list=PLYHaXvNA5Jrf_z0xbYhlzv0leoGBXHhll",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 503
+        },
+        {
+            "id": 1158,
+            "title": "Physical Chem II",
+            "url": "https://www.youtube.com/playlist?list=PLYHaXvNA5JrevMbLhoazFQbDdw8pfCm-O",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 503
+        },
+        {
+            "id": 1159,
+            "title": "Free texts",
+            "url": "https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps",
+            "type": "Web",
+            "trackId": "chem",
+            "courseId": 503
+        },
+        {
+            "id": 1160,
+            "title": "Inorganic & Organometallic",
+            "url": "https://www.youtube.com/playlist?list=PLybg94GvOJ9GlYQJWEhxOBtNXH5DKeNsN",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 504
+        },
+        {
+            "id": 1161,
+            "title": "LibreTexts Inorganic",
+            "url": "https://chem.libretexts.org/Bookshelves/Inorganic_Chemistry",
+            "type": "Book",
+            "trackId": "chem",
+            "courseId": 504
+        },
+        {
+            "id": 1162,
+            "title": "Thermodynamics",
+            "url": "https://www.youtube.com/playlist?list=PLd-0K-8ZyM0WdLse-OASmbqzXdpJcCn3P",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 505
+        },
+        {
+            "id": 1163,
+            "title": "Thermodynamics (Eng)",
+            "url": "https://www.youtube.com/playlist?list=PLOBajja3EcWKh2FzR0KiGQCKkpjN9FpLV",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 505
+        },
+        {
+            "id": 1164,
+            "title": "Thermo & Kinetics",
+            "url": "https://www.youtube.com/playlist?list=PLA62087102CC93765",
+            "type": "Video",
+            "trackId": "chem",
+            "courseId": 505
+        },
+        {
+            "id": 1165,
+            "title": "DeVoe \u2013 Thermodynamics & Chemistry",
+            "url": "https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Thermodynamics_and_Chemical_Equilibrium_(DeVoe",
+            "type": "Web",
+            "trackId": "chem",
+            "courseId": 505
+        },
+        {
+            "id": 1166,
+            "title": "DeVoe \u2013 Thermodynamics & Chemistry",
+            "url": "https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Thermodynamics_and_Chemical_Equilibrium_%28DeVoe%29",
+            "type": "Web",
+            "trackId": "chem",
+            "courseId": 505
+        },
+        {
+            "id": 1167,
+            "title": "DC Circuit Analysis",
+            "url": "https://open.umn.edu/opentextbooks/textbooks/884",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 1168,
+            "title": "DC Circuit Analysis",
+            "url": "http://www.dissidents.com/resources/DCElectricalCircuitAnalysis.pdf",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 1169,
+            "title": "DC Circuits (alt text)",
+            "url": "https://open.umn.edu/opentextbooks/textbooks/534",
+            "type": "Web",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 1170,
+            "title": "DC Electrical Circuit playlists",
+            "url": "https://www.youtube.com/playlist?list=PL1-PpkqcSWX4qNiSxizLIZK_hogj34UxX",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 1171,
+            "title": "DC Electrical Circuit playlists",
+            "url": "https://www.youtube.com/playlist?list=PLxuejeK2BP_d5pCXQVfpTbw2kGGPj8PdV",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 1172,
+            "title": "DC Electrical Circuit playlists",
+            "url": "https://www.youtube.com/playlist?list=PLdnqjKaksr8qQ9w3XY5zFXQ2H-zXQFMlI",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 1173,
+            "title": "General circuits playlists",
+            "url": "https://www.youtube.com/playlist?list=PL0o_zxa4K1BV9E-N8tSExU1djL6slnjbL",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 1174,
+            "title": "General circuits playlists",
+            "url": "https://www.youtube.com/playlist?list=PLFF553CED56CDE25D",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 1175,
+            "title": "MIT 6.002",
+            "url": "https://ocw.mit.edu/courses/6-002-circuits-and-electronics-spring-2007/",
+            "type": "Web",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 1176,
+            "title": "Signals & Systems",
+            "url": "https://www.youtube.com/playlist?list=PLYHaXvNA5Jrf_z0xbYhlzv0leoGBXHhll",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 602
+        },
+        {
+            "id": 1177,
+            "title": "Signals & Systems",
+            "url": "https://www.youtube.com/playlist?list=PLOBajja3EcWKh2FzR0KiGQCKkpjN9FpLV",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 602
+        },
+        {
+            "id": 1178,
+            "title": "Signals & Systems (Neso)",
+            "url": "https://www.youtube.com/playlist?list=PLBlnK6fEyqRhG6s3jYIU48CqsT5cyiDTO",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 602
+        },
+        {
+            "id": 1179,
+            "title": "Signals & Systems (Eng Funda)",
+            "url": "https://www.youtube.com/playlist?list=PLgwJf8NK-2e54DNmA5iHqPfK9y-7SPFGy",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 602
+        },
+        {
+            "id": 1180,
+            "title": "Signals & Systems (TutorialsPoint)",
+            "url": "https://www.youtube.com/playlist?list=PLWPirh4EWFpHr_1ZCkuF9ToYUrmujv9Aa",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 602
+        },
+        {
+            "id": 1181,
+            "title": "Stanford BME",
+            "url": "https://www.youtube.com/playlist?list=PLAE4A9DB84AC5F823",
+            "type": "Video",
+            "trackId": "ee",
+            "courseId": 603
+        },
+        {
+            "id": 1182,
+            "title": "BME textbooks",
+            "url": "https://www.intechopen.com/books/2241",
+            "type": "Web",
+            "trackId": "ee",
+            "courseId": 603
+        },
+        {
+            "id": 1183,
+            "title": "BME textbooks",
+            "url": "https://biblioseb.files.wordpress.com/2018/03/introduction-to-biomedical-engineering-john-d-enderle-et-al.pdf",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 603
+        },
+        {
+            "id": 1184,
+            "title": "BME Handbook",
+            "url": "https://biblioseb.files.wordpress.com/2018/03/biomedical-engineering-handbook-j-d-bronzino.pdf",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 603
+        },
+        {
+            "id": 1185,
+            "title": "Biomedical Instrumentation",
+            "url": "https://www.bharathuniv.ac.in/colleges1/downloads/courseware_eee/Notes/NE2/BEE007%20BIO%20MEDICAL%20INSTRUMENTATION.pdf",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 604
+        },
+        {
+            "id": 1186,
+            "title": "Biomedical Instrumentation",
+            "url": "https://sist.sathyabama.ac.in/sist_coursematerial/uploads/SIC1311.pdf",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 604
+        },
+        {
+            "id": 1187,
+            "title": "BME Instrumentation",
+            "url": "https://kanchiuniv.ac.in/wp-content/uploads/2022/02/III-YEAR-MECHATRONICS-BMI-Course-Material-.pdf",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 604
+        },
+        {
+            "id": 1188,
+            "title": "Medical Instrumentation basics",
+            "url": "https://www.egr.msu.edu/classes/ece445/mason/Files/2-Basics_ch1.pdf",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 604
+        },
+        {
+            "id": 1189,
+            "title": "Extra intro notes",
+            "url": "https://charuslukv.files.wordpress.com/2020/09/lecture-2-introduction-to-biomedical-instrumenation.pdf",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 604
+        },
+        {
+            "id": 1190,
+            "title": "BME Design & Systems",
+            "url": "https://engineeranddoctor.weebly.com/uploads/2/1/2/7/21272264/biomedical_engineering__and_design_handbook_vol-1.pdf",
+            "type": "Book",
+            "trackId": "ee",
+            "courseId": 605
+        }
+    ],
+    "projects": [
+        {
+            "id": 1,
+            "title": "Matrix Calculator",
+            "trackId": "math",
+            "courseId": 401,
+            "difficulty": 1,
+            "status": "Not Started",
+            "description": "Linear Algebra CLI",
+            "steps": "1. Input\\n2. Calc\\n3. Output",
+            "img": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=400&q=80"
+        },
+        {
+            "id": 2,
+            "title": "React Dashboard",
+            "trackId": "se",
+            "courseId": 101,
+            "difficulty": 2,
+            "status": "In Progress",
+            "description": "Personal dashboard app",
+            "steps": "1. Scaffold\\n2. Components",
+            "img": "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&w=400&q=80"
+        },
+        {
+            "id": 3,
+            "title": "EEG Analyzer",
+            "trackId": "neuro",
+            "courseId": 302,
+            "difficulty": 3,
+            "status": "Not Started",
+            "description": "Brain wave analysis",
+            "steps": "1. Load Data",
+            "img": "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=400&q=80"
+        },
+        {
+            "id": 4,
+            "title": "CLI Calculator",
+            "trackId": "cs",
+            "courseId": 208,
+            "difficulty": 1,
+            "status": "Not Started",
+            "description": "Python Basics",
+            "steps": "...",
+            "img": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=400&q=80"
+        },
+        {
+            "id": 5,
+            "title": "Circuit Sim",
+            "trackId": "ee",
+            "courseId": 601,
+            "difficulty": 2,
+            "status": "Not Started",
+            "description": "RC/RL Circuits",
+            "steps": "...",
+            "img": "https://images.unsplash.com/photo-1517077304055-6e89abbec40b?auto=format&fit=crop&w=400&q=80"
+        }
+    ]
+}
