@@ -19,7 +19,9 @@ track_map = {
     "Mathematics": "math",
     "Chemistry": "chem",
     "Electrical Engineering": "ee",
-    "General/Uncategorized Resources": "misc"
+    "General/Uncategorized Resources": "misc",
+    "ELECTRICAL ENGINEERING / SIGNALS / BME TRACK": "ee",
+    "SOFTWARE ENGINEERING + FULL-STACK TRACK": "se"
 }
 
 # Base IDs for courses
@@ -35,20 +37,24 @@ course_id_bases = {
 
 courses = []
 resources = []
+projects = []
 current_track = None
 current_course = None
 current_course_id = 0
 resource_id_counter = 1000 
+project_id_counter = 1
 
-file_path = 'organized_resources_by_track.md'
+# -------------------------------------------------------
+# PART 1: Parse Resources (organized_resources_by_track.md)
+# -------------------------------------------------------
+file_path_res = 'organized_resources_by_track.md'
 
 try:
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path_res, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 except FileNotFoundError:
-    with open('seed_output.json', 'w') as f:
-        f.write(json.dumps({"error": "file not found"}))
-    sys.exit(1)
+    # Fallback or error
+    lines = []
 
 course_counters = {k: v for k, v in course_id_bases.items()}
 
@@ -75,11 +81,9 @@ for line in lines:
     # Track detection
     if line.startswith('## '):
         track_name = line[3:].strip()
-        # Remove emojis if present
         track_name_clean = re.sub(r'[^\w\s/]', '', track_name).strip()
         
         found = False
-        # Direct match
         if track_name in track_map:
             current_track = track_map[track_name]
             found = True
@@ -87,7 +91,6 @@ for line in lines:
             current_track = track_map[track_name_clean]
             found = True
         else:
-             # Partial match
             for k, v in track_map.items():
                 if k in track_name:
                     current_track = v
@@ -105,7 +108,6 @@ for line in lines:
             course_counters[current_track] += 1
             current_course_id = course_counters[current_track]
             
-            # Create course object
             courses.append({
                 "id": current_course_id,
                 "trackId": current_track,
@@ -118,46 +120,26 @@ for line in lines:
         continue
 
     # Table Row Detection
-    # | Name | Desc | Link |
     if line.startswith('|') and current_track and current_course:
         parts = [p.strip() for p in line.split('|')]
-        # parts[0] is empty string before first |
-        # parts[1] is col 1, parts[2] is col 2, parts[3] is col 3
         if len(parts) < 4: continue
-        
-        # Skip header separator
         if '---' in parts[1]: continue
-        # Skip header row if it matches keywords
         if parts[1].lower() == 'course' or parts[1].lower() == 'area': continue
         
         col_name = parts[1]
         col_desc = parts[2]
         col_links = parts[3]
         
-        # Extract links
-        # Regex for [text](url) or just raw url
-        # We want the URLs
-        
-        # Simple extraction of http links
-        # Stop at space, closing paren, or closing bracket
         urls = re.findall(r'https?://[^ \n\]\)]+', col_links)
-        # Dedup URLs while preserving order
-        clean_urls = []
         seen_urls = set()
+        clean_urls = []
         for u in urls:
             if u not in seen_urls:
                 clean_urls.append(u)
                 seen_urls.add(u)
             
-        # If multiple links, create multiple resources
         for i, url in enumerate(clean_urls):
             r_title = col_name
-            if len(clean_urls) > 1:
-                 # Try to differentiate if needed, or just use same title
-                 # Maybe append domain?
-                 pass
-            
-            # If title is generic "Resource", maybe use desc?
             if r_title.lower() == 'resource':
                 r_title = col_desc[:30] + "..."
             
@@ -172,10 +154,9 @@ for line in lines:
             resource_id_counter += 1
         continue
         
-    # Legacy Resource detection (fallback)
+    # Legacy Resource detection
     if line.startswith('- ') and current_track and current_course:
         content = line[2:].strip()
-        
         url = ""
         title = ""
         
@@ -188,7 +169,6 @@ for line in lines:
                 url_part = content[http_idx:]
                 url = url_part.split(' ')[0]
                 if '|' in url: url = url.split('|')[0].strip()
-                
                 title_part = content[:http_idx].strip()
                 if title_part.endswith(':'):
                     title_part = title_part[:-1].strip()
@@ -211,6 +191,114 @@ for line in lines:
         })
         resource_id_counter += 1
 
+# -------------------------------------------------------
+# PART 2: Parse Projects (organized_projects.md)
+# -------------------------------------------------------
+file_path_proj = 'organized_projects.md'
+
+# Reset current track context for projects parsing
+current_track = None
+current_course_title = None 
+
+try:
+    with open(file_path_proj, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+except FileNotFoundError:
+    lines = []
+
+# Helper to find course ID by fuzzy title match
+def find_course_id(title):
+    # Direct match
+    for c in courses:
+        if c['title'] == title:
+            return c['id'], c['trackId']
+            
+    # Partial match (projects file title inside existing course title)
+    # e.g. Proj: "Organic Chemistry" -> Course: "Organic Chemistry I & II"
+    for c in courses:
+        if title.lower() in c['title'].lower():
+            return c['id'], c['trackId']
+            
+    # Reverse partial
+    for c in courses:
+        if c['title'].lower() in title.lower():
+            return c['id'], c['trackId']
+            
+    return None, None
+
+for line in lines:
+    line = line.strip()
+    if not line: continue
+    
+    # Track Header in Projects file
+    if line.startswith('## ') and 'TRACK' in line:
+        track_name = line[3:].strip()
+        # Map track name
+        # Try direct or partial
+        if track_name in track_map:
+            current_track = track_map[track_name]
+        else:
+            for k, v in track_map.items():
+                if k in track_name:
+                    current_track = v
+                    break
+        continue
+
+    # Course/Topic Header
+    # Could be '## Topic' or '### Topic' depending on file structure
+    # In organized_projects.md, tracks are '## ... TRACK' and topics are '## Topic' or '### Topic'
+    
+    is_header = False
+    header_title = ""
+    
+    if line.startswith('## ') and 'TRACK' not in line:
+        header_title = line[3:].strip()
+        is_header = True
+    elif line.startswith('### '):
+        header_title = line[4:].strip()
+        is_header = True
+        
+    if is_header:
+        current_course_title = header_title
+        # Try to find existing course ID
+        cid, tid = find_course_id(header_title)
+        # If found, use it. If not, and we have a current_track, maybe we default to that track?
+        # Or we just use 'misc'.
+        continue
+        
+    # Project Item: 1️⃣ Level 1: ...
+    # Regex: 1️⃣? Level (\d+): (.*)
+    match = re.search(r'Level (\d+): (.*)', line)
+    if match and current_course_title:
+        level = int(match.group(1))
+        desc = match.group(2)
+        
+        # Determine course ID and Track ID
+        cid, tid = find_course_id(current_course_title)
+        
+        if not tid and current_track:
+            tid = current_track
+            
+        if not tid:
+            tid = 'misc' # Fallback
+            
+        # If no course found, but we have a track, we might want to create a "Project Placeholder" course or null
+        # For now, let's keep courseId null if not found, or maybe 0
+        
+        projects.append({
+            "id": project_id_counter,
+            "title": f"{current_course_title} - Level {level}",
+            "trackId": tid,
+            "courseId": cid, # can be None
+            "difficulty": level,
+            "status": "Not Started",
+            "description": desc,
+            "steps": "1. Plan\n2. Build\n3. Test", # Generic steps
+            "img": "" # Placeholder
+        })
+        project_id_counter += 1
+
+
 seed_data = {
     "tracks": [
         { "id": 'se', "name": 'Software Engineering', "icon": 'laptop', "order": 0 },
@@ -223,13 +311,7 @@ seed_data = {
     ],
     "courses": courses,
     "resources": resources,
-    "projects": [
-         { "id": 1, "title": "Matrix Calculator", "trackId": 'math', "courseId": 401, "difficulty": 1, "status": "Not Started", "description": "Linear Algebra CLI", "steps": "1. Input\\n2. Calc\\n3. Output", "img": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=400&q=80" },
-         { "id": 2, "title": "React Dashboard", "trackId": 'se', "courseId": 101, "difficulty": 2, "status": "In Progress", "description": "Personal dashboard app", "steps": "1. Scaffold\\n2. Components", "img": "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&w=400&q=80" },
-         { "id": 3, "title": "EEG Analyzer", "trackId": 'neuro', "courseId": 302, "difficulty": 3, "status": "Not Started", "description": "Brain wave analysis", "steps": "1. Load Data", "img": "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=400&q=80" },
-         { "id": 4, "title": "CLI Calculator", "trackId": 'cs', "courseId": 208, "difficulty": 1, "status": "Not Started", "description": "Python Basics", "steps": "...", "img": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=400&q=80" },
-         { "id": 5, "title": "Circuit Sim", "trackId": 'ee', "courseId": 601, "difficulty": 2, "status": "Not Started", "description": "RC/RL Circuits", "steps": "...", "img": "https://images.unsplash.com/photo-1517077304055-6e89abbec40b?auto=format&fit=crop&w=400&q=80" }
-    ]
+    "projects": projects
 }
 
 with open('seed_output.json', 'w', encoding='utf-8') as f:
