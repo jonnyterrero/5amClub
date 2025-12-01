@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5amClub OS v6.3.0</title>
+    <title>5amClub OS v7.0.0</title>
     <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiNWFtQ2x1YiIsInNob3J0X25hbWUiOiI1YW1DbHViIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIn0=">
     
     <!-- Tailwind CSS -->
@@ -51,12 +51,16 @@
         .planner-col { min-height: 100px; }
         .task-card { cursor: grab; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .task-card:active { cursor: grabbing; }
+
+        /* Habit Grid */
+        .habit-btn { transition: all 0.2s; }
+        .habit-btn.active { background-color: #2eaadc; color: white; border-color: #2eaadc; }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden bg-white text-[#37352F] dark:bg-darkBg dark:text-[#D4D4D4] transition-colors duration-300">
     <!-- TOAST -->
     <div id="update-toast" class="fixed bottom-6 right-6 z-50 bg-[#37352F] dark:bg-white text-white dark:text-black p-3 rounded shadow-xl flex items-center gap-4 max-w-sm translate-y-full transition-transform duration-500">
-        <div><h4 class="font-bold text-sm">Update Available</h4><p class="text-xs opacity-80">New resources added (v6.3.0)</p></div>
+        <div><h4 class="font-bold text-sm">Update Available</h4><p class="text-xs opacity-80">New resources added (v7.0.0)</p></div>
         <button onclick="window.location.reload()" class="bg-white dark:bg-black text-black dark:text-white px-3 py-1 rounded text-xs font-bold">Refresh</button>
     </div>
     <!-- MOBILE HEADER -->
@@ -80,6 +84,7 @@
             <p class="px-2 mt-4 mb-1 text-xs font-semibold text-gray-500 uppercase">Workspace</p>
             <button onclick="app.router('dashboard')" id="nav-dashboard" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
             <button onclick="app.router('planner')" id="nav-planner" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="calendar" class="w-4 h-4"></i> Planner</button>
+            <button onclick="app.router('notes')" id="nav-notes" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="file-text" class="w-4 h-4"></i> Global Notes</button>
             
             <p class="px-2 mt-6 mb-1 text-xs font-semibold text-gray-500 uppercase">Databases</p>
             <button onclick="app.router('db-projects')" id="nav-db-projects" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"><i data-lucide="hammer" class="w-4 h-4"></i> Projects</button>
@@ -110,11 +115,11 @@
     </div>
     <!-- APP LOGIC -->
     <script>
-        const CURRENT_VERSION = '6.3.0';
-        const STORAGE_KEY = '5amClub_v6';
+        const CURRENT_VERSION = '7.0.0';
+        const STORAGE_KEY = '5amClub_v7';
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.log);
 
-        // --- MASTER SEED ---
+        // --- MASTER SEED (INJECTED VIA SCRIPT) ---
         const SEED = {
     "tracks": [
         {
@@ -3010,6 +3015,7 @@
         const App = {
             data: null,
             sidebarOpen: false,
+            
             async init() {
                 await this.checkVersion();
                 const stored = localStorage.getItem(STORAGE_KEY);
@@ -3026,10 +3032,10 @@
                 this.router('dashboard');
                 lucide.createIcons();
             },
+            
             async checkVersion() {
                 try {
                     // Fetch latest version.json from the repo (raw content)
-                    // Note: Using jsdelivr or raw.githubusercontent for caching/raw access
                     const repoOwner = 'jonnyterrero';
                     const repoName = '5amClub';
                     const branch = 'main';
@@ -3039,49 +3045,86 @@
                     if(res.ok) {
                         const remote = await res.json();
                         if(remote.version !== CURRENT_VERSION) {
-                            // Show toast
                             document.getElementById('update-toast').style.transform = 'translateY(0)';
-                            // Optional: we could auto-reload if we assume the new HTML is deployed and available at the current URL
                         }
                     }
                 } catch(e) { console.error('Update check failed', e); }
             },
+            
             migrate() {
                 if (this.data.version !== CURRENT_VERSION) {
-                    // MERGE SEED COURSES INTO DATA
-                    SEED.courses.forEach(sC => {
-                        if(!this.data.courses.find(c => c.id === sC.id)) this.data.courses.push(sC);
-                    });
+                    // Data Migration Logic
+                    if(!this.data.notes) this.data.notes = [];
+                    if(!this.data.habits) this.data.habits = [];
+
+                    // Merge Seed Data
+                    // Tracks
+                    const tMap = new Map(this.data.tracks.map(t => [t.id, t]));
+                    SEED.tracks.forEach(t => { if(!tMap.has(t.id)) this.data.tracks.push(t); });
                     
-                    // MERGE RESOURCES
-                    const existingRes = new Set(this.data.resources.map(r => r.url));
-                    SEED.resources.forEach(r => { if(!existingRes.has(r.url)) this.data.resources.push(r); });
+                    // Courses
+                    const cMap = new Map(this.data.courses.map(c => [c.id, c]));
+                    SEED.courses.forEach(c => { if(!cMap.has(c.id)) this.data.courses.push(c); });
                     
-                    // MERGE PROJECTS
-                    const existingProj = new Set(this.data.projects.map(p => p.title));
-                    SEED.projects.forEach(p => { if(!existingProj.has(p.title)) this.data.projects.push(p); });
+                    // Resources
+                    const rMap = new Set(this.data.resources.map(r => r.url));
+                    SEED.resources.forEach(r => { if(!rMap.has(r.url)) this.data.resources.push(r); });
                     
+                    // Projects
+                    const pMap = new Set(this.data.projects.map(p => p.title));
+                    SEED.projects.forEach(p => { if(!pMap.has(p.title)) this.data.projects.push(p); });
+
                     this.data.version = CURRENT_VERSION;
                     this.save();
                 }
             },
+            
             hardReset() {
-                    this.data = { ...SEED, tasks: [], notes: [], streak: 0, lastLogin: null, planner: { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] }, settings: { darkMode: false } };
-                if(this.data.resources.length === 0) this.data.resources.push({ id: 1, title: "Full Stack Open", url: "https://fullstackopen.com", type: "Course", trackId: 'se' });
-                    this.save();
-                    window.location.reload();
+                this.data = { 
+                    ...SEED, 
+                    tasks: [], 
+                    notes: [], 
+                    habits: [],
+                    streak: 0, 
+                    lastLogin: null, 
+                    planner: { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] }, 
+                    settings: { darkMode: false } 
+                };
+                // Ensure minimal data
+                if(this.data.tracks.length === 0) this.data.tracks.push({id:'se', name:'Software Engineering', icon:'laptop'});
+                this.save();
+                window.location.reload();
             },
+            
             save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data)); },
             
-            toggleSidebar() { this.sidebarOpen = !this.sidebarOpen; const sb=document.getElementById('sidebar'); const ov=document.getElementById('sidebar-overlay'); if(this.sidebarOpen) { sb.classList.remove('-translate-x-full'); ov.classList.remove('hidden'); } else { sb.classList.add('-translate-x-full'); ov.classList.add('hidden'); } },
+            toggleSidebar() { 
+                this.sidebarOpen = !this.sidebarOpen; 
+                const sb=document.getElementById('sidebar'); 
+                const ov=document.getElementById('sidebar-overlay'); 
+                if(this.sidebarOpen) { sb.classList.remove('-translate-x-full'); ov.classList.remove('hidden'); } 
+                else { sb.classList.add('-translate-x-full'); ov.classList.add('hidden'); } 
+            },
+            
             toggleDarkMode() { this.data.settings.darkMode = !this.data.settings.darkMode; this.applyTheme(); this.save(); },
             applyTheme() { document.documentElement.classList.toggle('dark', this.data.settings.darkMode); },
-            router(page, param = null) {
-                if(window.innerWidth < 768) { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-overlay').classList.add('hidden'); this.sidebarOpen = false; }
-                const container = document.getElementById('main-container'); container.innerHTML = '';
-                document.querySelectorAll('.nav-item').forEach(el => { el.classList.remove('nav-active', 'bg-gray-200', 'dark:bg-gray-700'); el.classList.add('text-gray-600', 'dark:text-gray-400'); });
+            
+            router(page, param = null, param2 = null) {
+                if(window.innerWidth < 768) { 
+                    document.getElementById('sidebar').classList.add('-translate-x-full'); 
+                    document.getElementById('sidebar-overlay').classList.add('hidden'); 
+                    this.sidebarOpen = false; 
+                }
+                const container = document.getElementById('main-container'); 
+                container.innerHTML = '';
+                
+                document.querySelectorAll('.nav-item').forEach(el => { 
+                    el.classList.remove('nav-active', 'bg-gray-200', 'dark:bg-gray-700'); 
+                    el.classList.add('text-gray-600', 'dark:text-gray-400'); 
+                });
                 const activeId = page.startsWith('db-') ? `nav-${page}` : `nav-${page}`;
                 const el = document.getElementById(activeId); if(el) el.classList.add('nav-active');
+                
                 switch(page) {
                     case 'dashboard': this.renderDashboard(container); break;
                     case 'planner': this.renderPlanner(container); break;
@@ -3090,11 +3133,13 @@
                     case 'db-courses': this.renderCourseDB(container); break;
                     case 'db-resources': this.renderResourceDB(container); break;
                     case 'track': this.renderTrackPage(container, param); break;
-                    case 'course-detail': this.renderCourseDetail(container, param); break;
+                    case 'course-detail': this.renderCourseDetail(container, param, param2 || 'resources'); break;
                 }
                 lucide.createIcons();
             },
+
             // --- RENDERERS ---
+            
             renderDashboard(c) {
                 const tasks = this.data.tasks.filter(t => !t.completed && !t.day);
                 const activeC = this.data.courses.filter(x => x.status === 'In Progress');
@@ -3115,20 +3160,55 @@
                 new Sortable(document.getElementById('dash-tasks'), { animation: 150 });
                 this.initChart();
             },
+
             renderPlanner(c) {
                 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                const today = new Date().toLocaleDateString('en-US', { weekday: 'short' });
+                
+                const renderHabits = () => {
+                    if(this.data.habits.length === 0) return '<div class="text-gray-400 text-sm p-4">No habits tracking yet. Add one!</div>';
+                    return `
+                        <div class="mb-8 overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr><th class="px-4 py-3">Habit</th>${days.map(d => `<th class="px-4 py-3 text-center">${d}</th>`).join('')}</tr>
+                                </thead>
+                                <tbody>
+                                    ${this.data.habits.map(h => `
+                                        <tr class="bg-white border-b dark:bg-darkSurface dark:border-gray-700">
+                                            <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">${h.title}</td>
+                                            ${days.map(d => {
+                                                const isActive = h.history && h.history[d]; 
+                                                return `<td class="px-4 py-3 text-center"><button onclick="app.toggleHabit(${h.id}, '${d}')" class="w-6 h-6 rounded border ${isActive ? 'bg-primary border-primary text-white' : 'border-gray-300 hover:bg-gray-100'}"></button></td>`;
+                                            }).join('')}
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                };
+
                 c.innerHTML = `
-                    <div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold dark:text-white">Weekly Planner</h2></div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold dark:text-white">Weekly Planner</h2>
+                        <button onclick="app.addHabit()" class="bg-gray-100 dark:bg-gray-800 text-sm px-3 py-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700">+ Add Habit</button>
+                    </div>
+                    
+                    <h3 class="font-bold text-lg mb-4 dark:text-white">Habits</h3>
+                    ${renderHabits()}
+
+                    <h3 class="font-bold text-lg mb-4 dark:text-white">Tasks</h3>
                     <div class="flex gap-4 overflow-x-auto pb-6 snap-x">
                         <div class="min-w-[260px] bg-gray-50 dark:bg-[#1E1E1E] p-3 rounded-lg border border-gray-200 dark:border-gray-800 snap-start flex flex-col">
                             <div class="flex justify-between items-center mb-3"><h3 class="font-bold dark:text-white">Backlog</h3><button onclick="app.addTask(null)" class="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300">+</button></div>
                             <div id="planner-backlog" class="planner-col space-y-2 flex-1">${this.data.tasks.filter(t => !t.day && !t.completed).map(t => this.htmlTaskItem(t, true)).join('')}</div>
-                    </div>
+                        </div>
                         ${days.map(d => `
-                            <div class="min-w-[260px] bg-white dark:bg-darkSurface p-3 rounded-lg border border-gray-200 dark:border-gray-800 snap-start flex flex-col">
+                            <div class="min-w-[260px] bg-white dark:bg-darkSurface p-3 rounded-lg border border-gray-200 dark:border-gray-800 snap-start flex flex-col ${d===today ? 'ring-1 ring-primary' : ''}">
                                 <div class="flex justify-between items-center mb-3"><h3 class="font-bold dark:text-white">${d}</h3><button onclick="app.addTask('${d}')" class="text-gray-400 hover:text-primary"><i data-lucide="plus" class="w-4"></i></button></div>
                                 <div id="planner-${d}" class="planner-col space-y-2 flex-1" data-day="${d}">${this.data.tasks.filter(t => t.day === d && !t.completed).map(t => this.htmlTaskItem(t, true)).join('')}</div>
-                                </div>
+                            </div>
                         `).join('')}
                     </div>
                 `;
@@ -3139,46 +3219,196 @@
                     }});
                 });
             },
+
             renderProjectDB(c) {
                 c.innerHTML = `
-                    <div class="flex justify-between items-center mb-8"><div><h2 class="text-3xl font-bold dark:text-white">Projects</h2></div><button onclick="app.openModal('project')" class="bg-primary text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2"><i data-lucide="plus" class="w-4"></i> New</button></div>
-                    <div id="projects-container" class="space-y-10 pb-20"></div>
+                    <div class="flex justify-between items-center mb-8">
+                        <div><h2 class="text-3xl font-bold dark:text-white">Projects</h2><p class="text-gray-500">Project gallery grouped by track.</p></div>
+                        <button onclick="app.openProjectModal()" class="bg-primary text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2"><i data-lucide="plus" class="w-4"></i> New</button>
+                    </div>
+                    <div id="projects-container" class="space-y-12 pb-20"></div>
                 `;
                 const pc = document.getElementById('projects-container');
                 this.data.tracks.forEach(t => {
-                    const projs = this.data.projects.filter(p => p.trackId === t.id);
+                    const projs = this.data.projects.filter(p => p.trackId === t.id || (t.id==='misc' && !p.trackId));
                     if(projs.length === 0) return;
+                    projs.sort((a,b) => (a.difficulty||0) - (b.difficulty||0));
+                    
                     const section = document.createElement('div');
-                    section.innerHTML = `<div class="flex items-center gap-2 mb-4 border-b border-gray-200 dark:border-gray-800 pb-2"><div class="p-1 bg-gray-100 dark:bg-gray-800 rounded"><i data-lucide="${t.icon}" class="w-4"></i></div><h3 class="font-bold text-lg dark:text-white">${t.name}</h3></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">${projs.map(p => this.htmlProjectCard(p)).join('')}</div>`;
+                    section.innerHTML = `
+                        <div class="flex items-center gap-2 mb-6 border-b border-gray-200 dark:border-gray-800 pb-2">
+                            <div class="p-1.5 bg-gray-100 dark:bg-gray-800 rounded text-primary"><i data-lucide="${t.icon}" class="w-5"></i></div>
+                            <h3 class="font-bold text-xl dark:text-white">${t.name}</h3>
+                            <span class="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded text-gray-500">${projs.length}</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${projs.map(p => this.htmlProjectCard(p)).join('')}
+                        </div>
+                    `;
                     pc.appendChild(section);
                 });
             },
-            renderResourceDB(c) {
-                window.editRes = (id) => app.openResourceModal(id);
+
+            renderNotesPage(c) {
+                const globalNotes = this.data.notes.filter(n => !n.courseId);
+                globalNotes.sort((a,b) => b.date - a.date); 
+                
                 c.innerHTML = `
-                    <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold dark:text-white">Resources</h2><button onclick="app.openResourceModal()" class="bg-primary text-white px-3 py-1 rounded flex gap-2"><i data-lucide="plus" class="w-4"></i> Add</button></div>
-                    <div class="space-y-2">${this.data.resources.map(r => `<div class="flex justify-between p-3 bg-white dark:bg-darkSurface border border-gray-200 dark:border-gray-800 rounded hover:bg-gray-50 dark:hover:bg-gray-800"><div class="dark:text-white">${r.title} <span class="text-xs text-gray-500 ml-2">${r.type}</span></div><div class="flex gap-2"><a href="${r.url}" target="_blank" class="text-gray-400 hover:text-primary"><i data-lucide="external-link" class="w-4"></i></a><button onclick="editRes(${r.id})" class="text-gray-400 hover:text-primary"><i data-lucide="edit-2" class="w-4"></i></button></div></div>`).join('')}</div>`; 
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-3xl font-bold dark:text-white">Global Notes</h2>
+                        <div class="flex gap-2">
+                            <button onclick="app.importNotes()" class="bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded text-sm">Import</button>
+                            <button onclick="app.openNoteModal()" class="bg-primary text-white px-3 py-1.5 rounded text-sm">+ New Note</button>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        ${globalNotes.map(n => `
+                            <div onclick="app.openNoteModal(${n.id})" class="bg-white dark:bg-darkSurface p-5 rounded-xl border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all cursor-pointer group relative">
+                                <h3 class="font-bold dark:text-white mb-2 line-clamp-1">${n.title}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-4 mb-4">${n.content}</p>
+                                <div class="flex justify-between items-center text-xs text-gray-400">
+                                    <span>${new Date(n.date).toLocaleDateString()}</span>
+                                    <button onclick="event.stopPropagation(); app.deleteNote(${n.id})" class="opacity-0 group-hover:opacity-100 hover:text-red-500"><i data-lucide="trash-2" class="w-4"></i></button>
+                                </div>
+                            </div>
+                        `).join('')}
+                        ${globalNotes.length===0 ? '<p class="text-gray-400 col-span-3 text-center py-10">No notes found. Create one to get started!</p>' : ''}
+                    </div>
+                `;
             },
-            renderTrackPage(c, id) { const t=this.data.tracks.find(x=>x.id===id); const cs=this.data.courses.filter(x=>x.trackId===id); c.innerHTML = `<div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold dark:text-white flex items-center gap-3"><i data-lucide="${t.icon}" class="text-primary"></i> ${t.name}</h2><button onclick="app.openModal('course', '${id}')" class="bg-primary text-white px-3 py-1.5 rounded text-sm">+ Course</button></div><div class="grid md:grid-cols-2 gap-4">${cs.map(x=>`<div onclick="app.router('course-detail', ${x.id})" class="bg-white dark:bg-darkSurface p-5 rounded-xl border border-gray-200 dark:border-gray-800 cursor-pointer hover:border-primary transition-colors"><h3 class="font-bold text-lg dark:text-white mb-2">${x.title}</h3><div class="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded"><div class="bg-primary h-1.5 rounded" style="width:${x.progress}%"></div></div></div>`).join('')}</div>`; },
             
-            renderCourseDetail(c, id) { 
-                const co=this.data.courses.find(x=>x.id===id); 
-                const cRes=this.data.resources.filter(r=>r.courseId===id);
-                c.innerHTML=`
-                    <div class="mb-6"><button onclick="app.router('track','${co.trackId}')" class="text-sm text-gray-400 mb-2 flex gap-1"><i data-lucide="arrow-left" class="w-4"></i> Back</button><div class="flex justify-between items-center"><h1 class="text-3xl font-bold dark:text-white">${co.title}</h1><button onclick="app.openResourceLinker(${id})" class="text-xs bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded">+ Add Resource</button></div></div>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="bg-white dark:bg-darkSurface p-6 rounded-xl border border-gray-200 dark:border-gray-800"><h3 class="font-bold mb-4 dark:text-white">Goals</h3><ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">${co.goals.map(g=>`<li class="flex gap-2"><div class="w-1.5 h-1.5 mt-1.5 bg-primary rounded-full"></div>${g}</li>`).join('')}</ul></div>
-                        <div class="bg-white dark:bg-darkSurface p-6 rounded-xl border border-gray-200 dark:border-gray-800"><h3 class="font-bold mb-4 dark:text-white">Resources</h3><div class="space-y-2">${cRes.map(r=>`<a href="${r.url}" target="_blank" class="block p-2 bg-gray-50 dark:bg-gray-800 rounded text-sm dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">${r.title}</a>`).join('')}</div></div>
-                </div>`; 
+            renderCourseDetail(c, id, activeTab = 'resources') { 
+                const co = this.data.courses.find(x => x.id === id); 
+                const cRes = this.data.resources.filter(r => r.courseId === id);
+                const cNotes = this.data.notes.filter(n => n.courseId === id);
+                
+                const tabClass = (t) => t === activeTab ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200';
+
+                c.innerHTML = `
+                    <div class="mb-6">
+                        <button onclick="app.router('track','${co.trackId}')" class="text-sm text-gray-400 mb-2 flex gap-1 hover:text-primary"><i data-lucide="arrow-left" class="w-4"></i> Back to Track</button>
+                        <div class="flex justify-between items-center">
+                            <h1 class="text-3xl font-bold dark:text-white">${co.title}</h1>
+                            <div class="flex gap-2">
+                                <button onclick="app.deleteCourse(${co.id})" class="text-gray-400 hover:text-red-500 px-2"><i data-lucide="trash-2" class="w-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabs -->
+                    <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+                        <button onclick="app.router('course-detail', ${id}, 'resources')" class="px-4 py-2 border-b-2 font-medium text-sm ${tabClass('resources')}">Resources</button>
+                        <button onclick="app.router('course-detail', ${id}, 'goals')" class="px-4 py-2 border-b-2 font-medium text-sm ${tabClass('goals')}">Goals</button>
+                        <button onclick="app.router('course-detail', ${id}, 'notes')" class="px-4 py-2 border-b-2 font-medium text-sm ${tabClass('notes')}">Notes</button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div id="tab-content">
+                        ${activeTab === 'resources' ? `
+                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold dark:text-white">Course Materials</h3><button onclick="app.openResourceLinker(${id})" class="text-xs bg-primary text-white px-3 py-1.5 rounded">+ Add Resource</button></div>
+                            <div class="space-y-2">${cRes.map(r => `<div class="flex justify-between items-center p-3 bg-white dark:bg-darkSurface border border-gray-200 dark:border-gray-800 rounded hover:bg-gray-50 dark:hover:bg-gray-800 group"><a href="${r.url}" target="_blank" class="flex-1 dark:text-white font-medium hover:text-primary">${r.title}</a><span class="text-xs text-gray-400 mr-3">${r.type}</span><button onclick="app.openResourceModal(${r.id})" class="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-primary"><i data-lucide="edit-2" class="w-4"></i></button></div>`).join('')}</div>
+                            ${cRes.length===0 ? '<p class="text-sm text-gray-400">No resources linked.</p>' : ''}
+                        ` : ''}
+
+                        ${activeTab === 'goals' ? `
+                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold dark:text-white">Learning Objectives</h3><button onclick="app.openGoalModal(${id})" class="text-xs bg-primary text-white px-3 py-1.5 rounded">+ Edit Goals</button></div>
+                            <ul class="space-y-3 text-sm text-gray-600 dark:text-gray-300">
+                                ${co.goals.length ? co.goals.map(g => `<li class="flex gap-3 items-start"><div class="w-1.5 h-1.5 mt-1.5 bg-primary rounded-full shrink-0"></div><span>${g}</span></li>`).join('') : '<p class="text-gray-400">No goals set.</p>'}
+                            </ul>
+                        ` : ''}
+
+                        ${activeTab === 'notes' ? `
+                            <div class="flex justify-between items-center mb-4"><h3 class="font-bold dark:text-white">Course Notes</h3><div class="flex gap-2"><button onclick="app.importNotes(${id})" class="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">Import</button><button onclick="app.openNoteModal(null, ${id})" class="text-xs bg-primary text-white px-3 py-1.5 rounded">+ New Note</button></div></div>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                ${cNotes.map(n => `
+                                    <div onclick="app.openNoteModal(${n.id}, ${id})" class="bg-white dark:bg-darkSurface p-4 rounded-lg border border-gray-200 dark:border-gray-800 cursor-pointer hover:border-primary">
+                                        <h4 class="font-bold dark:text-white mb-1">${n.title}</h4>
+                                        <p class="text-xs text-gray-500 line-clamp-2">${n.content}</p>
+                                    </div>
+                                `).join('')}
+                                ${cNotes.length===0 ? '<p class="text-sm text-gray-400 col-span-2">No notes for this course yet.</p>' : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                `; 
+            },
+
+            // --- MODALS & ACTIONS ---
+            
+            openProjectModal(id=null) {
+                const p = id ? this.data.projects.find(x => x.id === id) : { id: Date.now(), title:'', description:'', trackId:'misc', status:'Not Started', difficulty:1, img:'' };
+                const html = `
+                    <div class="space-y-4">
+                        <div><label class="text-xs font-bold uppercase text-gray-500">Title</label><input id="p-title" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" value="${p.title}"></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="text-xs font-bold uppercase text-gray-500">Track</label><select id="p-track" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white">${this.data.tracks.map(t => `<option value="${t.id}" ${t.id===p.trackId?'selected':''}>${t.name}</option>`).join('')}</select></div>
+                            <div><label class="text-xs font-bold uppercase text-gray-500">Difficulty (1-3)</label><input type="number" min="1" max="3" id="p-diff" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" value="${p.difficulty||1}"></div>
+                        </div>
+                        <div><label class="text-xs font-bold uppercase text-gray-500">Status</label><select id="p-status" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white">
+                            ${['Not Started', 'In Progress', 'Completed'].map(s => `<option value="${s}" ${s===p.status?'selected':''}>${s}</option>`).join('')}
+                        </select></div>
+                        <div><label class="text-xs font-bold uppercase text-gray-500">Description</label><textarea id="p-desc" class="w-full h-24 p-2 border rounded dark:bg-gray-800 dark:text-white">${p.description}</textarea></div>
+                        <div><label class="text-xs font-bold uppercase text-gray-500">Image URL</label><input id="p-img" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" value="${p.img||''}"></div>
+                    </div>
+                `;
+                app.openModal(id ? 'Edit Project' : 'New Project', html, () => { 
+                    p.title=document.getElementById('p-title').value; 
+                    p.trackId=document.getElementById('p-track').value;
+                    p.difficulty=parseInt(document.getElementById('p-diff').value);
+                    p.status=document.getElementById('p-status').value;
+                    p.description=document.getElementById('p-desc').value;
+                    p.img=document.getElementById('p-img').value;
+                    if(!id) this.data.projects.push(p);
+                    this.save(); app.closeModal(); app.router('db-projects'); 
+                });
+            },
+
+            openNoteModal(id=null, courseId=null) {
+                const n = id ? this.data.notes.find(x => x.id === id) : { id: Date.now(), title: 'New Note', content: '', date: Date.now(), courseId: courseId };
+                const html = `
+                    <div class="space-y-4 h-[60vh] flex flex-col">
+                        <input id="n-title" class="w-full p-2 text-xl font-bold border-none outline-none dark:bg-[#252525] dark:text-white" value="${n.title}" placeholder="Note Title">
+                        <div class="flex-1 flex gap-2 border-t border-gray-200 dark:border-gray-700 pt-2">
+                            <textarea id="n-content" class="w-1/2 h-full p-2 resize-none border-none outline-none dark:bg-[#252525] dark:text-gray-300 font-mono text-sm" placeholder="Type markdown here...">${n.content}</textarea>
+                            <div id="n-preview" class="w-1/2 h-full p-2 overflow-y-auto prose dark:prose-invert text-sm border-l border-gray-100 dark:border-gray-700"></div>
+                        </div>
+                    </div>
+                `;
+                
+                app.openModal(id ? 'Edit Note' : 'New Note', html, () => {
+                    n.title = document.getElementById('n-title').value;
+                    n.content = document.getElementById('n-content').value;
+                    n.date = Date.now();
+                    if(!id) this.data.notes.push(n);
+                    this.save(); 
+                    app.closeModal(); 
+                    if(courseId) app.router('course-detail', courseId, 'notes');
+                    else app.router('notes');
+                });
+                
+                // Live Preview
+                const ta = document.getElementById('n-content');
+                const pre = document.getElementById('n-preview');
+                const updatePre = () => { pre.innerHTML = marked.parse(ta.value); };
+                ta.addEventListener('input', updatePre);
+                updatePre();
             },
             
-            // --- MODALS & HELPERS ---
-            openProjectModal(id) {
-                const p = this.data.projects.find(x => x.id === id);
-                const html = `<div class="space-y-4"><label class="text-xs font-bold uppercase text-gray-500">Image URL</label><input id="p-img" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" value="${p.img||''}"><input id="p-title" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white text-lg font-bold" value="${p.title}"><textarea id="p-desc" class="w-full h-24 p-2 border rounded dark:bg-gray-800 dark:text-white">${p.description}</textarea></div>`;
-                app.openModal('Edit Project', html, () => { p.img=document.getElementById('p-img').value; p.title=document.getElementById('p-title').value; p.description=document.getElementById('p-desc').value; this.save(); app.closeModal(); app.router('db-projects'); });
+            openGoalModal(cid) {
+                const co = this.data.courses.find(c => c.id === cid);
+                const html = `
+                    <div class="space-y-4">
+                        <p class="text-sm text-gray-500">Enter one goal per line.</p>
+                        <textarea id="g-text" class="w-full h-48 p-2 border rounded dark:bg-gray-800 dark:text-white">${co.goals.join('\n')}</textarea>
+                    </div>
+                `;
+                app.openModal('Edit Goals', html, () => {
+                    const txt = document.getElementById('g-text').value;
+                    co.goals = txt.split('\n').filter(l => l.trim().length > 0);
+                    this.save(); app.closeModal(); app.router('course-detail', cid, 'goals');
+                });
             },
-            
+
             openResourceLinker(cid) {
                 const trackId = this.data.courses.find(c => c.id === cid).trackId;
                 const existing = this.data.resources.filter(r => r.trackId === trackId || r.trackId === 'misc');
@@ -3190,16 +3420,76 @@
                     this.save(); app.closeModal(); app.renderCourseDetail(document.getElementById('main-container'), cid);
                 });
             },
+            
+            openResourceModal(id=null) {
+                const r = id ? this.data.resources.find(x => x.id === id) : { id: Date.now(), title:'', url:'', type:'Web', trackId:'misc', courseId: null };
+                const html = `
+                    <div class="space-y-4">
+                        <div><label class="text-xs font-bold uppercase text-gray-500">Title</label><input id="r-title" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" value="${r.title}"></div>
+                        <div><label class="text-xs font-bold uppercase text-gray-500">URL</label><input id="r-url" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" value="${r.url}"></div>
+                        <div><label class="text-xs font-bold uppercase text-gray-500">Type</label><select id="r-type" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white">
+                            ${['Web', 'Video', 'Book', 'Course', 'Repo'].map(t => `<option value="${t}" ${t===r.type?'selected':''}>${t}</option>`).join('')}
+                        </select></div>
+                    </div>
+                `;
+                app.openModal(id ? 'Edit Resource' : 'Add Resource', html, () => {
+                    r.title = document.getElementById('r-title').value;
+                    r.url = document.getElementById('r-url').value;
+                    r.type = document.getElementById('r-type').value;
+                    if(!id) this.data.resources.push(r);
+                    this.save(); app.closeModal(); 
+                    const activePage = document.querySelector('.nav-active').id;
+                    if(activePage === 'nav-db-resources') this.renderResourceDB(document.getElementById('main-container'));
+                    else if(r.courseId) this.router('course-detail', r.courseId);
+                });
+            },
+            
+            addHabit() {
+                const t = prompt("Habit Title:");
+                if(t) {
+                    this.data.habits.push({ id: Date.now(), title: t, history: {} });
+                    this.save(); this.router('planner');
+                }
+            },
+            
+            toggleHabit(id, dayName) {
+                const h = this.data.habits.find(x => x.id === id);
+                if(h) {
+                    if(!h.history) h.history = {};
+                    h.history[dayName] = !h.history[dayName];
+                    this.save(); this.router('planner');
+                }
+            },
+            
+            importNotes(courseId=null) {
+                const html = `<div class="space-y-4"><p class="text-sm text-gray-500">Paste content here to create a new note.</p><textarea id="imp-text" class="w-full h-48 p-2 border rounded dark:bg-gray-800 dark:text-white"></textarea></div>`;
+                app.openModal('Import Note', html, () => {
+                    const content = document.getElementById('imp-text').value;
+                    if(content) {
+                        this.data.notes.push({ id: Date.now(), title: 'Imported Note', content: content, date: Date.now(), courseId });
+                        this.save(); app.closeModal();
+                        if(courseId) app.router('course-detail', courseId, 'notes');
+                        else app.router('notes');
+                    }
+                });
+            },
+            
+            deleteNote(id) { if(confirm('Delete note?')) { this.data.notes = this.data.notes.filter(n => n.id !== id); this.save(); this.router('notes'); } },
+            deleteCourse(id) { if(confirm('Delete course?')) { this.data.courses = this.data.courses.filter(c => c.id !== id); this.save(); this.router('track', this.data.courses.find(c=>c.id===id)?.trackId || 'se'); } },
+
+            // Helpers
             openModal(t,c,a) { document.getElementById('modalTitle').innerText=t; document.getElementById('modalContent').innerHTML=c; document.getElementById('modalSaveBtn').onclick=a; document.getElementById('genericModal').classList.remove('hidden'); },
             closeModal() { document.getElementById('genericModal').classList.add('hidden'); },
             addTask(day=null) { const t = prompt("Task:"); if(t) { this.data.tasks.push({id: Date.now(), title: t, completed: false, day}); this.save(); this.router('planner'); }},
             toggleTask(id) { const t = this.data.tasks.find(x => x.id == id); if(t) { t.completed = !t.completed; this.save(); const isDash = document.querySelector('#nav-dashboard.nav-active'); isDash ? this.router('dashboard') : this.router('planner'); } },
             renderSidebarTracks() { document.getElementById('track-list-render').innerHTML = this.data.tracks.map(t => `<button onclick="app.router('track', '${t.id}')" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i data-lucide="${t.icon}" class="w-4 h-4"></i> ${t.name}</button>`).join(''); },
+            renderResourceDB(c) { this.data.resources.length ? c.innerHTML = `<div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold dark:text-white">Resources</h2><button onclick="app.openResourceModal()" class="bg-primary text-white px-3 py-1 rounded flex gap-2"><i data-lucide="plus" class="w-4"></i> Add</button></div><div class="space-y-2">${this.data.resources.map(r => `<div class="flex justify-between p-3 bg-white dark:bg-darkSurface border border-gray-200 dark:border-gray-800 rounded hover:bg-gray-50 dark:hover:bg-gray-800"><div class="dark:text-white">${r.title} <span class="text-xs text-gray-500 ml-2">${r.type}</span></div><div class="flex gap-2"><a href="${r.url}" target="_blank" class="text-gray-400 hover:text-primary"><i data-lucide="external-link" class="w-4"></i></a><button onclick="app.openResourceModal(${r.id})" class="text-gray-400 hover:text-primary"><i data-lucide="edit-2" class="w-4"></i></button></div></div>`).join('')}</div>` : c.innerHTML='<p>No resources.</p>'; },
+            renderCourseDB(c) { c.innerHTML = `<h2 class="text-2xl font-bold dark:text-white mb-4">All Courses</h2><div class="space-y-2">${this.data.courses.map(co => `<div onclick="app.router('course-detail', ${co.id})" class="p-4 bg-white dark:bg-darkSurface border rounded cursor-pointer hover:border-primary dark:text-white">${co.title}</div>`).join('')}</div>`},
+            renderTrackPage(c, id) { const t=this.data.tracks.find(x=>x.id===id); const cs=this.data.courses.filter(x=>x.trackId===id); c.innerHTML = `<div class="flex justify-between items-center mb-8"><h2 class="text-3xl font-bold dark:text-white flex items-center gap-3"><i data-lucide="${t.icon}" class="text-primary"></i> ${t.name}</h2><button onclick="app.openModal('course', '${id}')" class="bg-primary text-white px-3 py-1.5 rounded text-sm">+ Course</button></div><div class="grid md:grid-cols-2 gap-4">${cs.map(x=>`<div onclick="app.router('course-detail', ${x.id})" class="bg-white dark:bg-darkSurface p-5 rounded-xl border border-gray-200 dark:border-gray-800 cursor-pointer hover:border-primary transition-colors"><h3 class="font-bold text-lg dark:text-white mb-2">${x.title}</h3><div class="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded"><div class="bg-primary h-1.5 rounded" style="width:${x.progress}%"></div></div></div>`).join('')}</div>`; },
             
             htmlTaskItem(t, isCard=false) { return `<div class="flex justify-between items-center p-3 bg-white dark:bg-darkSurface border border-gray-200 dark:border-gray-700 rounded shadow-sm mb-2 task-card group" data-id="${t.id}"><span class="text-sm dark:text-gray-200 ${t.completed?'line-through text-gray-400':''}">${t.title}</span><button onclick="app.toggleTask(${t.id})" class="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-primary"><i data-lucide="${t.completed?'check-circle':'circle'}" class="w-4"></i></button></div>`; },
-            htmlProjectCard(p) { return `<div onclick="app.openProjectModal(${p.id})" class="group bg-white dark:bg-darkSurface border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-all">${p.img ? `<img src="${p.img}" class="project-cover">` : '<div class="h-24 bg-gray-50 dark:bg-[#252525] flex items-center justify-center text-gray-300"><i data-lucide="image" class="w-8"></i></div>'}<div class="p-3"><h4 class="font-semibold dark:text-white text-sm mb-1">${p.title}</h4><span class="badge ${p.status==='Completed'?'badge-green':'badge-gray'}">${p.status}</span></div></div>`; },
-            initChart() { const ctx=document.getElementById('dashChart').getContext('2d'); new Chart(ctx,{type:'doughnut',data:{datasets:[{data:[15,85],backgroundColor:['#4F46E5','#E5E7EB'],borderWidth:0}]},options:{responsive:true,cutout:'75%'}}); },
-            renderCourseDB(c) {}, renderNotesPage(c) {}, openResourceModal(id) {}, openNoteModal(id) {} 
+            htmlProjectCard(p) { return `<div onclick="app.openProjectModal(${p.id})" class="group bg-white dark:bg-darkSurface border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-all flex flex-col h-full"><div class="relative">${p.img ? `<img src="${p.img}" class="project-cover">` : '<div class="aspect-video bg-gray-50 dark:bg-[#252525] flex items-center justify-center text-gray-300"><i data-lucide="image" class="w-8"></i></div>'}<div class="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">Lvl ${p.difficulty||1}</div></div><div class="p-4 flex-1 flex flex-col"><h4 class="font-semibold dark:text-white text-lg mb-1">${p.title}</h4><p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3 flex-1">${p.description}</p><span class="self-start text-xs px-2 py-1 rounded ${p.status==='Completed'?'bg-green-100 text-green-800':'bg-gray-100 text-gray-800'}">${p.status}</span></div></div>`; },
+            initChart() { const ctx=document.getElementById('dashChart').getContext('2d'); new Chart(ctx,{type:'doughnut',data:{datasets:[{data:[15,85],backgroundColor:['#2eaadc','#E5E7EB'],borderWidth:0}]},options:{responsive:true,cutout:'75%'}}); }
         };
 
         window.onload = () => App.init();
