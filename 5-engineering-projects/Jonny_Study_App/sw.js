@@ -1,4 +1,4 @@
-const CACHE_NAME = '5am-club-v6.1.0';
+const CACHE_NAME = '5am-club-v6.1.1';
 const ASSETS = [
   '/',
   '/index.html',
