@@ -67,11 +67,6 @@
     </style>
 </head>
 <body class="flex h-screen overflow-hidden bg-slate-50 text-slate-900 dark:bg-darkBg dark:text-slate-100 transition-colors duration-300">
-    <!-- TOAST -->
-    <div id="update-toast" class="fixed bottom-6 right-6 z-50 bg-[#37352F] dark:bg-white text-white dark:text-black p-3 rounded shadow-xl flex items-center gap-4 max-w-sm translate-y-full transition-transform duration-500">
-        <div><h4 class="font-bold text-sm">System Updated</h4><p class="text-xs opacity-80">Planner & Resources Fixed (v6.1.0)</p></div>
-        <button onclick="window.location.reload()" class="bg-white dark:bg-black text-black dark:text-white px-3 py-1 rounded text-xs font-bold">Refresh</button>
-    </div>
     <!-- MOBILE HEADER -->
     <div class="md:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-darkSurface border-b border-slate-200 dark:border-slate-700 z-30 flex items-center justify-between px-4">
         <div class="flex items-center gap-3">
@@ -107,6 +102,11 @@
             <div id="track-list-render" class="space-y-0.5"></div>
         </nav>
         <div class="p-4 border-t border-gray-200 dark:border-gray-800">
+            <!-- Update Toast (Sidebar Position) -->
+            <div id="update-toast" class="hidden mb-3 bg-[#37352F] dark:bg-white text-white dark:text-black p-3 rounded shadow-lg flex flex-col gap-2">
+                <div><h4 class="font-bold text-sm">System Updated</h4><p class="text-xs opacity-80">New version available</p></div>
+                <button onclick="window.location.reload()" class="w-full bg-white dark:bg-black text-black dark:text-white px-3 py-1.5 rounded text-xs font-bold">Refresh Now</button>
+            </div>
             <button onclick="app.hardReset()" class="w-full text-xs text-red-500 hover:text-red-700 flex items-center justify-center gap-2 py-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"><i data-lucide="refresh-cw" class="w-3 h-3"></i> Restore DB</button>
         </div>
     </aside>
@@ -4651,7 +4651,7 @@
                         const remote = await res.json();
                         if(remote.version !== CURRENT_VERSION) {
                             const toast = document.getElementById('update-toast');
-                            if(toast) toast.style.transform = 'translateY(0)';
+                            if(toast) toast.classList.remove('hidden');
                         }
                     }
                 } catch(e) {
