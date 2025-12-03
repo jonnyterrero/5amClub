@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5amClub Data Exporter</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #2eaadc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+            width: 100%;
+        }
+        button:hover {
+            background: #1e8bb8;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 4px solid #2eaadc;
+        }
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            display: none;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📥 5amClub Data Exporter</h1>
+        
+        <div class="info">
+            <strong>Important:</strong> Open this page in the <strong>same browser</strong> where you entered your data on the Netlify site. localStorage is browser-specific!
+        </div>
+
+        <button onclick="exportData()">Export My Data (Auto Download)</button>
+        <button onclick="showData()">Show Data First</button>
+        
+        <div id="success" class="success"></div>
+        
+        <div id="dataDisplay" style="display: none;">
+            <h3>Your Data:</h3>
+            <textarea id="dataText" readonly></textarea>
+            <button onclick="copyData()">Copy to Clipboard (Manual Save)</button>
+            <button onclick="saveAsFile()" style="background: #4caf50;">Open in New Tab (Alternative)</button>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <h3>Import to New Site:</h3>
+            <p>After exporting, go to your Vercel site and use the "Import Data" button in the sidebar.</p>
+        </div>
+    </div>
+
+    <script>
+        function getData() {
+            // Try both storage keys (v5 and v6)
+            let data = localStorage.getItem('5amClub_v6');
+            if (!data) {
+                data = localStorage.getItem('5amClub_v5');
+            }
+            if (!data) {
+                return null;
+            }
+            return JSON.parse(data);
+        }
+
+        function exportData() {
+            const data = getData();
+            if (!data) {
+                alert('❌ No data found! Make sure you:\n1. Are using the same browser where you entered data\n2. Have visited the Netlify site in this browser\n3. Have data saved in the workspace');
+                return;
+            }
+
+            try {
+                const dataStr = JSON.stringify(data, null, 2);
+                const filename = `5amclub-backup-${new Date().toISOString().split('T')[0]}.json`;
+                
+                // Method 1: Try download attribute
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                
+                // Trigger download
+                link.click();
+                
+                // Clean up after a delay
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                
+                // Also show data in textarea as backup
+                document.getElementById('dataText').value = dataStr;
+                document.getElementById('dataDisplay').style.display = 'block';
+                
+                document.getElementById('success').style.display = 'block';
+                document.getElementById('success').innerHTML = '✅ Data exported! Check your downloads folder. If no file downloaded, use the "Copy to Clipboard" button below and save it manually.';
+            } catch (error) {
+                alert('Error exporting: ' + error.message);
+                console.error(error);
+            }
+        }
+
+        function showData() {
+            const data = getData();
+            if (!data) {
+                alert('No data found in this browser.');
+                return;
+            }
+            document.getElementById('dataText').value = JSON.stringify(data, null, 2);
+            document.getElementById('dataDisplay').style.display = 'block';
+        }
+
+        function copyData() {
+            const textarea = document.getElementById('dataText');
+            if (!textarea.value) {
+                // If textarea is empty, get data first
+                const data = getData();
+                if (data) {
+                    textarea.value = JSON.stringify(data, null, 2);
+                } else {
+                    alert('No data to copy!');
+                    return;
+                }
+            }
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile
+            try {
+                document.execCommand('copy');
+                alert('✅ Copied to clipboard! Now:\n1. Open Notepad or any text editor\n2. Paste (Ctrl+V)\n3. Save as "5amclub-backup.json"');
+            } catch (err) {
+                // Fallback for modern browsers
+                navigator.clipboard.writeText(textarea.value).then(() => {
+                    alert('✅ Copied to clipboard! Now:\n1. Open Notepad or any text editor\n2. Paste (Ctrl+V)\n3. Save as "5amclub-backup.json"');
+                }).catch(() => {
+                    alert('Could not copy. Please manually select and copy the text from the box below.');
+                });
+            }
+        }
+        
+        function saveAsFile() {
+            const data = getData();
+            if (!data) {
+                alert('No data found!');
+                return;
+            }
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
+
