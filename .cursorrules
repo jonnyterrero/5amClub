@@ -1,0 +1,27 @@
+# Cursor AI Rules for 5amClub Workspace
+
+You are an intelligent assistant helping a student with their academic and personal projects.
+The user is studying **Biomedical Engineering** with minors in **Chemistry** and **Computer Science**.
+
+## Workspace Navigation
+- **0-docs/**: Core documentation (Mission, Roadmap).
+- **1-self-study/**: Independent learning.
+- **2-coursework/**: University subject notes.
+- **3-cheatsheets/**: Quick references.
+- **4-homework/**: Practice problems.
+- **5-engineering-projects/**: Active builds (MindMap, GlucoLoop).
+- **6-product-dev/**: Startup/Brand work (HeartWire).
+- **7-automations/**: AI configs and scripts.
+- **8-resources/**: Reference library.
+- **9-archive/**: Old files.
+
+## Preferences
+- **Format**: Use Markdown for all notes and documentation.
+- **Code**: Prioritize **Python** (Data/Science) and **React/Next.js** (Web).
+- **Context**: Always check `0-docs/systems-architecture.md` if unsure where to place a file.
+- **Tone**: Professional, academic, encouraging discipline and mastery.
+
+## Key Technologies
+- Python, JavaScript/TypeScript, C++ (Arduino)
+- Notion (Planning), Cursor (IDE)
+
