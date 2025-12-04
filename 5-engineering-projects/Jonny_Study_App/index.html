@@ -589,20 +589,6 @@
             "order": 1000
         },
         {
-            "id": 608,
-            "trackId": "se",
-            "title": "Differential Equations",
-            "status": "Not Started",
-            "order": 1001
-        },
-        {
-            "id": 609,
-            "trackId": "cs",
-            "title": "Differential Equations",
-            "status": "Not Started",
-            "order": 1002
-        },
-        {
             "id": 610,
             "trackId": "cs",
             "title": "General",
@@ -643,13 +629,6 @@
             "title": "Biochemistry",
             "status": "Not Started",
             "order": 1009
-        },
-        {
-            "id": 616,
-            "trackId": "misc",
-            "title": "Differential Equations",
-            "status": "Not Started",
-            "order": 1010
         },
         {
             "id": 617,
@@ -750,13 +729,6 @@
             "order": 1024
         },
         {
-            "id": 631,
-            "trackId": "neuro",
-            "title": "Differential Equations",
-            "status": "Not Started",
-            "order": 1025
-        },
-        {
             "id": 632,
             "trackId": "neuro",
             "title": "Biochemistry",
@@ -827,13 +799,6 @@
             "order": 1035
         },
         {
-            "id": 642,
-            "trackId": "ee",
-            "title": "Differential Equations",
-            "status": "Not Started",
-            "order": 1036
-        },
-        {
             "id": 643,
             "trackId": "ee",
             "title": "Operating Systems",
@@ -874,13 +839,6 @@
             "title": "Organic Chemistry",
             "status": "Not Started",
             "order": 1045
-        },
-        {
-            "id": 649,
-            "trackId": "chem",
-            "title": "Differential Equations",
-            "status": "Not Started",
-            "order": 1046
         }
     ],
     "projects": [
@@ -5651,24 +5609,24 @@
             "title": "Nodemon:  | GitHub: https://github.com/remy/nodemon",
             "url": "https://nodemon.io/",
             "type": "link",
-            "courseId": 616,
-            "trackId": "misc"
+            "courseId": 404,
+            "trackId": "math"
         },
         {
             "id": 477,
             "title": "Diff Eq (MAP 2302): MIT OCW 18.03 Differential Equations.",
             "url": "https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010ocw-openmatters",
             "type": "link",
-            "courseId": 616,
-            "trackId": "misc"
+            "courseId": 404,
+            "trackId": "math"
         },
         {
             "id": 478,
             "title": "Strang Differential Equations (PDF):",
             "url": "https://ocw.mit.edu/courses/18-03-differential-equations-spring-2010/pages/readings/",
             "type": "link",
-            "courseId": 616,
-            "trackId": "misc"
+            "courseId": 404,
+            "trackId": "math"
         },
         {
             "id": 479,
@@ -6283,32 +6241,32 @@
             "title": "| **PDEs** | Faculty of Khan | [Partial Differential Equations]( |",
             "url": "https://www.youtube.com/playlist?list=PLdgVBOaXkb9Ab7UM8sCfQWgdbzxkXTNVD)",
             "type": "link",
-            "courseId": 631,
-            "trackId": "neuro"
+            "courseId": 404,
+            "trackId": "math"
         },
         {
             "id": 556,
             "title": "| **Differential Equations** | MIT 18.03 (Arthur Mattuck) | [Differential Equations]( |",
             "url": "https://www.youtube.com/playlist?list=PLEC88901EBADDD980)",
             "type": "link",
-            "courseId": 631,
-            "trackId": "neuro"
+            "courseId": 404,
+            "trackId": "math"
         },
         {
             "id": 557,
             "title": "- github embedded programming course",
             "url": "https://github.com/QuantumLeaps/modern-embedded-programming-course",
             "type": "link",
-            "courseId": 631,
-            "trackId": "neuro"
+            "courseId": 404,
+            "trackId": "math"
         },
         {
             "id": 558,
             "title": "github How to learn modern Embedded Systems",
             "url": "https://github.com/joaocarvalhoopen/How_to_learn_modern_Embedded_Systems",
             "type": "link",
-            "courseId": 631,
-            "trackId": "neuro"
+            "courseId": 404,
+            "trackId": "math"
         },
         {
             "id": 559,
@@ -6547,8 +6505,8 @@
             "title": "\u25cb\t\"Organic Chemistry with a Biological Emphasis\" (Soderberg):",
             "url": "https://chem.libretexts.org/Bookshelves/Organic_Chemistry/Book:Organic_Chemistry_with_a_Biological_Emphasis_v2.0(Soderberg)",
             "type": "link",
-            "courseId": 649,
-            "trackId": "chem"
+            "courseId": 404,
+            "trackId": "math"
         }
     ],
     "habits": [
@@ -6816,21 +6774,72 @@
                     <div class="flex justify-between items-center mb-8">
                         <div><h2 class="text-3xl font-bold text-[#37352F] dark:text-white mb-1">Projects</h2></div>
                         <button onclick="app.openModal('project')" class="bg-primary text-white px-3 py-1.5 rounded text-sm font-medium flex items-center gap-2 hover:opacity-90"><i data-lucide="plus" class="w-4 h-4"></i> New</button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${this.data.projects.map(p => `
-                            <div onclick="app.openProjectModal(${p.id})" class="group bg-white dark:bg-[#252525] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-all">
-                                ${p.img ? `<img src="${p.img}" class="project-cover">` : '<div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-300"><i data-lucide="image" class="w-8"></i></div>'}
-                                <div class="p-4">
-                                    <h4 class="font-semibold dark:text-white mb-1">${p.title}</h4>
-                                    <div class="flex gap-2 mt-2">
-                                        <span class="text-xs bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-gray-600 dark:text-gray-300">${p.status}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
                     </div>`;
+                
+                // Group projects by Track -> Course -> Difficulty
+                const projectsByTrack = {};
+                this.data.projects.forEach(p => {
+                    const tId = p.trackId || 'misc';
+                    if(!projectsByTrack[tId]) projectsByTrack[tId] = {};
+                    
+                    const cId = p.courseId || 'general';
+                    if(!projectsByTrack[tId][cId]) projectsByTrack[tId][cId] = [];
+                    
+                    projectsByTrack[tId][cId].push(p);
+                });
+
+                // Sort tracks
+                const sortedTracks = this.data.tracks.sort((a,b) => (a.order||0) - (b.order||0));
+                
+                sortedTracks.forEach(track => {
+                    const trackProjects = projectsByTrack[track.id];
+                    if(!trackProjects) return;
+
+                    container.innerHTML += `<div class="mb-10"><h3 class="text-2xl font-bold mb-6 flex items-center gap-2 dark:text-white"><i data-lucide="${track.icon}" class="w-6"></i> ${track.name}</h3>`;
+                    
+                    // Sort courses: General first, then alphabetical
+                    const courseIds = Object.keys(trackProjects).sort((a,b) => {
+                        if(a==='general') return -1;
+                        if(b==='general') return 1;
+                        const cA = this.data.courses.find(x=>x.id==a);
+                        const cB = this.data.courses.find(x=>x.id==b);
+                        return (cA?.title||'').localeCompare(cB?.title||'');
+                    });
+
+                    courseIds.forEach(cId => {
+                        const course = cId === 'general' ? {title: 'General Projects'} : this.data.courses.find(x=>x.id==cId);
+                        const projects = trackProjects[cId];
+                        // Sort by difficulty
+                        projects.sort((a,b) => (a.difficulty||1) - (b.difficulty||1));
+
+                        container.innerHTML += `
+                            <div class="mb-6 ml-4">
+                                <h4 class="text-lg font-semibold text-slate-600 dark:text-slate-300 mb-3 border-b border-slate-200 dark:border-slate-700 pb-1">${course?.title || 'General'}</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    ${projects.map(p => this.htmlProjectCard(p)).join('')}
+                                </div>
+                            </div>`;
+                    });
+                    container.innerHTML += `</div>`;
+                });
                 lucide.createIcons();
+            },
+            htmlProjectCard(p) {
+                const diffColor = p.difficulty === 1 ? 'bg-green-100 text-green-800' : p.difficulty === 2 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800';
+                const diffText = p.difficulty === 1 ? 'Easy' : p.difficulty === 2 ? 'Medium' : 'Hard';
+                return `
+                    <div onclick="app.openProjectModal(${p.id})" class="group bg-white dark:bg-[#252525] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden cursor-pointer hover:shadow-md transition-all">
+                        ${p.img ? `<img src="${p.img}" class="project-cover">` : '<div class="h-32 bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-300"><i data-lucide="image" class="w-8"></i></div>'}
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold dark:text-white leading-tight">${p.title}</h4>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded font-medium ${diffColor}">${diffText}</span>
+                            </div>
+                            <div class="flex gap-2 mt-2">
+                                <span class="text-xs bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded text-gray-600 dark:text-gray-300">${p.status}</span>
+                            </div>
+                        </div>
+                    </div>`;
             },
             renderResourceDB(container) {
                 window.editRes = (id) => app.openResourceModal(id);
@@ -7009,8 +7018,11 @@
                 const cRes = this.data.resources.filter(r => r.courseId === courseId);
                 const cNotes = this.data.notes.filter(n => n.courseId === courseId);
                 container.innerHTML = `
-                    <div class="mb-6"><button onclick="app.router('track', '${c.trackId}')" class="text-sm text-slate-400 hover:text-indigo-500 mb-2 flex gap-1"><i data-lucide="arrow-left" class="w-4"></i> Back</button>
-                    <div class="bg-white dark:bg-darkSurface p-6 rounded-xl border border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                    <div class="mb-6 flex justify-between items-start">
+                        <button onclick="app.router('track', '${c.trackId}')" class="text-sm text-slate-400 hover:text-indigo-500 mb-2 flex gap-1"><i data-lucide="arrow-left" class="w-4"></i> Back</button>
+                        <button onclick="app.deleteCourse(${c.id})" class="text-xs text-red-400 hover:text-red-600 flex items-center gap-1"><i data-lucide="trash-2" class="w-3"></i> Delete Course</button>
+                    </div>
+                    <div class="bg-white dark:bg-darkSurface p-6 rounded-xl border border-slate-200 dark:border-slate-700 flex justify-between items-center mb-6">
                         <div><span class="text-xs bg-indigo-50 text-indigo-600 px-2 py-1 rounded font-bold uppercase">${c.status}</span><h1 class="text-3xl font-bold mt-2 dark:text-white">${c.title}</h1></div>
                         <div class="text-right"><div class="text-3xl font-bold text-slate-200 dark:text-slate-600">${c.progress}%</div></div>
                     </div></div>
@@ -7030,7 +7042,19 @@
                                 <h3 class="font-bold dark:text-white">Resources</h3>
                                 <button onclick="app.openResourceLinker(${c.id})" class="text-xs bg-white dark:bg-gray-700 border px-2 py-1 rounded">+ Link Resource</button>
                             </div>
-                            <div class="space-y-2">${cRes.map(r => `<a href="${r.url}" target="_blank" class="block p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded hover:border-primary dark:hover:border-primary transition-colors flex items-center gap-2"><i data-lucide="external-link" class="w-4 text-gray-400"></i><span class="text-sm text-gray-700 dark:text-gray-300">${r.title}</span></a>`).join('')}</div>
+                            <div class="space-y-2">${cRes.map(r => `
+                                <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded group hover:border-indigo-300 transition-all">
+                                    <a href="${r.url}" target="_blank" class="flex items-center gap-2 flex-1 min-w-0">
+                                        <i data-lucide="external-link" class="w-4 text-gray-400 flex-shrink-0"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300 truncate">${r.title}</span>
+                                    </a>
+                                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button onclick="app.moveResource(${r.id})" class="p-1.5 text-slate-400 hover:text-indigo-600" title="Move"><i data-lucide="folder-input" class="w-4 h-4"></i></button>
+                                        <button onclick="app.unlinkResource(${r.id})" class="p-1.5 text-slate-400 hover:text-orange-600" title="Unlink"><i data-lucide="unlink" class="w-4 h-4"></i></button>
+                                        <button onclick="editRes(${r.id})" class="p-1.5 text-slate-400 hover:text-blue-600" title="Edit"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>`).join('')}
+                            </div>
                         </div>
                     </div>
                     <div id="tab-notes" class="hidden space-y-4">
@@ -7038,6 +7062,43 @@
                         ${cNotes.length ? cNotes.map(n => app.htmlNoteCard(n)).join('') : '<p class="text-slate-400 italic">No notes for this course yet.</p>'}
                     </div>
                 `;
+            },
+            unlinkResource(id) {
+                if(confirm('Unlink resource from this course?')) {
+                    const r = this.data.resources.find(x=>x.id===id);
+                    const cId = r.courseId;
+                    r.courseId = null;
+                    this.save();
+                    if(cId) this.renderCourseDetail(document.getElementById('main-container'), cId);
+                }
+            },
+            moveResource(id) {
+                const r = this.data.resources.find(x=>x.id===id);
+                const html = `
+                    <div class="space-y-4">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Move <b>${r.title}</b> to:</p>
+                        <select id="mv-track" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" onchange="app.renderMoveCourseOptions(this.value)">
+                            ${this.data.tracks.map(t => `<option value="${t.id}" ${t.id===r.trackId?'selected':''}>${t.name}</option>`).join('')}
+                        </select>
+                        <select id="mv-course" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white">
+                            <option value="">No Course</option>
+                        </select>
+                    </div>`;
+                app.openModal('Move Resource', html, () => {
+                    r.trackId = document.getElementById('mv-track').value;
+                    const cVal = document.getElementById('mv-course').value;
+                    r.courseId = cVal ? parseInt(cVal) : null;
+                    this.save();
+                    app.closeModal();
+                    app.router('db-resources');
+                });
+                // Init course options
+                setTimeout(() => app.renderMoveCourseOptions(r.trackId), 50);
+            },
+            renderMoveCourseOptions(trackId) {
+                const courses = this.data.courses.filter(c => c.trackId === trackId);
+                const select = document.getElementById('mv-course');
+                select.innerHTML = '<option value="">No Course</option>' + courses.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
             },
             deleteTrack(id) {
                 if(confirm("Delete this track? All associated courses and resources will be moved to 'Misc'.")) {
