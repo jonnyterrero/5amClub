@@ -6876,10 +6876,10 @@
                         this.migrate();
                     } catch(e) { 
                         console.error('Parse error:', e);
-                        this.hardReset(); 
+                        this.silentReset(); 
                     }
                 } else {
-                    this.hardReset();
+                    this.silentReset();
                 }
                 this.applyTheme();
                 this.updateStreakLogic();
@@ -6951,10 +6951,14 @@
                     this.save();
                 }
             },
+            silentReset() {
+                this.data = { ...SEED, tasks: [], notes: [], streak: 0, lastLogin: null, planner: { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] }, settings: { darkMode: false } };
+                this.data.version = CURRENT_VERSION;
+                this.save();
+            },
             hardReset() {
                 if(confirm("Reset all data to defaults?")) {
-                    this.data = { ...SEED, tasks: [], notes: [], streak: 0, lastLogin: null, planner: { mon: [], tue: [], wed: [], thu: [], fri: [], sat: [], sun: [] }, settings: { darkMode: false } };
-                    this.save();
+                    this.silentReset();
                     window.location.reload();
                 }
             },
