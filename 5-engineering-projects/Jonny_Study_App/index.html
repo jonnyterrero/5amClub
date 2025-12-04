@@ -132,7 +132,17 @@
         const STORAGE_KEY = '5amClub_v6';
         const OLD_STORAGE_KEY = '5amClub_v5'; // For migration
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Fail', err));
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // New content is available, show the update toast
+                            document.getElementById('update-toast').classList.remove('hidden');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW Fail', err));
         }
         // --- MASTER SEED DATA ---
         const SEED = {
@@ -1887,7 +1897,7 @@
         {
             "id": 11,
             "title": "MIT 5.61 Physical Chemistry, Fall 2017",
-            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP62RsEHXe48Imi9-87FzQaJg",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP63LOmB3_O0xbgZVZibxj4rb",
             "type": "Web",
             "trackId": "chem",
             "courseId": 503
@@ -1927,7 +1937,7 @@
         {
             "id": 16,
             "title": "MIT 5.111 Principles of Chemical Science, Fall 2014",
-            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP63LOmB3_O0xbgZVZibxj4rb",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP62wNcIMfinU64CAfreShjpt",
             "type": "Web",
             "trackId": "neuro",
             "courseId": null
@@ -2072,14 +2082,6 @@
             "id": 34,
             "title": "Linear Algebra (Full Course)",
             "url": "https://www.youtube.com/playlist?list=PLHXZ9OQGMqxfUl0tcqPNTJsb7R6BqSLo6",
-            "type": "Web",
-            "trackId": "math",
-            "courseId": 401
-        },
-        {
-            "id": 35,
-            "title": "Dr. Trefor Bazet",
-            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP63oMNUHXqIUcrkS2PivhN3k",
             "type": "Web",
             "trackId": "math",
             "courseId": 401
@@ -2421,14 +2423,6 @@
             "courseId": null
         },
         {
-            "id": 78,
-            "title": "Resource",
-            "url": "https://www.accessengineeringlibrary.com/content/book/9780071356374",
-            "type": "Web",
-            "trackId": "neuro",
-            "courseId": null
-        },
-        {
             "id": 79,
             "title": "Resource",
             "url": "https://chem.libretexts.org/Bookshelves/Organic_Chemistry/Organic_Chemistry_(OpenStax",
@@ -2464,14 +2458,6 @@
             "id": 83,
             "title": "Resource",
             "url": "https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:thermodynamics",
-            "type": "Web",
-            "trackId": "neuro",
-            "courseId": null
-        },
-        {
-            "id": 84,
-            "title": "Resource",
-            "url": "https://openstax.org/books/college-physics-2e/pages/15-introduction-to-thermodynamics",
             "type": "Web",
             "trackId": "neuro",
             "courseId": null
@@ -2763,14 +2749,6 @@
             "type": "Web",
             "trackId": "neuro",
             "courseId": null
-        },
-        {
-            "id": 121,
-            "title": "DC Electrical Circuit Analysis: A Practical Approach (open textbook main page):",
-            "url": "https://open.umn.edu/opentextbooks/textbooks/884",
-            "type": "Web",
-            "trackId": "ee",
-            "courseId": 601
         },
         {
             "id": 122,
@@ -3104,14 +3082,6 @@
             "id": 163,
             "title": "Pandas:",
             "url": "https://pandas.pydata.org",
-            "type": "Web",
-            "trackId": "se",
-            "courseId": null
-        },
-        {
-            "id": 164,
-            "title": "| GitHub:",
-            "url": "https://github.com/pandas-dev/pandas",
             "type": "Web",
             "trackId": "se",
             "courseId": null
@@ -3781,30 +3751,6 @@
             "courseId": null
         },
         {
-            "id": 248,
-            "title": "Resource",
-            "url": "https://www.untitledui.com/blog/react-component-libraries",
-            "type": "Web",
-            "trackId": "cs",
-            "courseId": null
-        },
-        {
-            "id": 249,
-            "title": "Resource",
-            "url": "https://strapi.io/blog/nextjs-libraries",
-            "type": "Web",
-            "trackId": "cs",
-            "courseId": null
-        },
-        {
-            "id": 250,
-            "title": "Resource",
-            "url": "https://www.perplexity.ai/search/961d6579-40c7-42a0-9ee7-0b67941e1f4a",
-            "type": "Web",
-            "trackId": "cs",
-            "courseId": null
-        },
-        {
             "id": 251,
             "title": "Resource",
             "url": "https://www.intuz.com/node-js-frameworks",
@@ -4231,7 +4177,7 @@
         {
             "id": 304,
             "title": "Resource",
-            "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010",
+            "url": "https://ocw.mit.edu/courses/18-03-differential-equations-spring-2010",
             "type": "Web",
             "trackId": "ee",
             "courseId": 605
@@ -4239,7 +4185,7 @@
         {
             "id": 305,
             "title": "Resource",
-            "url": "https://ocw.mit.edu/1806videos",
+            "url": "https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011",
             "type": "Web",
             "trackId": "ee",
             "courseId": 605
@@ -4247,69 +4193,13 @@
         {
             "id": 306,
             "title": "Resource",
-            "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011",
-            "type": "Web",
-            "trackId": "ee",
-            "courseId": 605
-        },
-        {
-            "id": 307,
-            "title": "Resource",
-            "url": "https://ocw.mit.edu/1806scvideos",
-            "type": "Web",
-            "trackId": "ee",
-            "courseId": 605
-        },
-        {
-            "id": 308,
-            "title": "Resource",
-            "url": "https://math.mit.edu/~gs",
-            "type": "Web",
-            "trackId": "math",
-            "courseId": 401
-        },
-        {
-            "id": 309,
-            "title": "Resource",
-            "url": "https://math.mit.edu/~gs/linearalgebra",
-            "type": "Web",
-            "trackId": "math",
-            "courseId": 401
-        },
-        {
-            "id": 310,
-            "title": "Resource",
-            "url": "https://math.mit.edu/~gs/linearalgebra/ila6/indexila6.html",
-            "type": "Web",
-            "trackId": "math",
-            "courseId": 401
-        },
-        {
-            "id": 311,
-            "title": "Resource",
-            "url": "https://ocw.mit.edu/courses/18-03-differential-equations-spring-2010",
-            "type": "Web",
-            "trackId": "ee",
-            "courseId": 605
-        },
-        {
-            "id": 312,
-            "title": "Resource",
-            "url": "https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011",
-            "type": "Web",
-            "trackId": "ee",
-            "courseId": 605
-        },
-        {
-            "id": 313,
-            "title": "Resource",
             "url": "https://tutorial.math.lamar.edu/Classes/DE/DE.aspx",
             "type": "Web",
             "trackId": "math",
             "courseId": 404
         },
         {
-            "id": 314,
+            "id": 307,
             "title": "MIT 18.152 - Introduction to Partial Differential Equations",
             "url": "https://ocw.mit.edu/courses/18-152-introduction-to-partial-differential-equations-fall-2011",
             "type": "Web",
@@ -4317,7 +4207,7 @@
             "courseId": 605
         },
         {
-            "id": 315,
+            "id": 308,
             "title": "Resource",
             "url": "https://ocw.mit.edu/courses/18-330-introduction-to-numerical-analysis-spring-2012",
             "type": "Web",
@@ -4325,7 +4215,7 @@
             "courseId": 605
         },
         {
-            "id": 316,
+            "id": 309,
             "title": "Resource",
             "url": "https://ocw.mit.edu/courses/18-335j-introduction-to-numerical-methods-spring-2019",
             "type": "Web",
@@ -4333,7 +4223,7 @@
             "courseId": 605
         },
         {
-            "id": 317,
+            "id": 310,
             "title": "Resource",
             "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014",
             "type": "Web",
@@ -4341,7 +4231,7 @@
             "courseId": 605
         },
         {
-            "id": 318,
+            "id": 311,
             "title": "Resource",
             "url": "https://ocw.mit.edu/courses/res-6-012-introduction-to-probability-spring-2018",
             "type": "Web",
@@ -4349,7 +4239,7 @@
             "courseId": 605
         },
         {
-            "id": 319,
+            "id": 312,
             "title": "MIT 6.042J - Mathematics for Computer Science",
             "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015",
             "type": "Web",
@@ -4357,7 +4247,7 @@
             "courseId": 605
         },
         {
-            "id": 320,
+            "id": 313,
             "title": "Resource",
             "url": "https://chem.libretexts.org/Bookshelves",
             "type": "Web",
@@ -4365,7 +4255,7 @@
             "courseId": 605
         },
         {
-            "id": 321,
+            "id": 314,
             "title": "Resource",
             "url": "https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps",
             "type": "Web",
@@ -4373,7 +4263,7 @@
             "courseId": 605
         },
         {
-            "id": 322,
+            "id": 315,
             "title": "Resource",
             "url": "https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Thermodynamics_and_Chemical_Equilibrium_(DeVoe",
             "type": "Web",
@@ -4381,7 +4271,7 @@
             "courseId": 605
         },
         {
-            "id": 323,
+            "id": 316,
             "title": "Resource",
             "url": "https://chem.libretexts.org/Bookshelves/Organic_Chemistry",
             "type": "Web",
@@ -4389,7 +4279,7 @@
             "courseId": 605
         },
         {
-            "id": 324,
+            "id": 317,
             "title": "Multiple complete textbooks covering structure, properties, ",
             "url": "https://chem.libretexts.org/Bookshelves/Organic_Chemistry/Book:Organic_Chemistry_with_a_Biological_Emphasis_v2.0(Soderberg",
             "type": "Web",
@@ -4397,7 +4287,7 @@
             "courseId": 605
         },
         {
-            "id": 325,
+            "id": 318,
             "title": "Resource",
             "url": "https://www.khanacademy.org/science/organic-chemistry",
             "type": "Web",
@@ -4405,7 +4295,7 @@
             "courseId": null
         },
         {
-            "id": 326,
+            "id": 319,
             "title": "Resource",
             "url": "https://www2.chemistry.msu.edu/faculty/reusch/VirtTxtJml/intro1.htm",
             "type": "Web",
@@ -4413,7 +4303,7 @@
             "courseId": null
         },
         {
-            "id": 327,
+            "id": 320,
             "title": "Resource",
             "url": "https://ocw.mit.edu/courses/7-05-general-biochemistry-spring-2020",
             "type": "Web",
@@ -4421,7 +4311,7 @@
             "courseId": 605
         },
         {
-            "id": 328,
+            "id": 321,
             "title": "Resource",
             "url": "https://ocw.mit.edu/courses/5-07sc-biological-chemistry-i-fall-2013",
             "type": "Web",
@@ -4429,7 +4319,7 @@
             "courseId": 605
         },
         {
-            "id": 329,
+            "id": 322,
             "title": "Resource",
             "url": "https://open.oregonstate.education/biochemistry",
             "type": "Web",
@@ -4437,7 +4327,7 @@
             "courseId": 502
         },
         {
-            "id": 330,
+            "id": 331,
             "title": "Resource",
             "url": "https://bio.libretexts.org/Bookshelves/Biochemistry",
             "type": "Web",
@@ -4445,7 +4335,7 @@
             "courseId": 605
         },
         {
-            "id": 331,
+            "id": 332,
             "title": "Resource",
             "url": "https://ocw.mit.edu/courses/9-01-introduction-to-neuroscience-fall-2007",
             "type": "Web",
@@ -4453,7 +4343,7 @@
             "courseId": 605
         },
         {
-            "id": 332,
+            "id": 333,
             "title": "Resource",
             "url": "https://ocw.mit.edu/courses/9-10-cognitive-neuroscience-spring-2006",
             "type": "Web",
@@ -4461,7 +4351,7 @@
             "courseId": 605
         },
         {
-            "id": 333,
+            "id": 334,
             "title": "Resource",
             "url": "https://ocw.mit.edu/courses/9-13-the-human-brain-spring-2019",
             "type": "Web",
@@ -4469,7 +4359,7 @@
             "courseId": 605
         },
         {
-            "id": 334,
+            "id": 335,
             "title": "MIT 9.00SC - Introduction to Psychology",
             "url": "https://ocw.mit.edu/courses/9-00sc-introduction-to-psychology-fall-2011",
             "type": "Web",
@@ -4477,7 +4367,7 @@
             "courseId": 605
         },
         {
-            "id": 335,
+            "id": 336,
             "title": "MIT 9.29J - Introduction to Computational Neuroscience",
             "url": "https://ocw.mit.edu/courses/9-29j-introduction-to-computational-neuroscience-spring-2004",
             "type": "Web",
@@ -4485,15 +4375,7 @@
             "courseId": 605
         },
         {
-            "id": 336,
-            "title": "Resource",
-            "url": "https://backyardbrains.com",
-            "type": "Web",
-            "trackId": "neuro",
-            "courseId": null
-        },
-        {
-            "id": 337,
+            "id": 338,
             "title": "Resource",
             "url": "https://bio.libretexts.org",
             "type": "Web",
@@ -4501,7 +4383,7 @@
             "courseId": 605
         },
         {
-            "id": 338,
+            "id": 339,
             "title": "Resource",
             "url": "https://math.libretexts.org",
             "type": "Web",
@@ -4509,15 +4391,7 @@
             "courseId": 605
         },
         {
-            "id": 339,
-            "title": "Resource",
-            "url": "https://phys.libretexts.org",
-            "type": "Web",
-            "trackId": "ee",
-            "courseId": 605
-        },
-        {
-            "id": 340,
+            "id": 341,
             "title": "Resource",
             "url": "https://www.khanacademy.org",
             "type": "Web",
@@ -4525,7 +4399,7 @@
             "courseId": null
         },
         {
-            "id": 341,
+            "id": 342,
             "title": "Resource",
             "url": "https://www.coursera.org",
             "type": "Web",
@@ -4533,7 +4407,7 @@
             "courseId": 202
         },
         {
-            "id": 342,
+            "id": 343,
             "title": "Resource",
             "url": "https://www.edx.org",
             "type": "Web",
@@ -4541,7 +4415,7 @@
             "courseId": null
         },
         {
-            "id": 343,
+            "id": 344,
             "title": "Resource",
             "url": "https://www.classcentral.com",
             "type": "Web",
@@ -4549,7 +4423,7 @@
             "courseId": 605
         },
         {
-            "id": 344,
+            "id": 345,
             "title": "Resource",
             "url": "https://github.com/ossu/data-science",
             "type": "Web",
@@ -4557,7 +4431,7 @@
             "courseId": 605
         },
         {
-            "id": 345,
+            "id": 346,
             "title": "Resource",
             "url": "https://github.com/ossu/bioinformatics",
             "type": "Web",
@@ -4565,7 +4439,7 @@
             "courseId": 605
         },
         {
-            "id": 346,
+            "id": 347,
             "title": "Resource",
             "url": "https://github.com/anu0012/awesome-computer-science-opportunities",
             "type": "Web",
@@ -4573,7 +4447,7 @@
             "courseId": null
         },
         {
-            "id": 347,
+            "id": 348,
             "title": "Practice Problem Resources",
             "url": "https://projecteuler.net",
             "type": "Web",
@@ -4581,7 +4455,7 @@
             "courseId": null
         },
         {
-            "id": 348,
+            "id": 349,
             "title": "Resource",
             "url": "https://leetcode.com",
             "type": "Web",
@@ -4589,7 +4463,7 @@
             "courseId": null
         },
         {
-            "id": 349,
+            "id": 350,
             "title": "Resource",
             "url": "https://www.hackerrank.com",
             "type": "Web",
@@ -4597,7 +4471,7 @@
             "courseId": null
         },
         {
-            "id": 350,
+            "id": 351,
             "title": "Resource",
             "url": "https://tutorial.math.lamar.edu",
             "type": "Web",
@@ -4605,7 +4479,7 @@
             "courseId": 404
         },
         {
-            "id": 351,
+            "id": 352,
             "title": "Next.js / React / Node ecosystem libraries (used alongside FSO)",
             "url": "https://tailwindcss.com",
             "type": "Web",
@@ -4613,7 +4487,7 @@
             "courseId": 101
         },
         {
-            "id": 352,
+            "id": 353,
             "title": "Next.js / React / Node ecosystem libraries (used alongside FSO)",
             "url": "https://www.prisma.io",
             "type": "Web",
@@ -4621,7 +4495,7 @@
             "courseId": 101
         },
         {
-            "id": 353,
+            "id": 354,
             "title": "Next.js / React / Node ecosystem libraries (used alongside FSO)",
             "url": "https://authjs.dev",
             "type": "Web",
@@ -4629,7 +4503,7 @@
             "courseId": 101
         },
         {
-            "id": 354,
+            "id": 355,
             "title": "Component libs & helpers (MUI, shadcn/ui, React Hook Form)",
             "url": "https://mui.com",
             "type": "Web",
@@ -4637,7 +4511,7 @@
             "courseId": 101
         },
         {
-            "id": 355,
+            "id": 356,
             "title": "Component libs & helpers (MUI, shadcn/ui, React Hook Form)",
             "url": "https://ui.shadcn.com",
             "type": "Web",
@@ -4645,7 +4519,7 @@
             "courseId": 101
         },
         {
-            "id": 356,
+            "id": 357,
             "title": "Component libs & helpers (MUI, shadcn/ui, React Hook Form)",
             "url": "https://react-hook-form.com",
             "type": "Web",
@@ -4653,7 +4527,7 @@
             "courseId": 101
         },
         {
-            "id": 357,
+            "id": 358,
             "title": "Web framework + tooling",
             "url": "https://expressjs.com",
             "type": "Web",
@@ -4661,7 +4535,7 @@
             "courseId": 101
         },
         {
-            "id": 358,
+            "id": 359,
             "title": "Web framework + tooling",
             "url": "https://socket.io",
             "type": "Web",
@@ -4669,7 +4543,7 @@
             "courseId": 101
         },
         {
-            "id": 359,
+            "id": 360,
             "title": "Web framework + tooling",
             "url": "https://nodemon.io",
             "type": "Web",
@@ -4677,7 +4551,7 @@
             "courseId": 101
         },
         {
-            "id": 360,
+            "id": 361,
             "title": "TS, SQL, C/C++, C#, Flutter, Swift ecosystem references",
             "url": "https://www.typescriptlang.org/docs/handbook",
             "type": "Web",
@@ -4685,7 +4559,7 @@
             "courseId": 101
         },
         {
-            "id": 361,
+            "id": 362,
             "title": "Free textbooks: \"SQL Cookbook\": free excerpts; Use The Index Luke:",
             "url": "https://use-the-index-luke.com/sql",
             "type": "Web",
@@ -4693,7 +4567,7 @@
             "courseId": 101
         },
         {
-            "id": 362,
+            "id": 363,
             "title": "TS, SQL, C/C++, C#, Flutter, Swift ecosystem references",
             "url": "https://learn.microsoft.com/dotnet/csharp",
             "type": "Web",
@@ -4701,7 +4575,7 @@
             "courseId": 101
         },
         {
-            "id": 363,
+            "id": 364,
             "title": "TS, SQL, C/C++, C#, Flutter, Swift ecosystem references",
             "url": "https://docs.flutter.dev",
             "type": "Web",
@@ -4709,7 +4583,7 @@
             "courseId": 101
         },
         {
-            "id": 364,
+            "id": 365,
             "title": "TS, SQL, C/C++, C#, Flutter, Swift ecosystem references",
             "url": "https://docs.swift.org/swift-book",
             "type": "Web",
@@ -4717,7 +4591,7 @@
             "courseId": 101
         },
         {
-            "id": 365,
+            "id": 366,
             "title": "Django docs + ecosystem",
             "url": "https://www.djangoproject.com",
             "type": "Web",
@@ -4725,7 +4599,7 @@
             "courseId": 102
         },
         {
-            "id": 366,
+            "id": 367,
             "title": "Django docs + ecosystem",
             "url": "https://docs.djangoproject.com",
             "type": "Web",
@@ -4733,7 +4607,7 @@
             "courseId": 102
         },
         {
-            "id": 367,
+            "id": 368,
             "title": "Django docs + ecosystem",
             "url": "https://automatetheboringstuff.com",
             "type": "Web",
@@ -4741,7 +4615,7 @@
             "courseId": 102
         },
         {
-            "id": 368,
+            "id": 369,
             "title": "SQLAlchemy, Prisma (if using JS backends)",
             "url": "https://www.sqlalchemy.org",
             "type": "Web",
@@ -4749,7 +4623,7 @@
             "courseId": 102
         },
         {
-            "id": 369,
+            "id": 370,
             "title": "Netlify / Vercel docs (for your workspace)",
             "url": "https://www.netlify.com",
             "type": "Web",
@@ -4757,20 +4631,12 @@
             "courseId": 103
         },
         {
-            "id": 370,
+            "id": 371,
             "title": "Netlify / Vercel docs (for your workspace)",
             "url": "https://vercel.com",
             "type": "Web",
             "trackId": "se",
             "courseId": 103
-        },
-        {
-            "id": 371,
-            "title": "FastAPI (Python alt):",
-            "url": "https://fastapi.tiangolo.com",
-            "type": "Web",
-            "trackId": "se",
-            "courseId": 104
         },
         {
             "id": 372,
@@ -5165,22 +5031,6 @@
             "trackId": "misc"
         },
         {
-            "id": 421,
-            "title": "r/EngineeringStudents \u2013 exams, conceptual help, internships.",
-            "url": "https://www.reddit.com/r/EngineeringStudentsreddit",
-            "type": "link",
-            "courseId": 613,
-            "trackId": "misc"
-        },
-        {
-            "id": 422,
-            "title": "MIT Biological Engineering OCW (biotransport, biomaterials, etc.).",
-            "url": "https://ocw.mit.edu/courses/biological-engineeringopencw.aprende",
-            "type": "link",
-            "courseId": 613,
-            "trackId": "misc"
-        },
-        {
             "id": 423,
             "title": "r/biomedicalengineering \u2013 devices, coursework, grad advice.",
             "url": "https://www.reddit.com/r/biomedicalengineeringreddit",
@@ -5517,14 +5367,6 @@
             "trackId": "misc"
         },
         {
-            "id": 465,
-            "title": "Tissue Engineering (NCBI Book):",
-            "url": "https://www.ncbi.nlm.nih.gov/books/NBK234413/",
-            "type": "link",
-            "courseId": 613,
-            "trackId": "misc"
-        },
-        {
             "id": 466,
             "title": "IHI Open School (Free healthcare engineering content):",
             "url": "https://www.ihi.org/education/IHIOpenSchool/",
@@ -5757,14 +5599,6 @@
             "trackId": "misc"
         },
         {
-            "id": 495,
-            "title": "Eigen (linear algebra):  | GitHub: https://gitlab.com/libeigen/eigen",
-            "url": "http://eigen.tuxfamily.org/",
-            "type": "link",
-            "courseId": 619,
-            "trackId": "misc"
-        },
-        {
             "id": 496,
             "title": "http://www.dissidents.com/resources/DCElectricalCircuitAnalysis.pdf",
             "url": "https://mds.marshall.edu/oa-textbooks/767/",
@@ -5856,14 +5690,6 @@
             "id": 507,
             "title": "Flipping Physics \u2013 conceptual + calculus-based physics.",
             "url": "https://www.youtube.com/@flippingphysicsyoutube",
-            "type": "link",
-            "courseId": 625,
-            "trackId": "misc"
-        },
-        {
-            "id": 508,
-            "title": "Calculus by Strang (MIT OCW):",
-            "url": "https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/",
             "type": "link",
             "courseId": 625,
             "trackId": "misc"
@@ -6200,14 +6026,6 @@
             "id": 550,
             "title": "| **Operating Systems** | Neso Academy | [Operating Systems]( |",
             "url": "https://www.youtube.com/playlist?list=PLBlnK6fEyqRhqJPDXcvYlLfXPh37L89g3)",
-            "type": "link",
-            "courseId": 630,
-            "trackId": "neuro"
-        },
-        {
-            "id": 551,
-            "title": "| **Operating Systems** | Gate Smashers | [OS Tutorials]( |",
-            "url": "https://www.youtube.com/playlist?list=PLWPirh4EWFpHr_1ZCkuF9ToYUrmujv9Aa)",
             "type": "link",
             "courseId": 630,
             "trackId": "neuro"
@@ -7000,25 +6818,7 @@
                 const track = this.data.tracks.find(t => t.id === trackId);
                 const courses = this.data.courses.filter(c => c.trackId === trackId);
                 container.innerHTML = `
-                    <div class="mb-8 flex justify-between items-center">
-                        <h2 class="text-3xl font-bold dark:text-white flex items-center gap-3"><i data-lucide="${track.icon}" class="w-8 h-8 text-indigo-500"></i>${track.name} <button onclick="app.openTrackModal('${trackId}')" class="ml-2 p-1 text-slate-400 hover:text-indigo-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button></h2>
-                        <button onclick="app.openCourseModal(null, '${trackId}')" class="bg-indigo-600 text-white px-3 py-1.5 rounded text-sm">+ Course</button>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${courses.map(c => `
-                            <div class="bg-white dark:bg-darkSurface p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-indigo-300 transition-all cursor-pointer" onclick="app.router('course-detail', ${c.id})">
-                                <div class="flex justify-between"><h3 class="font-bold dark:text-white text-lg mb-3">${c.title}</h3></div>
-                                <div class="flex items-center gap-2"><input type="range" min="0" max="100" value="${c.progress}" onchange="event.stopPropagation(); app.updateCourseProgress(${c.id}, this.value)" class="w-full h-1.5 bg-slate-100 rounded-lg accent-indigo-600"><span class="text-xs text-slate-500 w-8 text-right">${c.progress}%</span></div>
-                            </div>`).join('')}
-                    </div>`;
-            },
-            renderCourseDetail(container, courseId) {
-                const c = this.data.courses.find(x => x.id === courseId);
-                if(!c) return;
-                const cRes = this.data.resources.filter(r => r.courseId === courseId);
-                const cNotes = this.data.notes.filter(n => n.courseId === courseId);
-                container.innerHTML = `
-                    <div class="mb-6 flex justify-between items-start">
+                    <div class="mb-8 flex justify-between items-start">
                         <button onclick="app.router('track', '${c.trackId}')" class="text-sm text-slate-400 hover:text-indigo-500 mb-2 flex gap-1"><i data-lucide="arrow-left" class="w-4"></i> Back</button>
                         <button onclick="app.deleteCourse(${c.id})" class="text-xs text-red-400 hover:text-red-600 flex items-center gap-1"><i data-lucide="trash-2" class="w-3"></i> Delete Course</button>
                     </div>
@@ -7235,29 +7035,104 @@
             
             // --- NOTES ---
             htmlNoteCard(n) { 
+                const attachmentsPreview = (n.attachments || []).map(att => `
+                    <span class="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+                        <i data-lucide="paperclip" class="w-3 h-3"></i> ${att.name}
+                    </span>
+                `).join('');
+
                 return `
                 <div onclick="app.openNoteModal(${n.id}, ${n.courseId})" class="bg-white dark:bg-darkSurface p-4 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm cursor-pointer group relative">
                     <h4 class="font-bold dark:text-white pr-6">${n.title}</h4>
                     <div class="prose prose-sm text-slate-500 line-clamp-2 text-xs mt-2">${marked.parse(n.content || '')}</div>
+                    <div class="mt-2 flex flex-wrap gap-2">${attachmentsPreview}</div>
                     <button onclick="event.stopPropagation(); app.deleteNote(${n.id})" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
                         <i data-lucide="trash-2" class="w-4 h-4"></i>
                     </button>
                 </div>`; 
             },
             openNoteModal(id, courseId) {
-                const n = id ? this.data.notes.find(x => x.id === id) : { title: '', content: '' };
+                const n = id ? this.data.notes.find(x => x.id === id) : { title: '', content: '', attachments: [] };
                 const deleteBtn = id ? `<button onclick="app.deleteNote(${id})" class="text-red-500 text-sm hover:text-red-700 flex items-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete Note</button>` : '';
-                const html = `<div class="space-y-4"><input id="n-title" class="w-full p-2 text-lg font-bold border-b dark:bg-transparent dark:text-white dark:border-slate-600 outline-none" placeholder="Title" value="${n.title}"><textarea id="n-content" class="w-full h-64 p-2 border rounded font-mono text-sm dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600" placeholder="Markdown...">${n.content}</textarea><div class="flex justify-between items-center">${deleteBtn}</div></div>`;
+                
+                const attachmentsHtml = (n.attachments || []).map((att, index) => `
+                    <div class="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-700 rounded text-sm">
+                        <a href="${att.dataUrl}" download="${att.name}" class="truncate hover:underline">${att.name}</a>
+                        <button onclick="app.removeAttachment(${id}, ${index})" class="text-red-400 hover:text-red-600 p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
+                    </div>
+                `).join('');
+
+                const html = `
+                    <div class="space-y-4">
+                        <input id="n-title" class="w-full p-2 text-lg font-bold border-b dark:bg-transparent dark:text-white dark:border-slate-600 outline-none" placeholder="Title" value="${n.title}">
+                        <textarea id="n-content" class="w-full h-64 p-2 border rounded font-mono text-sm dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600" placeholder="Markdown...">${n.content || ''}</textarea>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-500 mb-2">Attachments</h4>
+                            <div id="attachments-list" class="space-y-2 mb-2">${attachmentsHtml}</div>
+                            <input type="file" id="n-attachment" class="text-sm">
+                        </div>
+                        <div class="flex justify-between items-center pt-4">${deleteBtn}</div>
+                    </div>`;
                 
                 app.openModal(id ? 'Edit Note' : 'New Note', html, () => {
                     const title = document.getElementById('n-title').value;
                     const content = document.getElementById('n-content').value;
+                    const attachmentInput = document.getElementById('n-attachment');
+                    
                     if(title) {
-                        if(id) { const note = this.data.notes.find(x => x.id === id); note.title = title; note.content = content; }
-                        else { this.data.notes.push({ id: Date.now(), title, content, courseId, date: new Date().toISOString() }); }
-                        this.save(); app.closeModal(); courseId ? app.router('course-detail', courseId) : app.router('notes');
+                        const file = attachmentInput.files[0];
+                        
+                        const handleSave = (newAttachment = null) => {
+                            let noteToSave;
+                            if(id) { 
+                                noteToSave = this.data.notes.find(x => x.id === id); 
+                                noteToSave.title = title; 
+                                noteToSave.content = content; 
+                            } else { 
+                                noteToSave = { id: Date.now(), title, content, courseId, date: new Date().toISOString(), attachments: [] };
+                                this.data.notes.push(noteToSave); 
+                            }
+                            
+                            if (newAttachment) {
+                                if (!noteToSave.attachments) noteToSave.attachments = [];
+                                noteToSave.attachments.push(newAttachment);
+                            }
+                            
+                            this.save(); 
+                            app.closeModal(); 
+                            courseId ? app.router('course-detail', courseId) : app.router('notes');
+                        };
+
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                handleSave({ name: file.name, dataUrl: e.target.result });
+                            };
+                            reader.onerror = function(e) {
+                                alert('Error reading file.');
+                                console.error(e);
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            handleSave();
+                        }
                     }
                 });
+            },
+            removeAttachment(noteId, attachmentIndex) {
+                const note = this.data.notes.find(x => x.id === noteId);
+                if (note && note.attachments) {
+                    note.attachments.splice(attachmentIndex, 1);
+                    this.save();
+                    // Re-render modal content
+                    document.querySelector('#attachments-list').innerHTML = (note.attachments || []).map((att, index) => `
+                        <div class="flex items-center justify-between p-2 bg-slate-100 dark:bg-slate-700 rounded text-sm">
+                            <a href="${att.dataUrl}" download="${att.name}" class="truncate hover:underline">${att.name}</a>
+                            <button onclick="app.removeAttachment(${noteId}, ${index})" class="text-red-400 hover:text-red-600 p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
+                        </div>
+                    `).join('');
+                    lucide.createIcons();
+                }
             },
             deleteNote(id) {
                 if(confirm("Delete note?")) {
