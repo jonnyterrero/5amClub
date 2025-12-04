@@ -7307,48 +7307,30 @@
                 const track = this.data.tracks.find(t => t.id === trackId);
                 const courses = this.data.courses.filter(c => c.trackId === trackId);
                 container.innerHTML = `
-                    <div class="mb-8 flex justify-between items-start">
-                        <button onclick="app.router('track', '${c.trackId}')" class="text-sm text-slate-400 hover:text-indigo-500 mb-2 flex gap-1"><i data-lucide="arrow-left" class="w-4"></i> Back</button>
-                        <button onclick="app.deleteCourse(${c.id})" class="text-xs text-red-400 hover:text-red-600 flex items-center gap-1"><i data-lucide="trash-2" class="w-3"></i> Delete Course</button>
+                    <div class="mb-8 flex justify-between items-center">
+                        <h2 class="text-3xl font-bold dark:text-white flex items-center gap-3">
+                            <i data-lucide="${track.icon}" class="w-8 h-8 text-indigo-500"></i>
+                            ${track.name}
+                            <button onclick="app.openTrackModal('${trackId}')" class="ml-2 p-1 text-slate-400 hover:text-indigo-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                        </h2>
+                        <button onclick="app.openCourseModal(null, '${trackId}')" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Add Course
+                        </button>
                     </div>
-                    <div class="bg-white dark:bg-darkSurface p-6 rounded-xl border border-slate-200 dark:border-slate-700 flex justify-between items-center mb-6">
-                        <div><span class="text-xs bg-indigo-50 text-indigo-600 px-2 py-1 rounded font-bold uppercase">${c.status}</span><h1 class="text-3xl font-bold mt-2 dark:text-white">${c.title}</h1></div>
-                        <div class="text-right"><div class="text-3xl font-bold text-slate-200 dark:text-slate-600">${c.progress}%</div></div>
-                    </div></div>
-                    <div class="flex gap-4 mb-6 border-b border-slate-200 dark:border-slate-700">
-                        <button onclick="document.getElementById('tab-overview').classList.remove('hidden'); document.getElementById('tab-notes').classList.add('hidden');" class="px-4 py-2 border-b-2 border-indigo-500 font-bold text-indigo-600">Overview</button>
-                        <button onclick="document.getElementById('tab-notes').classList.remove('hidden'); document.getElementById('tab-overview').classList.add('hidden');" class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400">Notes</button>
-                    </div>
-                    <div id="tab-overview" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="space-y-6">
-                            <div class="bg-white dark:bg-darkSurface p-6 rounded-xl border border-slate-200 dark:border-slate-700">
-                                <div class="flex justify-between mb-4"><h3 class="font-bold dark:text-white">Goals</h3><button onclick="app.addGoal(${c.id})" class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">+ Add</button></div>
-                                <ul class="space-y-2">${c.goals ? c.goals.map((g, i) => `<li class="flex justify-between items-center group text-sm text-slate-600 dark:text-slate-300"><span class="flex gap-2"><div class="w-1.5 h-1.5 mt-1.5 bg-indigo-500 rounded-full flex-shrink-0"></div>${g}</span><button onclick="app.deleteGoal(${c.id}, ${i})" class="opacity-0 group-hover:opacity-100 text-red-400"><i data-lucide="trash" class="w-3"></i></button></li>`).join('') : ''}</ul>
-                            </div>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-[#252525] p-4 rounded border border-gray-200 dark:border-gray-700">
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="font-bold dark:text-white">Resources</h3>
-                                <button onclick="app.openResourceLinker(${c.id})" class="text-xs bg-white dark:bg-gray-700 border px-2 py-1 rounded">+ Link Resource</button>
-                            </div>
-                            <div class="space-y-2">${cRes.map(r => `
-                                <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded group hover:border-indigo-300 transition-all">
-                                    <a href="${r.url}" target="_blank" class="flex items-center gap-2 flex-1 min-w-0">
-                                        <i data-lucide="external-link" class="w-4 text-gray-400 flex-shrink-0"></i>
-                                        <span class="text-sm text-gray-700 dark:text-gray-300 truncate">${r.title}</span>
-                                    </a>
-                                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button onclick="app.moveResource(${r.id})" class="p-1.5 text-slate-400 hover:text-indigo-600" title="Move"><i data-lucide="folder-input" class="w-4 h-4"></i></button>
-                                        <button onclick="app.unlinkResource(${r.id})" class="p-1.5 text-slate-400 hover:text-orange-600" title="Unlink"><i data-lucide="unlink" class="w-4 h-4"></i></button>
-                                        <button onclick="editRes(${r.id})" class="p-1.5 text-slate-400 hover:text-blue-600" title="Edit"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        ${courses.length > 0 ? courses.map(c => `
+                            <div class="bg-white dark:bg-darkSurface p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:border-indigo-300 transition-all cursor-pointer" onclick="app.router('course-detail', ${c.id})">
+                                <div class="flex justify-between items-start mb-3">
+                                    <h3 class="font-bold dark:text-white text-lg">${c.title}</h3>
+                                    <span class="text-xs px-2 py-1 rounded ${c.status === 'Completed' ? 'bg-green-100 text-green-700' : c.status === 'In Progress' ? 'bg-yellow-100 text-yellow-700' : 'bg-slate-100 text-slate-600'}">${c.status}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="flex-1 bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                                        <div class="bg-indigo-500 h-2 rounded-full" style="width: ${c.progress || 0}%"></div>
                                     </div>
-                                </div>`).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tab-notes" class="hidden space-y-4">
-                        <div class="flex justify-between"><h3 class="font-bold dark:text-white">Course Notes</h3><button onclick="app.openNoteModal(null, ${c.id})" class="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded">+ New Note</button></div>
-                        ${cNotes.length ? cNotes.map(n => app.htmlNoteCard(n)).join('') : '<p class="text-slate-400 italic">No notes for this course yet.</p>'}
+                                    <span class="text-xs text-slate-500 w-10 text-right">${c.progress || 0}%</span>
+                                </div>
+                            </div>`).join('') : '<p class="text-slate-400 col-span-full text-center py-8">No courses in this track yet. Click "+ Add Course" to create one.</p>'}
                     </div>
                 `;
             },
