@@ -99,6 +99,7 @@
             <button onclick="app.router('db-courses')" id="nav-db-courses" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i data-lucide="book-open" class="w-4 h-4"></i> Courses</button>
             <button onclick="app.router('db-resources')" id="nav-db-resources" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i data-lucide="library" class="w-4 h-4"></i> Resources</button>
             <button onclick="app.router('notes')" id="nav-notes" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i data-lucide="file-text" class="w-4 h-4"></i> Notes</button>
+            <button onclick="app.router('habits')" id="nav-habits" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i data-lucide="target" class="w-4 h-4"></i> Habits</button>
             <div class="flex justify-between items-center px-2 mt-6 mb-1">
                 <span class="text-xs font-semibold text-gray-500 uppercase">Tracks</span>
                 <button onclick="app.openTrackModal()" class="text-gray-500 hover:text-black dark:hover:text-white"><i data-lucide="plus" class="w-3 h-3"></i></button>
@@ -106,16 +107,21 @@
             <div id="track-list-render" class="space-y-0.5"></div>
         </nav>
         <div class="p-4 border-t border-gray-200 dark:border-gray-800">
+            <!-- Offline Indicator -->
+            <div id="offline-indicator" class="hidden mb-3 bg-yellow-600 dark:bg-yellow-500 text-white p-2 rounded text-xs text-center">
+                ⚠️ You're offline. Changes are saved locally.
+            </div>
+            
             <!-- Update Toast (Sidebar Position) -->
             <div id="update-toast" class="hidden mb-3 bg-[#37352F] dark:bg-white text-white dark:text-black p-3 rounded shadow-lg flex flex-col gap-2">
                 <div><h4 class="font-bold text-sm">System Updated</h4><p class="text-xs opacity-80">New version available. Refresh to update.</p></div>
                 <button onclick="if(typeof forceUpdate === 'function') forceUpdate(); else window.location.reload();" class="w-full bg-white dark:bg-black text-black dark:text-white px-3 py-1.5 rounded text-xs font-bold">Refresh Now</button>
             </div>
             
-            <!-- Offline Indicator -->
-            <div id="offline-indicator" class="hidden mb-3 bg-yellow-600 dark:bg-yellow-500 text-white p-2 rounded text-xs text-center">
-                ⚠️ You're offline. Changes are saved locally.
-            </div>
+            <!-- Manual Update Check Button -->
+            <button onclick="if(typeof app !== 'undefined' && app.checkVersion) app.checkVersion(); if(typeof swRegistration !== 'undefined' && swRegistration) swRegistration.update();" class="w-full text-xs text-blue-500 hover:text-blue-700 flex items-center justify-center gap-2 py-1 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded mb-2"><i data-lucide="refresh-cw" class="w-3 h-3"></i> Check for Updates</button>
+            
+            <!-- Reset Database Button -->
             <button onclick="app.hardReset()" class="w-full text-xs text-red-500 hover:text-red-700 flex items-center justify-center gap-2 py-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"><i data-lucide="refresh-cw" class="w-3 h-3"></i> Restore DB</button>
         </div>
     </aside>
@@ -6918,6 +6924,7 @@
                     case 'dashboard': this.renderDashboard(container); break;
                     case 'planner': this.renderPlanner(container); break;
                     case 'notes': this.renderNotesPage(container); break;
+                    case 'habits': this.renderHabitsPage(container); break;
                     case 'db-courses': this.renderCourseDB(container); break;
                     case 'db-resources': this.renderResourceDB(container); break;
                     case 'db-projects': this.renderProjectDB(container); break;
@@ -7233,6 +7240,113 @@
                 lucide.createIcons();
             },
             renderNotesPage(container) { container.innerHTML = `<div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold dark:text-white">Notes</h2><button onclick="app.openNoteModal()" class="bg-indigo-600 text-white px-4 py-2 rounded text-sm flex gap-2"><i data-lucide="plus" class="w-4"></i> New</button></div><div class="grid gap-4">${this.data.notes.map(n => this.htmlNoteCard(n)).join('')}</div>`; },
+            renderHabitsPage(container) {
+                const today = new Date().toDateString();
+                const thisWeek = [];
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date();
+                    date.setDate(date.getDate() - i);
+                    thisWeek.push(date.toDateString());
+                }
+                
+                container.innerHTML = `
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold dark:text-white">Habits</h2>
+                        <button onclick="app.addHabit()" class="bg-indigo-600 text-white px-4 py-2 rounded text-sm flex gap-2">
+                            <i data-lucide="plus" class="w-4"></i> Add Habit
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        ${this.data.habits.map(h => {
+                            const history = h.history || {};
+                            const weekData = thisWeek.map(date => history[date] || false);
+                            const streak = this.calculateHabitStreak(h.history || {});
+                            return `
+                                <div class="bg-white dark:bg-darkSurface border border-slate-200 dark:border-slate-700 rounded-xl p-6">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <div>
+                                            <h3 class="font-bold text-lg dark:text-white">${h.title}</h3>
+                                            <p class="text-sm text-slate-500 dark:text-slate-400">${streak} day streak</p>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button onclick="app.editHabit('${h.id}')" class="text-slate-400 hover:text-indigo-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                                            <button onclick="app.deleteHabit('${h.id}')" class="text-slate-400 hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        ${weekData.map((completed, i) => {
+                                            const date = thisWeek[i];
+                                            const isToday = date === today;
+                                            return `
+                                                <div class="flex-1 flex flex-col items-center gap-1">
+                                                    <button onclick="app.toggleHabit('${h.id}', '${date}')" 
+                                                        class="w-full aspect-square rounded ${completed ? 'bg-indigo-600' : 'bg-slate-200 dark:bg-slate-700'} ${isToday ? 'ring-2 ring-indigo-400' : ''} hover:opacity-80 transition-all">
+                                                        ${completed ? '<i data-lucide="check" class="w-4 h-4 text-white mx-auto"></i>' : ''}
+                                                    </button>
+                                                    <span class="text-xs text-slate-500 dark:text-slate-400">${new Date(date).toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                lucide.createIcons();
+            },
+            calculateHabitStreak(history) {
+                let streak = 0;
+                const today = new Date();
+                for (let i = 0; i < 365; i++) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    const dateStr = date.toDateString();
+                    if (history[dateStr]) {
+                        streak++;
+                    } else if (i > 0) {
+                        break;
+                    }
+                }
+                return streak;
+            },
+            toggleHabit(habitId, date) {
+                const habit = this.data.habits.find(h => h.id === habitId);
+                if (!habit) return;
+                if (!habit.history) habit.history = {};
+                habit.history[date] = !habit.history[date];
+                this.save();
+                this.renderHabitsPage(document.getElementById('main-container'));
+            },
+            addHabit() {
+                const title = prompt('Habit name:');
+                if (title) {
+                    this.data.habits.push({
+                        id: 'h' + Date.now(),
+                        title,
+                        history: {}
+                    });
+                    this.save();
+                    this.renderHabitsPage(document.getElementById('main-container'));
+                }
+            },
+            editHabit(habitId) {
+                const habit = this.data.habits.find(h => h.id === habitId);
+                if (!habit) return;
+                const newTitle = prompt('Edit habit name:', habit.title);
+                if (newTitle && newTitle !== habit.title) {
+                    habit.title = newTitle;
+                    this.save();
+                    this.renderHabitsPage(document.getElementById('main-container'));
+                }
+            },
+            deleteHabit(habitId) {
+                if (confirm('Delete this habit?')) {
+                    this.data.habits = this.data.habits.filter(h => h.id !== habitId);
+                    this.save();
+                    this.renderHabitsPage(document.getElementById('main-container'));
+                }
+            },
             
             renderTrackPage(container, trackId) {
                 const track = this.data.tracks.find(t => t.id === trackId);
@@ -7614,7 +7728,7 @@
                         <div class="flex justify-end">${deleteBtn}</div>
                         <input id="r-title" value="${r.title}" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" placeholder="Title">
                         <input id="r-url" value="${r.url}" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" placeholder="URL">
-                        <select id="r-track" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white">
+                        <select id="r-track" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white" onchange="app.updateResourceCourseOptions()">
                             ${this.data.tracks.map(t => `<option value="${t.id}" ${t.id===r.trackId?'selected':''}>${t.name}</option>`).join('')}
                         </select>
                         <select id="r-course" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white">
@@ -7745,7 +7859,22 @@
                 });
             },
             addGoal(cid) { const g=prompt("Goal:"); if(g){ const c=this.data.courses.find(x=>x.id===cid); if(!c.goals)c.goals=[]; c.goals.push(g); this.save(); this.renderCourseDetail(document.getElementById('main-container'), cid); lucide.createIcons(); }},
-            deleteGoal(cid, i) { const c=this.data.courses.find(x=>x.id===cid); c.goals.splice(i,1); this.save(); this.renderCourseDetail(document.getElementById('main-container'), cid); lucide.createIcons(); }
+            deleteGoal(cid, i) { const c=this.data.courses.find(x=>x.id===cid); c.goals.splice(i,1); this.save(); this.renderCourseDetail(document.getElementById('main-container'), cid); lucide.createIcons(); },
+            updateResourceCourseOptions() {
+                const trackSelect = document.getElementById('r-track');
+                const courseSelect = document.getElementById('r-course');
+                if (!trackSelect || !courseSelect) return;
+                const trackId = trackSelect.value;
+                const courses = this.data.courses.filter(c => c.trackId === trackId);
+                const currentValue = courseSelect.value;
+                courseSelect.innerHTML = '<option value="">No Course</option>' + courses.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+                // Try to preserve selection if course is still in new track
+                if (currentValue && courses.find(c => c.id == currentValue)) {
+                    courseSelect.value = currentValue;
+                } else {
+                    courseSelect.value = '';
+                }
+            }
         };
         window.onload = () => App.init();
         const app = App;
