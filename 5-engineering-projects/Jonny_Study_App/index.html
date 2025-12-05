@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5amClub OS v6.1.1</title>
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiNWFtQ2x1YiIsInNob3J0X25hbWUiOiI1YW1DbHViIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIn0=">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#2eaadc">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="5amClub">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -104,8 +108,13 @@
         <div class="p-4 border-t border-gray-200 dark:border-gray-800">
             <!-- Update Toast (Sidebar Position) -->
             <div id="update-toast" class="hidden mb-3 bg-[#37352F] dark:bg-white text-white dark:text-black p-3 rounded shadow-lg flex flex-col gap-2">
-                <div><h4 class="font-bold text-sm">System Updated</h4><p class="text-xs opacity-80">New version available</p></div>
-                <button onclick="window.location.reload()" class="w-full bg-white dark:bg-black text-black dark:text-white px-3 py-1.5 rounded text-xs font-bold">Refresh Now</button>
+                <div><h4 class="font-bold text-sm">System Updated</h4><p class="text-xs opacity-80">New version available. Refresh to update.</p></div>
+                <button onclick="if(typeof forceUpdate === 'function') forceUpdate(); else window.location.reload();" class="w-full bg-white dark:bg-black text-black dark:text-white px-3 py-1.5 rounded text-xs font-bold">Refresh Now</button>
+            </div>
+            
+            <!-- Offline Indicator -->
+            <div id="offline-indicator" class="hidden mb-3 bg-yellow-600 dark:bg-yellow-500 text-white p-2 rounded text-xs text-center">
+                ⚠️ You're offline. Changes are saved locally.
             </div>
             <button onclick="app.hardReset()" class="w-full text-xs text-red-500 hover:text-red-700 flex items-center justify-center gap-2 py-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"><i data-lucide="refresh-cw" class="w-3 h-3"></i> Restore DB</button>
         </div>
@@ -131,19 +140,72 @@
         const CURRENT_VERSION = '6.1.1'; 
         const STORAGE_KEY = '5amClub_v6';
         const OLD_STORAGE_KEY = '5amClub_v5'; // For migration
+        // Service Worker Registration & Update Management
+        let swRegistration = null;
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(reg => {
+            navigator.serviceWorker.register('./sw.js', { scope: './' }).then(reg => {
+                swRegistration = reg;
+                console.log('[SW] Service Worker registered:', reg.scope);
+                
+                // Check for updates immediately
+                reg.update();
+                
+                // Listen for new service worker
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
+                    console.log('[SW] New service worker found');
+                    
                     newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // New content is available, show the update toast
-                            document.getElementById('update-toast').classList.remove('hidden');
+                        if (newWorker.state === 'installed') {
+                            if (navigator.serviceWorker.controller) {
+                                // New content is available, show the update toast
+                                console.log('[SW] New version available');
+                                document.getElementById('update-toast').classList.remove('hidden');
+                            } else {
+                                // First install, no update needed
+                                console.log('[SW] Service Worker installed for first time');
+                            }
                         }
                     });
                 });
-            }).catch(err => console.log('SW Fail', err));
+                
+                // Check for updates every 5 minutes
+                setInterval(() => {
+                    reg.update();
+                }, 5 * 60 * 1000);
+                
+                // Also check version.json periodically
+                setInterval(() => {
+                    if (typeof app !== 'undefined' && app.checkVersion) {
+                        app.checkVersion();
+                    }
+                }, 10 * 60 * 1000); // Every 10 minutes
+                
+            }).catch(err => {
+                console.error('[SW] Registration failed:', err);
+            });
+            
+            // Listen for controller change (update applied)
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                console.log('[SW] New service worker activated');
+                // Optionally reload the page to get new version
+                // window.location.reload();
+            });
         }
+        
+        // Force update function
+        window.forceUpdate = function() {
+            if (swRegistration) {
+                swRegistration.update().then(() => {
+                    if (swRegistration.waiting) {
+                        swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                        window.location.reload();
+                    }
+                });
+            } else {
+                window.location.reload();
+            }
+        };
         // --- MASTER SEED DATA ---
         const SEED = {
     "tracks": [
@@ -160,21 +222,21 @@
             "order": 1
         },
         {
-            "id": "neuro",
-            "name": "Neural Engineering",
-            "icon": "brain",
-            "order": 2
-        },
-        {
             "id": "math",
             "name": "Mathematics",
             "icon": "calculator",
-            "order": 3
+            "order": 2
         },
         {
             "id": "chem",
             "name": "Chemistry",
             "icon": "flask-conical",
+            "order": 3
+        },
+        {
+            "id": "neuro",
+            "name": "Neural Engineering",
+            "icon": "brain",
             "order": 4
         },
         {
@@ -849,6 +911,48 @@
             "title": "Organic Chemistry",
             "status": "Not Started",
             "order": 1045
+        },
+        {
+            "id": 649,
+            "trackId": "se",
+            "title": "Differential Equations",
+            "status": "Not Started",
+            "order": 1001
+        },
+        {
+            "id": 650,
+            "trackId": "cs",
+            "title": "Differential Equations",
+            "status": "Not Started",
+            "order": 1002
+        },
+        {
+            "id": 651,
+            "trackId": "misc",
+            "title": "Differential Equations",
+            "status": "Not Started",
+            "order": 1010
+        },
+        {
+            "id": 652,
+            "trackId": "neuro",
+            "title": "Differential Equations",
+            "status": "Not Started",
+            "order": 1025
+        },
+        {
+            "id": 653,
+            "trackId": "ee",
+            "title": "Differential Equations",
+            "status": "Not Started",
+            "order": 1036
+        },
+        {
+            "id": 654,
+            "trackId": "chem",
+            "title": "Differential Equations",
+            "status": "Not Started",
+            "order": 1046
         }
     ],
     "projects": [
@@ -6325,6 +6429,270 @@
             "type": "link",
             "courseId": 404,
             "trackId": "math"
+        },
+        {
+            "id": 589,
+            "title": "Dr. Trefor Bazet",
+            "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP63oMNUHXqIUcrkS2PivhN3k",
+            "type": "link",
+            "courseId": 613,
+            "trackId": "misc"
+        },
+        {
+            "id": 590,
+            "title": "https://prismic.io/blog/react-component-libraries",
+            "url": "https://www.untitledui.com/blog/react-component-libraries",
+            "type": "link",
+            "courseId": 613,
+            "trackId": "misc"
+        },
+        {
+            "id": 591,
+            "title": "https://www.untitledui.com/blog/react-component-libraries",
+            "url": "https://strapi.io/blog/nextjs-libraries",
+            "type": "link",
+            "courseId": 613,
+            "trackId": "misc"
+        },
+        {
+            "id": 592,
+            "title": "\u25cb\tPhysics:",
+            "url": "https://phys.libretexts.org",
+            "type": "link",
+            "courseId": 613,
+            "trackId": "misc"
+        },
+        {
+            "id": 593,
+            "title": "r/EngineeringStudents \u2013 exams, conceptual help, internships.",
+            "url": "https://www.reddit.com/r/EngineeringStudentsreddit",
+            "type": "link",
+            "courseId": 613,
+            "trackId": "misc"
+        },
+        {
+            "id": 594,
+            "title": "MIT Biological Engineering OCW (biotransport, biomaterials, etc.).",
+            "url": "https://ocw.mit.edu/courses/biological-engineeringopencw.aprende",
+            "type": "link",
+            "courseId": 613,
+            "trackId": "misc"
+        },
+        {
+            "id": 595,
+            "title": "Tissue Engineering (NCBI Book):",
+            "url": "https://www.ncbi.nlm.nih.gov/books/NBK234413/",
+            "type": "link",
+            "courseId": 613,
+            "trackId": "misc"
+        },
+        {
+            "id": 596,
+            "title": "https://github.com/unicodeveloper/awesome-nextjs",
+            "url": "https://www.perplexity.ai/search/961d6579-40c7-42a0-9ee7-0b67941e1f4a",
+            "type": "link",
+            "courseId": 651,
+            "trackId": "misc"
+        },
+        {
+            "id": 597,
+            "title": "Eigen (linear algebra):  | GitHub: https://gitlab.com/libeigen/eigen",
+            "url": "http://eigen.tuxfamily.org/",
+            "type": "link",
+            "courseId": 619,
+            "trackId": "misc"
+        },
+        {
+            "id": 598,
+            "title": "Calculus by Strang (MIT OCW):",
+            "url": "https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/",
+            "type": "link",
+            "courseId": 625,
+            "trackId": "misc"
+        },
+        {
+            "id": 599,
+            "title": "https://elec241.rice.edu",
+            "url": "https://www.accessengineeringlibrary.com/content/book/9780071356374",
+            "type": "link",
+            "courseId": 627,
+            "trackId": "neuro"
+        },
+        {
+            "id": 600,
+            "title": "| **Operating Systems** | Gate Smashers | [OS Tutorials]( |",
+            "url": "https://www.youtube.com/playlist?list=PLWPirh4EWFpHr_1ZCkuF9ToYUrmujv9Aa)",
+            "type": "link",
+            "courseId": 630,
+            "trackId": "neuro"
+        },
+        {
+            "id": 601,
+            "title": "https://www.khanacademy.org/science/ap-chemistry-beta/x2eef969c74e0d802:thermodynamics",
+            "url": "https://openstax.org/books/college-physics-2e/pages/15-introduction-to-thermodynamics",
+            "type": "link",
+            "courseId": 633,
+            "trackId": "neuro"
+        },
+        {
+            "id": 602,
+            "title": "\u25cb\tYouTube Videos:",
+            "url": "https://ocw.mit.edu/1806videos",
+            "type": "link",
+            "courseId": 645,
+            "trackId": "math"
+        },
+        {
+            "id": 603,
+            "title": "\u25cb\tIntroduction to Linear Algebra 6th Edition:",
+            "url": "https://math.mit.edu/~gs/linearalgebra/ila6/indexila6.html",
+            "type": "link",
+            "courseId": 401,
+            "trackId": "math"
+        },
+        {
+            "id": 604,
+            "title": "MIT 9.01 Introduction to Neuroscience",
+            "url": "https://ocw.mit.edu/courses/9-01-introduction-to-neuroscience-fall-2007/",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 301
+        },
+        {
+            "id": 605,
+            "title": "MIT 9.04 Sensory Systems",
+            "url": "https://ocw.mit.edu/courses/9-04-sensory-systems-fall-2013/",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 302
+        },
+        {
+            "id": 606,
+            "title": "MIT 9.29J Intro to Computational Neuroscience",
+            "url": "https://ocw.mit.edu/courses/9-29j-introduction-to-computational-neuroscience-spring-2004/",
+            "type": "Web",
+            "trackId": "neuro",
+            "courseId": 305
+        },
+        {
+            "id": 607,
+            "title": "CS50\u2019s Web Programming with Python and JavaScript",
+            "url": "https://cs50.harvard.edu/web/",
+            "type": "Web",
+            "trackId": "se",
+            "courseId": 102
+        },
+        {
+            "id": 608,
+            "title": "MIT 7.05 General Biochemistry",
+            "url": "https://ocw.mit.edu/courses/7-05-general-biochemistry-spring-2020/",
+            "type": "Web",
+            "trackId": "chem",
+            "courseId": 502
+        },
+        {
+            "id": 609,
+            "title": "MIT 5.111 Principles of Chemical Science",
+            "url": "https://ocw.mit.edu/courses/5-111sc-principles-of-chemical-science-fall-2014",
+            "type": "Web",
+            "trackId": "chem",
+            "courseId": 504
+        },
+        {
+            "id": 610,
+            "title": "MIT 18.06 Linear Algebra (Strang)",
+            "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 401
+        },
+        {
+            "id": 611,
+            "title": "MIT 18.05 Intro to Probability and Statistics",
+            "url": "https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 402
+        },
+        {
+            "id": 612,
+            "title": "MIT 18.03 Differential Equations (Mattuck)",
+            "url": "https://ocw.mit.edu/courses/18-03-differential-equations-spring-2010/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 404
+        },
+        {
+            "id": 613,
+            "title": "MIT 18.152 Intro to PDEs",
+            "url": "https://ocw.mit.edu/courses/18-152-introduction-to-partial-differential-equations-fall-2011/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 405
+        },
+        {
+            "id": 614,
+            "title": "MIT 18.330 Intro to Numerical Analysis",
+            "url": "https://ocw.mit.edu/courses/18-330-introduction-to-numerical-analysis-spring-2012/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 406
+        },
+        {
+            "id": 615,
+            "title": "MIT 6.042J Mathematics for Computer Science",
+            "url": "https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/",
+            "type": "Web",
+            "trackId": "math",
+            "courseId": 407
+        },
+        {
+            "id": 616,
+            "title": "Nand2Tetris",
+            "url": "https://www.nand2tetris.org/",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 201
+        },
+        {
+            "id": 617,
+            "title": "MIT 6.0001 Intro to CS in Python",
+            "url": "https://ocw.mit.edu/courses/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/",
+            "type": "Web",
+            "trackId": "cs",
+            "courseId": 208
+        },
+        {
+            "id": 618,
+            "title": "MIT 6.002 Circuits and Electronics",
+            "url": "https://ocw.mit.edu/courses/6-002-circuits-and-electronics-spring-2007/",
+            "type": "Web",
+            "trackId": "ee",
+            "courseId": 601
+        },
+        {
+            "id": 619,
+            "title": "MIT Medical Device Design",
+            "url": "https://www.google.com/search?q=https://ocw.mit.edu/courses/hst-552j-medical-device-design-spring-2010",
+            "type": "Web",
+            "trackId": "ee",
+            "courseId": 605
+        },
+        {
+            "id": 620,
+            "title": "MIT Advanced Biomechanics",
+            "url": "https://www.google.com/search?q=https://ocw.mit.edu/courses/2-131-advanced-biomechanics-of-structure-and-motion-spring-2004",
+            "type": "Web",
+            "trackId": "ee",
+            "courseId": null
+        },
+        {
+            "id": 621,
+            "title": "MIT OCW Biology Portal",
+            "url": "https://ocw.mit.edu/courses/biology",
+            "type": "Web",
+            "trackId": "misc",
+            "courseId": null
         }
     ],
     "habits": [
@@ -6348,6 +6716,26 @@
         const App = {
             data: null,
             sidebarOpen: false,
+            // Offline/Online detection
+            setupOfflineDetection() {
+                const offlineIndicator = document.getElementById('offline-indicator');
+                if (!offlineIndicator) return;
+                
+                const updateOfflineStatus = () => {
+                    if (!navigator.onLine) {
+                        offlineIndicator.classList.remove('hidden');
+                        console.log('[App] Offline mode');
+                    } else {
+                        offlineIndicator.classList.add('hidden');
+                        console.log('[App] Online mode');
+                    }
+                };
+                
+                window.addEventListener('online', updateOfflineStatus);
+                window.addEventListener('offline', updateOfflineStatus);
+                updateOfflineStatus(); // Initial check
+            },
+            
             async init() {
                 // Check for data in new key first, then migrate from old key if needed
                 let stored = localStorage.getItem(STORAGE_KEY);
@@ -6381,9 +6769,13 @@
                 }
                 this.applyTheme();
                 this.updateStreakLogic();
+                this.setupOfflineDetection();
                 this.renderSidebarTracks();
                 this.router('dashboard');
                 lucide.createIcons();
+                
+                // Initial version check
+                this.checkVersion();
             },
             async checkVersion() {
                 try {
@@ -6460,7 +6852,31 @@
                     window.location.reload();
                 }
             },
-            save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data)); },
+            save() { 
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
+                    // Also save a backup timestamp
+                    localStorage.setItem(STORAGE_KEY + '_backup', JSON.stringify({
+                        ...this.data,
+                        _backupTime: new Date().toISOString()
+                    }));
+                    console.log('[Data] Saved to localStorage');
+                } catch (e) {
+                    console.error('[Data] Failed to save:', e);
+                    // Try to clear some space if quota exceeded
+                    try {
+                        const keys = Object.keys(localStorage);
+                        if (keys.length > 50) {
+                            // Remove oldest backup
+                            localStorage.removeItem(STORAGE_KEY + '_backup');
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
+                        }
+                    } catch (e2) {
+                        console.error('[Data] Critical save failure:', e2);
+                        alert('Warning: Unable to save data. Please check browser storage.');
+                    }
+                }
+            },
             
             // --- UI ACTIONS ---
             toggleSidebar() {
