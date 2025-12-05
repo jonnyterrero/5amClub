@@ -164,9 +164,9 @@
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed') {
                             if (navigator.serviceWorker.controller) {
-                                // New content is available, show the update toast
+                            // New content is available, show the update toast
                                 console.log('[SW] New version available');
-                                document.getElementById('update-toast').classList.remove('hidden');
+                            document.getElementById('update-toast').classList.remove('hidden');
                             } else {
                                 // First install, no update needed
                                 console.log('[SW] Service Worker installed for first time');
@@ -6910,6 +6910,10 @@
                     this.sidebarOpen = false;
                 }
                 
+                // Store current page and param for refresh functionality
+                this.currentPage = page;
+                this.currentParam = param;
+                
                 const container = document.getElementById('main-container');
                 container.innerHTML = '';
                 
@@ -6932,6 +6936,12 @@
                     case 'course-detail': this.renderCourseDetail(container, param); break;
                 }
                 lucide.createIcons();
+            },
+            refreshCurrentPage() {
+                // Refresh the current page without changing route
+                if (this.currentPage) {
+                    this.router(this.currentPage, this.currentParam);
+                }
             },
             // --- RENDERERS ---
             renderDashboard(container) {
@@ -7546,12 +7556,12 @@
                             </div>
                             <div class="space-y-2">
                                 ${cRes.length > 0 ? cRes.map(r => `
-                                    <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded group hover:border-indigo-300 transition-all">
-                                        <a href="${r.url}" target="_blank" class="flex items-center gap-2 flex-1 min-w-0">
-                                            <i data-lucide="external-link" class="w-4 text-gray-400 flex-shrink-0"></i>
-                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate">${r.title}</span>
-                                        </a>
-                                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded group hover:border-indigo-300 transition-all">
+                                    <a href="${r.url}" target="_blank" class="flex items-center gap-2 flex-1 min-w-0">
+                                        <i data-lucide="external-link" class="w-4 text-gray-400 flex-shrink-0"></i>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300 truncate">${r.title}</span>
+                                    </a>
+                                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button onclick="app.moveResource(${r.id})" class="p-1.5 text-slate-400 hover:text-indigo-600" title="Move">
                                                 <i data-lucide="folder-input" class="w-4 h-4"></i>
                                             </button>
@@ -7561,7 +7571,7 @@
                                             <button onclick="editRes(${r.id})" class="p-1.5 text-slate-400 hover:text-blue-600" title="Edit">
                                                 <i data-lucide="edit-2" class="w-4 h-4"></i>
                                             </button>
-                                        </div>
+                                    </div>
                                     </div>
                                 `).join('') : '<p class="text-slate-400 italic text-sm text-center py-4">No resources linked yet.</p>'}
                             </div>
@@ -7587,7 +7597,12 @@
                     const cId = r.courseId;
                     r.courseId = null;
                     this.save();
-                    if(cId) this.renderCourseDetail(document.getElementById('main-container'), cId);
+                    // Refresh current page - if on course-detail, refresh that course
+                    if (app.currentPage === 'course-detail' && cId && app.currentParam == cId) {
+                        app.router('course-detail', cId);
+                    } else {
+                        app.refreshCurrentPage();
+                    }
                 }
             },
             moveResource(id) {
@@ -7608,7 +7623,13 @@
                     r.courseId = cVal ? parseInt(cVal) : null;
                     this.save();
                     app.closeModal();
-                    app.router('db-resources');
+                    
+                    // Refresh current page - if on course-detail, refresh that course
+                    if (app.currentPage === 'course-detail' && r.courseId && app.currentParam == r.courseId) {
+                        app.router('course-detail', r.courseId);
+                    } else {
+                        app.refreshCurrentPage();
+                    }
                 });
                 // Init course options
                 setTimeout(() => app.renderMoveCourseOptions(r.trackId), 50);
@@ -7634,19 +7655,23 @@
                 const c = this.data.courses.find(x => x.id === id);
                 if (!c) return;
                 
-                const trackId = c.trackId;
-                this.data.courses = this.data.courses.filter(c => c.id !== id);
-                this.data.resources.forEach(r => { if(r.courseId === id) r.courseId = null; });
-                this.data.notes.forEach(n => { if(n.courseId === id) n.courseId = null; });
-                this.save();
-                app.closeModal();
+                    this.data.courses = this.data.courses.filter(c => c.id !== id);
+                    this.data.resources.forEach(r => { if(r.courseId === id) r.courseId = null; });
+                    this.data.notes.forEach(n => { if(n.courseId === id) n.courseId = null; });
+                    this.save();
+                    app.closeModal();
                 
-                // Navigate back to track page or courses DB
-                const container = document.getElementById('main-container');
-                if (trackId) {
-                    app.router('track', trackId);
-                } else {
+                // Refresh current page instead of redirecting
+                // If we're on course-detail for this course, go back to track or courses DB
+                if (app.currentPage === 'course-detail' && app.currentParam == id) {
+                    const trackId = c.trackId;
+                    if (trackId) {
+                        app.router('track', trackId);
+                    } else {
                     app.router('db-courses');
+                    }
+                } else {
+                    app.refreshCurrentPage();
                 }
             },
             deleteCourseWithConfirm(id) {
@@ -7681,7 +7706,7 @@
                     this.data.resources = this.data.resources.filter(r => r.id !== id);
                     this.save();
                     app.closeModal();
-                    app.router('db-resources');
+                    app.refreshCurrentPage();
                 }
             },
             deleteProject(id) {
@@ -7771,7 +7796,7 @@
                 const b=document.getElementById('modalSaveBtn'); 
                 const n=b.cloneNode(true); 
                 b.parentNode.replaceChild(n,b); 
-                n.onclick=a;
+                n.onclick=a; 
                 // Update button labels if provided
                 if(confirmLabel) n.innerText = confirmLabel;
                 if(cancelLabel) {
@@ -8008,8 +8033,14 @@
                             }); 
                         }
                         this.save(); 
-                        app.closeModal(); 
-                        app.router('db-resources');
+                        app.closeModal();
+                        
+                        // If we're on course-detail, refresh that specific course
+                        if (app.currentPage === 'course-detail' && r.courseId && r.courseId == app.currentParam) {
+                            app.router('course-detail', r.courseId);
+                        } else {
+                            app.refreshCurrentPage();
+                        }
                     }
                 });
             },
@@ -8054,7 +8085,7 @@
                         };
                         if (id) { 
                             const idx = this.data.courses.findIndex(x => x.id === id); 
-                            this.data.courses[idx] = newC;
+                            this.data.courses[idx] = newC; 
                             // Update resources trackId if course moved tracks
                             if (newC.trackId !== c.trackId) {
                                 this.data.resources.forEach(r => {
@@ -8067,14 +8098,20 @@
                             this.data.courses.push(newC); 
                         }
                         this.save(); 
-                        app.closeModal(); 
-                        if (id) {
-                            // If editing, go back to course detail
+                        app.closeModal();
+                        
+                        // Refresh current page instead of redirecting
+                        // If we're on course-detail for this course, refresh it
+                        if (id && app.currentPage === 'course-detail' && app.currentParam == id) {
                             app.router('course-detail', id);
-                        } else if (preTrackId) {
-                            app.router('track', preTrackId);
+                        } else if (app.currentPage === 'track' && (preTrackId || (id && this.data.courses.find(c => c.id === id)?.trackId))) {
+                            // If we're on a track page, refresh it
+                            const trackId = preTrackId || (id ? this.data.courses.find(c => c.id === id)?.trackId : null);
+                            if (trackId) app.router('track', trackId);
+                            else app.refreshCurrentPage();
                         } else {
-                            app.router('db-courses');
+                            // Otherwise refresh current page
+                            app.refreshCurrentPage();
                         }
                     }
                 });
@@ -8106,7 +8143,15 @@
                         
                         this.save();
                         app.closeModal();
-                        app.router('course-detail', courseId);
+                        
+                        // Refresh current page - if on course-detail or track page, refresh appropriately
+                        if (app.currentPage === 'course-detail' && app.currentParam == courseId) {
+                            app.router('course-detail', courseId);
+                        } else if (app.currentPage === 'track' && (app.currentParam == oldTrackId || app.currentParam == newTrackId)) {
+                            app.router('track', app.currentParam);
+                        } else {
+                            app.refreshCurrentPage();
+                        }
                     }
                 });
             },
