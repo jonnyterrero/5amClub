@@ -7425,6 +7425,114 @@
                 `;
                 lucide.createIcons();
             },
+            renderCourseDetail(container, courseId) {
+                const c = this.data.courses.find(x => x.id === courseId);
+                if (!c) {
+                    container.innerHTML = '<p class="text-red-500">Course not found</p>';
+                    return;
+                }
+                
+                const track = this.data.tracks.find(t => t.id === c.trackId);
+                const cRes = this.data.resources.filter(r => r.courseId === courseId);
+                const cNotes = this.data.notes.filter(n => n.courseId === courseId);
+                
+                container.innerHTML = `
+                    <div class="mb-8 flex justify-between items-start">
+                        <button onclick="app.router('track', '${c.trackId}')" class="text-sm text-slate-400 hover:text-indigo-500 mb-2 flex gap-1 items-center">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to ${track ? track.name : 'Track'}
+                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="app.openCourseModal(${c.id})" class="text-xs text-slate-400 hover:text-indigo-600 flex items-center gap-1">
+                                <i data-lucide="edit-2" class="w-3 h-3"></i> Edit Course
+                            </button>
+                            <button onclick="app.deleteCourse(${c.id})" class="text-xs text-red-400 hover:text-red-600 flex items-center gap-1">
+                                <i data-lucide="trash-2" class="w-3 h-3"></i> Delete Course
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-darkSurface p-6 rounded-xl border border-slate-200 dark:border-slate-700 flex justify-between items-center mb-6">
+                        <div>
+                            <span class="text-xs bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-2 py-1 rounded font-bold uppercase">${c.status || 'Not Started'}</span>
+                            <h1 class="text-3xl font-bold mt-2 dark:text-white">${c.title}</h1>
+                            ${track ? `<p class="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
+                                <i data-lucide="${track.icon}" class="w-4 h-4"></i> ${track.name}
+                            </p>` : ''}
+                        </div>
+                        <div class="text-right">
+                            <div class="text-3xl font-bold text-slate-200 dark:text-slate-600">${c.progress || 0}%</div>
+                            <div class="w-32 bg-slate-200 dark:bg-slate-700 rounded-full h-2 mt-2">
+                                <div class="bg-indigo-600 h-2 rounded-full transition-all" style="width: ${c.progress || 0}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 mb-6 border-b border-slate-200 dark:border-slate-700">
+                        <button onclick="document.getElementById('tab-overview').classList.remove('hidden'); document.getElementById('tab-notes').classList.add('hidden');" class="px-4 py-2 border-b-2 border-indigo-500 font-bold text-indigo-600 dark:text-indigo-400">Overview</button>
+                        <button onclick="document.getElementById('tab-notes').classList.remove('hidden'); document.getElementById('tab-overview').classList.add('hidden');" class="px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400">Notes</button>
+                    </div>
+                    <div id="tab-overview" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-6">
+                            <div class="bg-white dark:bg-darkSurface p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <div class="flex justify-between mb-4">
+                                    <h3 class="font-bold dark:text-white">Goals</h3>
+                                    <button onclick="app.addGoal(${c.id})" class="text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-600">+ Add</button>
+                                </div>
+                                <ul class="space-y-2">
+                                    ${(c.goals && c.goals.length > 0) ? c.goals.map((g, i) => `
+                                        <li class="flex justify-between items-center group text-sm text-slate-600 dark:text-slate-300">
+                                            <span class="flex gap-2">
+                                                <div class="w-1.5 h-1.5 mt-1.5 bg-indigo-500 rounded-full flex-shrink-0"></div>
+                                                ${g}
+                                            </span>
+                                            <button onclick="app.deleteGoal(${c.id}, ${i})" class="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600">
+                                                <i data-lucide="trash" class="w-3 h-3"></i>
+                                            </button>
+                                        </li>
+                                    `).join('') : '<p class="text-slate-400 italic text-sm">No goals yet. Add one to get started!</p>'}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-[#252525] p-4 rounded border border-gray-200 dark:border-gray-700">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-bold dark:text-white">Resources</h3>
+                                <button onclick="app.openResourceLinker(${c.id})" class="text-xs bg-white dark:bg-gray-700 border px-2 py-1 rounded hover:bg-gray-50 dark:hover:bg-gray-600">+ Link Resource</button>
+                            </div>
+                            <div class="space-y-2">
+                                ${cRes.length > 0 ? cRes.map(r => `
+                                    <div class="flex items-center justify-between p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded group hover:border-indigo-300 transition-all">
+                                        <a href="${r.url}" target="_blank" class="flex items-center gap-2 flex-1 min-w-0">
+                                            <i data-lucide="external-link" class="w-4 text-gray-400 flex-shrink-0"></i>
+                                            <span class="text-sm text-gray-700 dark:text-gray-300 truncate">${r.title}</span>
+                                        </a>
+                                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button onclick="app.moveResource(${r.id})" class="p-1.5 text-slate-400 hover:text-indigo-600" title="Move">
+                                                <i data-lucide="folder-input" class="w-4 h-4"></i>
+                                            </button>
+                                            <button onclick="app.unlinkResource(${r.id})" class="p-1.5 text-slate-400 hover:text-orange-600" title="Unlink">
+                                                <i data-lucide="unlink" class="w-4 h-4"></i>
+                                            </button>
+                                            <button onclick="editRes(${r.id})" class="p-1.5 text-slate-400 hover:text-blue-600" title="Edit">
+                                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('') : '<p class="text-slate-400 italic text-sm text-center py-4">No resources linked yet.</p>'}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-notes" class="hidden space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold dark:text-white">Course Notes</h3>
+                            <button onclick="app.openNoteModal(null, ${c.id})" class="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded hover:bg-indigo-700 flex items-center gap-1">
+                                <i data-lucide="plus" class="w-3 h-3"></i> New Note
+                            </button>
+                        </div>
+                        <div class="grid gap-4">
+                            ${cNotes.length > 0 ? cNotes.map(n => this.htmlNoteCard(n)).join('') : '<p class="text-slate-400 italic text-center py-8">No notes for this course yet.</p>'}
+                        </div>
+                    </div>
+                `;
+                lucide.createIcons();
+            },
             unlinkResource(id) {
                 if(confirm('Unlink resource from this course?')) {
                     const r = this.data.resources.find(x=>x.id===id);
@@ -7662,7 +7770,17 @@
                             
                             this.save(); 
                             app.closeModal(); 
-                            courseId ? app.router('course-detail', courseId) : app.router('notes');
+                            if (courseId) {
+                                // Navigate to course detail and open notes tab
+                                app.router('course-detail', courseId);
+                                setTimeout(() => {
+                                    document.getElementById('tab-overview').classList.add('hidden');
+                                    document.getElementById('tab-notes').classList.remove('hidden');
+                                    lucide.createIcons();
+                                }, 100);
+                            } else {
+                                app.router('notes');
+                            }
                         };
 
                         if (file) {
@@ -7699,19 +7817,29 @@
             deleteNote(id) {
                 if(confirm("Delete note?")) {
                     const n = this.data.notes.find(x => x.id === id);
+                    const courseId = n ? n.courseId : null;
                     this.data.notes = this.data.notes.filter(x => x.id !== id);
                     this.save();
                     this.closeModal();
                     
+                    // Immediately update the view - check if we're on course detail page
+                    const container = document.getElementById('main-container');
                     const noteTab = document.getElementById('tab-notes');
-                    if (noteTab && !noteTab.classList.contains('hidden')) {
-                        if(n && n.courseId) this.renderCourseDetail(document.getElementById('main-container'), n.courseId);
-                    } else {
-                        if (document.getElementById('nav-notes') && document.getElementById('nav-notes').classList.contains('nav-active')) {
-                            this.renderNotesPage(document.getElementById('main-container'));
-                        } else if (n && n.courseId) {
-                            this.renderCourseDetail(document.getElementById('main-container'), n.courseId);
-                        }
+                    
+                    if (noteTab && !noteTab.classList.contains('hidden') && courseId) {
+                        // We're on course detail page with notes tab open, refresh it
+                        this.renderCourseDetail(container, courseId);
+                        // Re-open notes tab after refresh
+                        setTimeout(() => {
+                            document.getElementById('tab-overview').classList.add('hidden');
+                            document.getElementById('tab-notes').classList.remove('hidden');
+                        }, 50);
+                    } else if (document.getElementById('nav-notes') && document.getElementById('nav-notes').classList.contains('nav-active')) {
+                        // We're on global notes page
+                        this.renderNotesPage(container);
+                    } else if (courseId) {
+                        // Fallback: render course detail if we have courseId
+                        this.renderCourseDetail(container, courseId);
                     }
                     lucide.createIcons();
                 }
@@ -7793,9 +7921,13 @@
             openCourseModal(id, preTrackId = null) {
                 const c = id ? this.data.courses.find(x => x.id === id) : { title: '', trackId: preTrackId || 'misc', status: 'Not Started', progress: 0, goals: [] };
                 const deleteBtn = id ? `<button onclick="app.deleteCourse(${id})" class="text-red-500 text-sm hover:text-red-700 flex items-center gap-2"><i data-lucide="trash-2" class="w-4 h-4"></i> Delete Course</button>` : '';
+                const moveTrackBtn = id ? `<button onclick="app.moveCourseToTrack(${id})" class="text-blue-500 text-sm hover:text-blue-700 flex items-center gap-2"><i data-lucide="folder-input" class="w-4 h-4"></i> Move to Different Track</button>` : '';
                 const html = `
                     <div class="space-y-4">
-                        <div class="flex justify-end">${deleteBtn}</div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex gap-2">${moveTrackBtn}</div>
+                            <div>${deleteBtn}</div>
+                        </div>
                         <input id="c-title" class="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 dark:text-white" placeholder="Course Title" value="${c.title}">
                         <select id="c-track" class="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 dark:text-white">
                             ${this.data.tracks.map(t => `<option value="${t.id}" ${t.id === c.trackId ? 'selected' : ''}>${t.name}</option>`).join('')}
@@ -7827,17 +7959,59 @@
                         };
                         if (id) { 
                             const idx = this.data.courses.findIndex(x => x.id === id); 
-                            this.data.courses[idx] = newC; 
+                            this.data.courses[idx] = newC;
+                            // Update resources trackId if course moved tracks
+                            if (newC.trackId !== c.trackId) {
+                                this.data.resources.forEach(r => {
+                                    if (r.courseId === id) {
+                                        r.trackId = newC.trackId;
+                                    }
+                                });
+                            }
                         } else { 
                             this.data.courses.push(newC); 
                         }
                         this.save(); 
                         app.closeModal(); 
-                        if (preTrackId) {
+                        if (id) {
+                            // If editing, go back to course detail
+                            app.router('course-detail', id);
+                        } else if (preTrackId) {
                             app.router('track', preTrackId);
                         } else {
                             app.router('db-courses');
                         }
+                    }
+                });
+            },
+            moveCourseToTrack(courseId) {
+                const c = this.data.courses.find(x => x.id === courseId);
+                if (!c) return;
+                
+                const html = `
+                    <div class="space-y-4">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Move <b>${c.title}</b> to:</p>
+                        <select id="move-course-track" class="w-full p-2 border rounded dark:bg-gray-800 dark:text-white">
+                            ${this.data.tracks.map(t => `<option value="${t.id}" ${t.id === c.trackId ? 'selected' : ''}>${t.name}</option>`).join('')}
+                        </select>
+                    </div>`;
+                
+                app.openModal('Move Course to Track', html, () => {
+                    const newTrackId = document.getElementById('move-course-track').value;
+                    if (newTrackId && newTrackId !== c.trackId) {
+                        const oldTrackId = c.trackId;
+                        c.trackId = newTrackId;
+                        
+                        // Update all resources linked to this course
+                        this.data.resources.forEach(r => {
+                            if (r.courseId === courseId) {
+                                r.trackId = newTrackId;
+                            }
+                        });
+                        
+                        this.save();
+                        app.closeModal();
+                        app.router('course-detail', courseId);
                     }
                 });
             },
