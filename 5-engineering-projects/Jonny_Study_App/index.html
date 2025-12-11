@@ -194,6 +194,32 @@
         </div>
         <button onclick="app.toggleDarkMode()" class="text-slate-400 hover:text-indigo-500"><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i></button>
     </div>
+
+    <!-- AUTH UI -->
+    <div class="hidden md:flex fixed top-4 right-4 z-50 items-center gap-3">
+      <button id="connectCloudBtn" class="px-3 py-1 rounded bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm">
+        Connect Cloud
+      </button>
+      <span id="userStatus" class="text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded"></span>
+      <button id="logoutBtn" class="px-3 py-1 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white text-sm font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors hidden">
+        Logout
+      </button>
+    </div>
+
+    <!-- Email login modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[100] backdrop-blur-sm">
+      <div class="bg-white dark:bg-[#1E1E1E] dark:text-white rounded-xl p-6 w-[320px] shadow-2xl border border-slate-200 dark:border-slate-700 transform scale-100 transition-transform">
+        <h3 class="font-bold mb-2 text-lg">Sign in to 5amClub</h3>
+        <p class="text-sm mb-4 text-slate-500 dark:text-slate-400">Enter your email to receive a login link.</p>
+        <input id="loginEmail" type="email" placeholder="you@example.com"
+               class="w-full border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 mb-4 bg-slate-50 dark:bg-black/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" />
+        <div class="flex justify-end gap-2">
+          <button id="cancelLogin" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Cancel</button>
+          <button id="sendMagicLink" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm">Send link</button>
+        </div>
+        <p id="loginMsg" class="text-xs mt-3 text-center text-slate-500"></p>
+      </div>
+    </div>
     <!-- Top bar -->
     <div class="flex items-center gap-3">
       <button id="connectCloudBtn" class="px-3 py-1 rounded bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors">
@@ -283,7 +309,83 @@
         </div>
     </div>
     <!-- APP LOGIC -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // --- SUPABASE & AUTH CONFIG ---
+        const SUPABASE_URL = 'https://opappznvhjtalcelcrta.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wYXBwem52aGp0YWxjZWxjcnRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUyMjc1ODksImV4cCI6MjA4MDgwMzU4OX0.A3FB5QdN10OkPu-J6SbcF_usSt7SAmffBn4XjC2Tkyw';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true }
+        });
+
+        const AppAuth = { user: null };
+
+        // Auth Logic (Wait for DOM)
+        window.addEventListener('DOMContentLoaded', () => {
+            const connectBtn = document.getElementById('connectCloudBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userStatus = document.getElementById('userStatus');
+            const loginModal = document.getElementById('loginModal');
+            const loginEmail = document.getElementById('loginEmail');
+            const sendMagicLink = document.getElementById('sendMagicLink');
+            const cancelLogin = document.getElementById('cancelLogin');
+            const loginMsg = document.getElementById('loginMsg');
+
+            function show(el) { if(el) el.classList.remove('hidden'); }
+            function hide(el) { if(el) el.classList.add('hidden'); }
+            function openModal() { if(loginModal) { loginModal.classList.remove('hidden'); loginModal.classList.add('flex'); } }
+            function closeModal() { if(loginModal) { loginModal.classList.add('hidden'); loginModal.classList.remove('flex'); } if(loginMsg) loginMsg.textContent = ''; }
+
+            window.setAuthedUI = function(user) {
+                AppAuth.user = user;
+                if (typeof app !== 'undefined') app.user = user;
+                
+                if (user) {
+                    if(userStatus) userStatus.textContent = user.email;
+                    hide(connectBtn);
+                    show(logoutBtn);
+                    if (typeof app !== 'undefined' && app.syncDown) app.syncDown();
+                } else {
+                    if(userStatus) userStatus.textContent = '';
+                    show(connectBtn);
+                    hide(logoutBtn);
+                }
+            };
+
+            // Init Auth
+            (async function initAuth(){
+                const { data: { session } } = await supabase.auth.getSession();
+                window.setAuthedUI(session?.user ?? null);
+            })();
+
+            supabase.auth.onAuthStateChange(async (event, session) => {
+                if (event === 'SIGNED_IN') {
+                    window.setAuthedUI(session?.user ?? null);
+                    closeModal();
+                }
+                if (event === 'SIGNED_OUT') {
+                    window.setAuthedUI(null);
+                }
+            });
+
+            if(connectBtn) connectBtn.addEventListener('click', () => { openModal(); if(loginEmail) loginEmail.focus(); });
+            if(cancelLogin) cancelLogin.addEventListener('click', closeModal);
+            if(logoutBtn) logoutBtn.addEventListener('click', async () => { await supabase.auth.signOut(); window.setAuthedUI(null); });
+            
+            if(sendMagicLink) sendMagicLink.addEventListener('click', async () => {
+                if(loginMsg) loginMsg.textContent = 'Sending...';
+                const email = (loginEmail?.value || '').trim();
+                if (!email) { if(loginMsg) loginMsg.textContent = 'Please enter a valid email.'; return; }
+                const { error } = await supabase.auth.signInWithOtp({
+                    email,
+                    options: { emailRedirectTo: window.location.origin }
+                });
+                if (error) { if(loginMsg) loginMsg.textContent = 'Error: ' + error.message; } 
+                else { if(loginMsg) loginMsg.textContent = 'Check your email for the sign-in link!'; }
+            });
+        });
+
         const CURRENT_VERSION = '8.0.0';
         const STORAGE_KEY = '5amClub_v8';
 
