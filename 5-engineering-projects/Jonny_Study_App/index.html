@@ -34,6 +34,121 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://opappznvhjtalcelcrta.supabase.co";
+      const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wYXBwem52aGp0YWxjZWxjcnRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUyMjc1ODksImV4cCI6MjA4MDgwMzU4OX0.A3FB5QdN10OkPu-J6SbcF_usSt7SAmffBn4XjC2Tkyw";
+      
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+        },
+      });
+
+      // Simple app state
+      const AppAuth = {
+        user: null, // <- your toggleTask code can read from here
+      };
+
+      // UI elements
+      const connectBtn = document.getElementById('connectCloudBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const userStatus = document.getElementById('userStatus');
+      const loginModal = document.getElementById('loginModal');
+      const loginEmail = document.getElementById('loginEmail');
+      const sendMagicLink = document.getElementById('sendMagicLink');
+      const cancelLogin = document.getElementById('cancelLogin');
+      const loginMsg = document.getElementById('loginMsg');
+
+      // Helpers
+      function show(el) { if(el) el.classList.remove('hidden'); }
+      function hide(el) { if(el) el.classList.add('hidden'); }
+      function openModal() { if(loginModal) { loginModal.classList.remove('hidden'); loginModal.classList.add('flex'); } }
+      function closeModal() { if(loginModal) { loginModal.classList.add('hidden'); loginModal.classList.remove('flex'); } if(loginMsg) loginMsg.textContent = ''; }
+
+      // Reflect user in the UI
+      function setAuthedUI(user) {
+        AppAuth.user = user;
+        // Also update the main App object user if it exists
+        if (typeof app !== 'undefined') app.user = user;
+        
+        if (user) {
+          if(userStatus) userStatus.textContent = user.email ?? 'Signed in';
+          hide(connectBtn);
+          show(logoutBtn);
+          
+          // After login: kick off cloud sync
+          // These methods might be on the 'app' object
+          if (typeof app !== 'undefined') {
+              if (app.syncDown) app.syncDown();
+              if (app.syncDownNotes) app.syncDownNotes();
+          } else {
+              // Fallback if 'app' isn't ready yet (race condition)
+              window.pendingSync = true;
+          }
+        } else {
+          if(userStatus) userStatus.textContent = 'Not connected';
+          show(connectBtn);
+          hide(logoutBtn);
+        }
+      }
+
+      // On page load, try to restore the session
+      (async function initAuth(){
+        const { data: { session } } = await supabase.auth.getSession();
+        setAuthedUI(session?.user ?? null);
+      })();
+
+      // Listen for auth state changes (new login via magic link)
+      supabase.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN') {
+          setAuthedUI(session?.user ?? null);
+          closeModal();
+        }
+        if (event === 'SIGNED_OUT') {
+          setAuthedUI(null);
+        }
+      });
+
+      // Open modal
+      connectBtn?.addEventListener('click', () => {
+        openModal();
+        if(loginEmail) loginEmail.focus();
+      });
+
+      // Cancel modal
+      cancelLogin?.addEventListener('click', () => closeModal());
+
+      // Send magic link
+      sendMagicLink?.addEventListener('click', async () => {
+        if(loginMsg) loginMsg.textContent = '';
+        const email = (loginEmail?.value || '').trim();
+        if (!email) {
+          if(loginMsg) loginMsg.textContent = 'Please enter a valid email.';
+          return;
+        }
+        // Use email magic link
+        const { error } = await supabase.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: window.location.origin, // after clicking the email link, user returns here and session is detected
+          },
+        });
+        if (error) {
+          if(loginMsg) loginMsg.textContent = 'Error: ' + error.message;
+        } else {
+          if(loginMsg) loginMsg.textContent = 'Check your email for the sign-in link.';
+        }
+      });
+
+      // Logout
+      logoutBtn?.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        setAuthedUI(null);
+      });
+    </script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -79,6 +194,32 @@
         </div>
         <button onclick="app.toggleDarkMode()" class="text-slate-400 hover:text-indigo-500"><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i></button>
     </div>
+    <!-- Top bar -->
+    <div class="flex items-center gap-3">
+      <button id="connectCloudBtn" class="px-3 py-1 rounded bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors">
+        Connect Cloud
+      </button>
+      <span id="userStatus" class="text-sm text-slate-500 dark:text-slate-400"></span>
+      <button id="logoutBtn" class="px-3 py-1 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white text-sm font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors hidden">
+        Logout
+      </button>
+    </div>
+
+    <!-- Email login modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[100]">
+      <div class="bg-white dark:bg-darkSurface dark:text-white rounded-lg p-6 w-[320px] shadow-xl border border-slate-200 dark:border-slate-700">
+        <h3 class="font-bold mb-2 text-lg">Sign in to 5amClub</h3>
+        <p class="text-sm mb-4 text-slate-500 dark:text-slate-400">Enter your email to receive a login link.</p>
+        <input id="loginEmail" type="email" placeholder="you@example.com"
+               class="w-full border dark:border-slate-600 rounded px-3 py-2 mb-4 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <div class="flex justify-end gap-2">
+          <button id="cancelLogin" class="px-3 py-1.5 border dark:border-slate-600 rounded text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Cancel</button>
+          <button id="sendMagicLink" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-sm font-medium transition-colors">Send link</button>
+        </div>
+        <p id="loginMsg" class="text-xs mt-3 text-center text-slate-500"></p>
+      </div>
+    </div>
+
     <!-- SIDEBAR -->
     <div id="sidebar-overlay" onclick="app.toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden glass-backdrop"></div>
     <aside id="sidebar" class="fixed md:static inset-y-0 left-0 w-64 bg-[#F7F7F5] dark:bg-[#202020] border-r border-gray-200 dark:border-gray-800 flex flex-col z-40 transform -translate-x-full md:translate-x-0 h-full transition-transform duration-300 pt-14 md:pt-0">
@@ -143,8 +284,9 @@
     </div>
     <!-- APP LOGIC -->
     <script>
-        const CURRENT_VERSION = '6.1.1'; 
-        const STORAGE_KEY = '5amClub_v6';
+        const CURRENT_VERSION = '8.0.0';
+        const STORAGE_KEY = '5amClub_v8';
+
         const OLD_STORAGE_KEY = '5amClub_v5'; // For migration
         // Service Worker Registration & Update Management
         let swRegistration = null;
@@ -7812,8 +7954,96 @@
             closeModal(){ document.getElementById('genericModal').classList.add('hidden'); },
             
             // Standard Logic
-            addTask(day=null) { const t = prompt("Task:"); if(t) { this.data.tasks.push({id: Date.now(), title: t, completed: false, day}); this.save(); this.router('planner'); }},
-            toggleTask(id) { const t = this.data.tasks.find(x => x.id === id); if(t) { t.completed = !t.completed; this.save(); this.router('dashboard'); }},
+            async syncDown() {
+                if (!AppAuth.user || !supabase) return; // local-only mode
+
+                // Fetch tasks from Supabase for this user
+                const { data: tasks, error: taskError } = await supabase
+                    .from('tasks')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+
+                if (taskError) {
+                    console.error('Error fetching tasks from Supabase:', taskError);
+                } else if (tasks) {
+                    // Replace local tasks with cloud tasks
+                    this.data.tasks = tasks.map(t => ({
+                        id: t.id,
+                        title: t.title,
+                        completed: t.completed,
+                        day: t.day
+                    }));
+                }
+
+                this.save();
+                this.router(this.currentPage || 'dashboard');
+            },
+            
+            async addTask(day = null) {
+                const title = prompt("Task Name:");
+                if (!title) return;
+
+                // 1) Create a temporary task locally so UI updates instantly
+                const tempId = Date.now();
+                const newTask = { id: tempId, title, completed: false, day };
+
+                this.data.tasks.push(newTask);
+                this.save();
+                this.router('planner');
+
+                // 2) If logged in, also insert it into Supabase
+                if (supabase && AppAuth.user) {
+                    const { data, error } = await supabase
+                        .from('tasks')
+                        .insert({
+                            user_id: AppAuth.user.id, // <-- REQUIRED by your RLS policies
+                            title,
+                            completed: false,
+                            day
+                        })
+                        .select()
+                        .single();
+
+                    if (error) {
+                        console.error('Supabase task insert error:', error);
+                        // Optional: show a toast/error, or revert task
+                    } else if (data) {
+                        // 3) Replace the temporary ID with the real DB ID
+                        const idx = this.data.tasks.findIndex(t => t.id === tempId);
+                        if (idx !== -1) {
+                            this.data.tasks[idx].id = data.id;
+                            this.save();
+                        }
+                    }
+                }
+            },
+
+            async toggleTask(id) {
+                const t = this.data.tasks.find(x => x.id == id);
+                if (!t) return;
+
+                // Flip locally first
+                t.completed = !t.completed;
+                this.save();
+                this.router(this.currentPage || 'dashboard');
+
+                // If logged in and ID is a real DB ID, sync with Supabase
+                if (supabase && AppAuth.user && !isNaN(Number(id))) {
+                    const { error } = await supabase
+                        .from('tasks')
+                        .update({ completed: t.completed })
+                        .eq('id', id)
+                        .eq('user_id', AppAuth.user.id); // RLS safety
+
+                    if (error) {
+                        console.error('Supabase task update error:', error);
+                        // Optional: revert local state on error
+                        t.completed = !t.completed;
+                        this.save();
+                        this.router(this.currentPage || 'dashboard');
+                    }
+                }
+            },
             updateCourseProgress(id, val) { const c = this.data.courses.find(x=>x.id===id); c.progress=parseInt(val); c.status = val>0?'In Progress':'Not Started'; this.save(); },
             renderSidebarTracks() { document.getElementById('track-list-render').innerHTML = this.data.tracks.map(t => `<button onclick="app.router('track', '${t.id}')" class="nav-item w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"><i data-lucide="${t.icon}" class="w-4 h-4"></i> ${t.name}</button>`).join(''); },
             htmlTaskItem(t, isCard=false) { 

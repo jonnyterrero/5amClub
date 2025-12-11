@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User & Auth
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  tracks    Track[]
+  tasks     Task[]
+  sessions  StudySession[]
+  notes     Note[]
+}
+
+// Academic Tracks (e.g., BME, CS, Math)
+model Track {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  color       String   @default("blue") // blue, green, purple, etc.
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  courses     Course[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Courses within a Track
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  code        String?  // e.g., "MIT 18.06"
+  description String?
+  status      String   @default("NOT_STARTED") // NOT_STARTED, IN_PROGRESS, COMPLETED
+  trackId     String
+  track       Track    @relation(fields: [trackId], references: [id])
+  
+  resources   Resource[]
+  notes       Note[]
+  tasks       Task[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Learning Resources
+model Resource {
+  id          String   @id @default(uuid())
+  title       String
+  type        String   // BOOK, VIDEO, ARTICLE, COURSE
+  url         String?
+  isCompleted Boolean  @default(false)
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Kanban Tasks
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  status      String   @default("TODO") // TODO, IN_PROGRESS, DONE
+  priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH
+  dueDate     DateTime?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  courseId    String?
+  course      Course?  @relation(fields: [courseId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Study Sessions (Pomodoro / Time Tracking)
+model StudySession {
+  id          String   @id @default(uuid())
+  duration    Int      // in minutes
+  notes       String?
+  date        DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+// Notes
+model Note {
+  id          String   @id @default(uuid())
+  title       String
+  content     String   // Markdown content
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  courseId    String?
+  course      Course?  @relation(fields: [courseId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
