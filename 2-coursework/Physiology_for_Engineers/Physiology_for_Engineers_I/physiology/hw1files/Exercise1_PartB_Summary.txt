@@ -1,0 +1,85 @@
+EXERCISE 1 - PART B: COMPLIANCE ADJUSTMENT SUMMARY
+==================================================
+
+QUESTION: Adjust the systemic arterial compliance by trial and error to achieve a blood pressure of about 120/80 mmHg.
+
+ANSWER:
+
+## COMPLIANCE ADJUSTMENT PERFORMED:
+
+**Original Compliance Value:**
+- Csa = 0.0012 L/mmHg (initial value)
+
+**Adjusted Compliance Value:**
+- Csa = 0.0015 L/mmHg (final value)
+
+**Change Made:**
+- INCREASED compliance by 25% (from 0.0012 to 0.0015 L/mmHg)
+
+## ANSWERS TO SPECIFIC QUESTIONS:
+
+### i. Did you have to increase or decrease the compliance?
+**ANSWER: INCREASED the compliance**
+
+**Rationale:**
+- Higher compliance allows arteries to expand more easily
+- This reduces the pressure for the same blood volume
+- According to the Windkessel model: P = V/C (Pressure = Volume/Compliance)
+- Higher compliance = lower pressure for same volume
+
+### ii. The adjusted arterial compliance should be considered as the normal value
+**ANSWER: Csa = 0.0015 L/mmHg is now the NORMAL VALUE**
+
+**Implementation:**
+- This value is set in the in_sa.m file
+- All subsequent exercises should use this as the baseline
+- Any further adjustments should be made from this value
+
+### iii. Reset parameters to normal values in subsequent exercises
+**NORMAL VALUES TO USE (from Exercise 1):**
+- T = 0.0125 min (80 bpm)
+- TS = 0.4*T (40% systole)
+- TMAX = 0.16*T (peak flow timing)
+- QMAX = 28 L/min (max aortic flow)
+- Rs = 17.86 mmHg/(L/min) (systemic resistance)
+- **Csa = 0.0015 L/mmHg (adjusted compliance - NORMAL VALUE)**
+- Psa = 80 mmHg (initial diastolic pressure)
+- dt = 0.01*T (time step)
+- klokmax = 16 cycles simulation
+
+## PHYSIOLOGICAL INTERPRETATION:
+
+**Why Compliance Had to be Increased:**
+- The original compliance (0.0012) was too low for normal blood pressure
+- This created a "stiff" arterial system
+- Increasing compliance made the arteries more elastic
+- This allowed the system to achieve normal 120/80 mmHg pressure
+
+**Clinical Relevance:**
+- This adjustment represents optimizing arterial elasticity
+- The final value (0.0015) represents healthy arterial compliance
+- This is the baseline for comparing pathological conditions
+
+## IMPLEMENTATION STATUS:
+
+✅ **Compliance adjusted**: 0.0012 → 0.0015 L/mmHg
+✅ **Target achieved**: ~120/80 mmHg blood pressure
+✅ **Normal value established**: Csa = 0.0015 L/mmHg
+✅ **Documentation complete**: All parameters documented
+✅ **Ready for subsequent exercises**: Baseline values established
+
+## INSTRUCTIONS FOR FUTURE EXERCISES:
+
+1. **Always start with these normal values**
+2. **Change ONLY the parameter being tested**
+3. **Reset all other parameters to normal values**
+4. **Use Csa = 0.0015 L/mmHg as the normal compliance**
+5. **Start with Psa = 80 mmHg for immediate equilibrium**
+
+This compliance adjustment was successfully completed and the system is now calibrated for normal blood pressure conditions.
+
+
+
+
+
+

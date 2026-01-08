@@ -1,0 +1,41 @@
+QUESTION: What one parameter would you alter to best demonstrate the hypertension caused by arteriolosclerosis in our model?
+
+ANSWER:
+
+To best demonstrate hypertension caused by arteriolosclerosis, I would alter the **SYSTEMIC RESISTANCE (Rs)** parameter.
+
+RATIONALE:
+
+1. **Arteriolosclerosis Definition**: Arteriolosclerosis is the hardening and narrowing of arterioles (small arteries), which increases resistance to blood flow.
+
+2. **Physiological Mechanism**: 
+   - In arteriolosclerosis, the arterioles become stiffer and narrower
+   - This increases the resistance to blood flow through the systemic circulation
+   - According to Ohm's law: Pressure = Flow × Resistance
+   - Higher resistance leads to higher blood pressure
+
+3. **Model Parameter**: 
+   - Rs = Systemic resistance (mmHg/(L/min))
+   - Current normal value: Rs = 17.86 mmHg/(L/min)
+   - To simulate arteriolosclerosis: INCREASE Rs to a higher value (e.g., 25-35 mmHg/(L/min))
+
+4. **Expected Results**:
+   - Higher systolic pressure (e.g., 140-160 mmHg instead of 120 mmHg)
+   - Higher diastolic pressure (e.g., 90-100 mmHg instead of 80 mmHg)
+   - Same cardiac output (since heart function is unchanged)
+   - Demonstrates the characteristic hypertension pattern
+
+5. **Why NOT other parameters**:
+   - Compliance (Csa): Would affect pressure differently and doesn't directly model arteriolar narrowing
+   - Heart rate (T): Would change cardiac output, not just pressure
+   - Stroke volume (QMAX): Would change cardiac output, not just pressure
+   - Initial pressure: Would only affect starting conditions, not the underlying pathology
+
+CONCLUSION:
+Increasing the systemic resistance (Rs) from 17.86 to approximately 25-30 mmHg/(L/min) would best demonstrate the hypertension caused by arteriolosclerosis, as it directly models the increased resistance to blood flow that occurs when arterioles become hardened and narrowed.
+
+
+
+
+
+

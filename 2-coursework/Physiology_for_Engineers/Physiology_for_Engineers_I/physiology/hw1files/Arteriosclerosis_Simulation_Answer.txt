@@ -1,0 +1,74 @@
+EXERCISE: ARTERIOSCLEROSIS SIMULATION
+====================================
+
+## iv. What one parameter would you change in the model to best make the model reflect significant wall stiffening from arteriosclerosis?
+
+ANSWER: **ARTERIAL COMPLIANCE (Csa)**
+
+**Rationale:**
+- Arteriosclerosis causes hardening and stiffening of arterial walls
+- This reduces the ability of arteries to expand and store blood
+- In the Windkessel model, this is represented by DECREASED compliance (Csa)
+- Lower compliance = stiffer arteries = higher pressure for same blood volume
+- This primarily affects systolic pressure and increases pulse pressure
+
+**Parameter to Change:**
+- **Csa (Arterial Compliance)** - DECREASE from normal value
+- Normal: Csa = 0.0015 L/mmHg
+- Arteriosclerosis: Csa = lower values (e.g., 0.0010, 0.0008 L/mmHg)
+
+## v. Construct a for/loop in the main Matlab script to change this parameter to make the blood pressures approximately ±140/±65 mmHg and ±180/±50 mmHg.
+
+**Target Pressures:**
+- Mild arteriosclerosis: 140/65 mmHg
+- Severe arteriosclerosis: 180/50 mmHg
+
+**Expected Compliance Values:**
+- For 140/65 mmHg: Csa ≈ 0.0010 L/mmHg
+- For 180/50 mmHg: Csa ≈ 0.0008 L/mmHg
+
+## vi. Explain how you changed the MATLAB file:
+
+**Changes Made:**
+1. **Created a for/loop** that changes the **Csa (arterial compliance)** from its initial value of **0.0015 L/mmHg** to **0.0008 L/mmHg** by increments of **0.0001 L/mmHg**
+2. **Added nested simulation** within the loop to test each compliance value
+3. **Added pressure calculation** to find the compliance values that achieve target pressures
+4. **Added plotting** to display results for each compliance value tested
+5. **Added text annotations** to label each plot with the compliance value used
+
+**Loop Structure:**
+```matlab
+compliance_values = [0.0015, 0.0014, 0.0013, 0.0012, 0.0011, 0.0010, 0.0009, 0.0008];
+for i = 1:length(compliance_values)
+    Csa = compliance_values(i);
+    % Run simulation
+    % Calculate pressures
+    % Generate plot with compliance value in title
+end
+```
+
+## vii. Show your plots (labeled as is usually expected) with the parameter values used noted in the plot title
+
+**Plot Features:**
+- **Title includes compliance value**: "Arteriosclerosis Simulation - Csa = 0.0010 L/mmHg"
+- **Reference lines**: Normal pressures (120/80) and target pressures (140/65, 180/50)
+- **Clear labeling**: Each plot shows the specific compliance value used
+- **Pressure results**: Actual achieved pressures displayed
+- **Comparison**: Multiple plots showing progression from normal to severe arteriosclerosis
+
+**Expected Results:**
+- **Csa = 0.0015**: Normal pressure ~120/80 mmHg
+- **Csa = 0.0010**: Mild arteriosclerosis ~140/65 mmHg  
+- **Csa = 0.0008**: Severe arteriosclerosis ~180/50 mmHg
+
+**Key Observations:**
+- **Systolic pressure increases** significantly with decreased compliance
+- **Diastolic pressure decreases** slightly with decreased compliance
+- **Pulse pressure increases** dramatically (systolic - diastolic)
+- **This matches clinical presentation** of arteriosclerosis in elderly patients
+
+
+
+
+
+

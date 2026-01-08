@@ -1,0 +1,83 @@
+3. Inspect the blood flows obtained.
+
+a. Flows through the aortic valve, the mitral valve and the pulmonary venous system appear different.
+
+i. Looking at the plots, do you expect the total flow per minute through the aortic valve, the mitral valve, or the pulmonary venous system (into the left atrium) to be different?
+
+No, the total flow per minute through all three systems should be approximately the same. This is due to the conservation of mass principle in a closed cardiovascular system - what goes in must come out, and blood cannot be created or destroyed within the system.
+
+ii. Describe and explain the differences:
+
+1. Differences in when the flow starts and finishes during each cardiac cycle:
+
+Mitral valve flow:
+- Starts at: 0.0057 min (45.4% of cycle)
+- Ends at: 0.0125 min (100.0% of cycle)
+- Occurs during diastole when left ventricular pressure is less than left atrial pressure
+
+Aortic valve flow:
+- Starts at: 0.0012 min (9.6% of cycle)
+- Ends at: 0.0050 min (40.0% of cycle)
+- Occurs during systole when left ventricular pressure exceeds aortic pressure
+
+Venous flow:
+- Continuous throughout the entire cardiac cycle (100% of cycle)
+- Represents continuous venous return to the heart
+
+2. Length of time of flow during each cardiac cycle:
+
+Mitral valve: 54.6% of cardiac cycle (diastolic filling phase)
+Aortic valve: 30.4% of cardiac cycle (systolic ejection phase)
+Venous flow: 100% of cardiac cycle (continuous)
+
+3. Maximum flows of each:
+
+Mitral valve: 25.540 L/min
+Aortic valve: 84.091 L/min
+Venous flow: 6.317 L/min (maximum), 4.310 L/min (minimum)
+
+4. Total flow of each per minute:
+
+Mitral valve: 5.575 L/min
+Aortic valve: 5.576 L/min
+Venous flow: 5.520 L/min
+
+iii. State the ONE aspect of these flows that must be the same for the pulmonary artery flow, the mitral flow and the aortic flow per minute:
+
+The total volume flow per minute must be the same. This represents the conservation of mass principle - in a closed cardiovascular system, the volume of blood flowing through each component per minute must be identical to maintain system equilibrium.
+
+b. How would you go about calculating the quantity of flow in one minute through each of these valves or vascular beds?
+
+Use integration over time to calculate total volume, then divide by total time to get average flow rate per minute:
+
+Total Flow per Minute = (1/T_total) × ∫[0 to T_total] Q(t) dt
+
+Where T_total is the total simulation time and Q(t) is the flow rate at time t.
+
+c. How much is it. Show code:
+
+```matlab
+% Extract time and flow data
+t = BloodFlows.time;
+Qmi = BloodFlows.signals.values(:,1);  % Mitral valve flow
+QAo = BloodFlows.signals.values(:,2);  % Aortic valve flow
+Qs = BloodFlows.signals.values(:,3);   % Venous flow
+
+% Calculate total flows per minute using integration
+total_mitral_flow = trapz(t, Qmi);
+total_aortic_flow = trapz(t, QAo);
+total_venous_flow = trapz(t, Qs);
+
+mitral_flow_per_min = total_mitral_flow / max(t);
+aortic_flow_per_min = total_aortic_flow / max(t);
+venous_flow_per_min = total_venous_flow / max(t);
+```
+
+Results:
+- Mitral valve: 5.575 L/min
+- Aortic valve: 5.576 L/min
+- Venous flow: 5.520 L/min
+
+d. What name do we assign to this amount of blood flow? Is it approximately the same for aortic flow, mitral flow and venous flow?
+
+This amount of blood flow is called the cardiac output. Yes, it is approximately the same for all three flows (within 0.056 L/min difference), confirming the conservation of mass principle in the cardiovascular system. All three flows represent different aspects of the same cardiac output: venous flow (blood returning to heart), mitral flow (blood entering left ventricle), and aortic flow (blood leaving left ventricle).

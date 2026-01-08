@@ -1,0 +1,333 @@
+================================================================================
+                    BLOOD FLOW ANALYSIS - DETAILED REPORT
+                           Homework Project 2 - Physiology
+================================================================================
+
+STUDENT: Jonathan Terrero
+DATE: Fall 2025
+TOPIC: Analysis of Blood Flows Through Aortic Valve, Mitral Valve, and Venous System
+
+================================================================================
+                                EXECUTIVE SUMMARY
+================================================================================
+
+This report provides a comprehensive analysis of blood flows through the aortic 
+valve, mitral valve, and pulmonary venous system based on the LEFT HEART AND 
+AORTA Simulink model. The analysis examines flow timing, duration, maximum 
+flows, and total flows per minute, demonstrating the physiological principles 
+underlying cardiac function.
+
+================================================================================
+                              SIMULATION PARAMETERS
+================================================================================
+
+CARDIAC CYCLE DURATION: 0.0125 min (0.8 seconds)
+HEART RATE: 80 beats/min
+TIME STEP: 0.000001 min
+TOTAL SIMULATION TIME: 0.200 min (16 cardiac cycles)
+NUMBER OF CARDIAC CYCLES: 16.0
+
+================================================================================
+                        QUESTION 3a.i: EXPECTED FLOW DIFFERENCES
+================================================================================
+
+QUESTION: Do you expect the total flow per minute through the aortic valve, 
+the mitral valve, or the pulmonary venous system to be different?
+
+ANSWER: NO - The total flow per minute should be approximately the same for all 
+three systems.
+
+PHYSIOLOGICAL RATIONALE:
+1. CONSERVATION OF MASS: Blood cannot be created or destroyed in the system
+2. CONTINUITY PRINCIPLE: What goes in must come out
+3. CLOSED CIRCULATION: The cardiovascular system is a closed loop
+4. STEADY STATE: Over time, inflow must equal outflow
+
+EXPECTED RELATIONSHIPS:
+- Mitral flow = Aortic flow = Venous flow (approximately)
+- Small differences may exist due to:
+  * Simulation numerical errors
+  * Transient effects during startup
+  * Rounding in calculations
+
+================================================================================
+                        QUESTION 3a.ii: FLOW DIFFERENCES ANALYSIS
+================================================================================
+
+1. TIMING DIFFERENCES DURING CARDIAC CYCLE:
+
+MITRAL VALVE FLOW (Qmi):
+- Flow starts at: 0.0057 min (45.4% of cycle)
+- Flow ends at: 0.0125 min (100.0% of cycle)
+- Flow duration: 0.0068 min (54.6% of cycle)
+- PHASE: Diastolic filling phase
+- PHYSIOLOGY: Opens during diastole when LV pressure < LA pressure
+
+AORTIC VALVE FLOW (QAo):
+- Flow starts at: 0.0012 min (9.6% of cycle)
+- Flow ends at: 0.0050 min (40.0% of cycle)
+- Flow duration: 0.0038 min (30.4% of cycle)
+- PHASE: Systolic ejection phase
+- PHYSIOLOGY: Opens during systole when LV pressure > Aortic pressure
+
+VENOUS FLOW (Qs):
+- Flow duration: 0.0125 min (100% of cycle - continuous)
+- PHASE: Continuous throughout entire cycle
+- PHYSIOLOGY: Continuous venous return to the heart
+
+TIMING INTERPRETATION:
+- Mitral and Aortic flows are MUTUALLY EXCLUSIVE (no overlap)
+- Venous flow is CONTINUOUS (always present)
+- This demonstrates proper valve timing and cardiac cycle coordination
+
+2. LENGTH OF TIME OF FLOW:
+
+MITRAL VALVE: 54.6% of cardiac cycle (diastolic phase)
+AORTIC VALVE: 30.4% of cardiac cycle (systolic phase)
+VENOUS FLOW: 100% of cardiac cycle (continuous)
+
+PHYSIOLOGICAL SIGNIFICANCE:
+- Mitral flow duration > Aortic flow duration
+- This allows adequate ventricular filling time
+- Venous flow is continuous, ensuring steady preload
+- Total active flow time = 54.6% + 30.4% = 85% of cycle
+- 15% of cycle has no active valve flow (isovolumic phases)
+
+3. MAXIMUM FLOWS:
+
+MITRAL VALVE: 25.540 L/min
+AORTIC VALVE: 84.091 L/min
+VENOUS FLOW: 6.317 L/min (maximum), 4.310 L/min (minimum)
+
+FLOW MAGNITUDE ANALYSIS:
+- Aortic flow > Mitral flow > Venous flow (peak values)
+- Aortic valve handles highest peak flow (ejection phase)
+- Mitral valve has moderate peak flow (filling phase)
+- Venous flow has lowest but most consistent flow
+
+4. TOTAL FLOW PER MINUTE:
+
+MITRAL VALVE: 5.575 L/min
+AORTIC VALVE: 5.576 L/min
+VENOUS FLOW: 5.520 L/min
+
+FLOW CONSERVATION VERIFICATION:
+- Mitral flow ≈ Aortic flow ≈ Venous flow (within 0.056 L/min)
+- Difference: < 1% variation
+- This confirms conservation of mass principle
+- Small differences due to numerical simulation effects
+
+================================================================================
+                        QUESTION 3a.iii: UNIFYING ASPECT
+================================================================================
+
+QUESTION: State the ONE aspect of these flows that must be the same for the 
+pulmonary artery flow, the mitral flow and the aortic flow per minute.
+
+ANSWER: TOTAL VOLUME FLOW PER MINUTE
+
+EXPLANATION:
+The total volume of blood flowing through each system per minute must be 
+identical because:
+
+1. CONSERVATION OF MASS: Blood cannot be created or destroyed
+2. CLOSED CIRCULATION: The cardiovascular system is a closed loop
+3. CONTINUITY PRINCIPLE: What enters must exit
+4. STEADY STATE: Over time, inflow equals outflow
+
+PHYSIOLOGICAL PRINCIPLE:
+- Pulmonary venous return = Mitral valve inflow = Aortic valve outflow
+- This represents the cardiac output
+- Any imbalance would lead to:
+  * Blood accumulation (if inflow > outflow)
+  * Blood depletion (if outflow > inflow)
+  * System failure
+
+================================================================================
+                        QUESTION 3b: CALCULATION METHOD
+================================================================================
+
+QUESTION: How would you go about calculating the quantity of flow in one minute 
+through each of these valves or vascular beds?
+
+ANSWER: INTEGRATION METHOD
+
+CALCULATION APPROACH:
+1. INTEGRATE flow over time to get total volume
+2. DIVIDE by total time to get average flow rate
+3. CONVERT to per-minute basis
+
+MATHEMATICAL EXPRESSION:
+Total Flow per Minute = (1/T_total) × ∫[0 to T_total] Q(t) dt
+
+WHERE:
+- T_total = Total simulation time
+- Q(t) = Flow rate at time t
+- Integration gives total volume over time
+- Division by time gives average flow rate
+
+ALTERNATIVE METHOD:
+Average Flow = Mean(Q(t)) over all time points
+
+================================================================================
+                        QUESTION 3c: CALCULATION CODE
+================================================================================
+
+MATLAB CODE FOR FLOW CALCULATIONS:
+
+```matlab
+% Extract time and flow data
+t = BloodFlows.time;
+Qmi = BloodFlows.signals.values(:,1);  % Mitral valve flow
+QAo = BloodFlows.signals.values(:,2);  % Aortic valve flow
+Qs = BloodFlows.signals.values(:,3);   % Venous flow
+
+% Method 1: Integration over time
+total_mitral_flow = trapz(t, Qmi);  % Total flow in L over entire simulation
+total_aortic_flow = trapz(t, QAo);
+total_venous_flow = trapz(t, Qs);
+
+% Convert to flow per minute
+mitral_flow_per_min = total_mitral_flow / max(t);  % L/min
+aortic_flow_per_min = total_aortic_flow / max(t);
+venous_flow_per_min = total_venous_flow / max(t);
+
+% Method 2: Average flow calculation
+avg_mitral = mean(Qmi);
+avg_aortic = mean(QAo);
+avg_venous = mean(Qs);
+```
+
+================================================================================
+                        QUESTION 3d: CALCULATED VALUES
+================================================================================
+
+TOTAL FLOWS PER MINUTE:
+
+MITRAL VALVE: 5.575 L/min
+AORTIC VALVE: 5.576 L/min
+VENOUS FLOW: 5.520 L/min
+
+AVERAGE FLOWS:
+MITRAL VALVE: 5.575 L/min
+AORTIC VALVE: 5.576 L/min
+VENOUS FLOW: 5.520 L/min
+
+CARDIAC OUTPUT CALCULATION:
+Heart rate: 80.0 beats/min
+Stroke volume: 0.070 L/beat
+Cardiac output: 5.589 L/min
+
+VERIFICATION:
+- All flows are approximately equal (within 0.069 L/min difference)
+- Cardiac output matches individual valve flows
+- Confirms conservation of mass principle
+
+================================================================================
+                        QUESTION 3e: FLOW NAMING
+================================================================================
+
+QUESTION: What name do we assign to this amount of blood flow? Is it 
+approximately the same for aortic flow, mitral flow and venous flow?
+
+ANSWER: CARDIAC OUTPUT
+
+DEFINITION:
+Cardiac Output (CO) = Volume of blood pumped by the heart per minute
+
+CALCULATION:
+CO = Heart Rate × Stroke Volume
+CO = 80 beats/min × 0.070 L/beat = 5.6 L/min
+
+VERIFICATION:
+- Aortic flow: 5.576 L/min ≈ Cardiac Output
+- Mitral flow: 5.575 L/min ≈ Cardiac Output  
+- Venous flow: 5.520 L/min ≈ Cardiac Output
+
+CONSERVATION CONFIRMATION:
+YES - All three flows are approximately the same because they represent 
+different aspects of the same cardiac output:
+
+1. VENOUS FLOW: Blood returning to the heart (preload)
+2. MITRAL FLOW: Blood entering the left ventricle (filling)
+3. AORTIC FLOW: Blood leaving the left ventricle (ejection)
+
+All represent the same 5.6 L/min of blood flow through the system.
+
+================================================================================
+                              PHYSIOLOGICAL SIGNIFICANCE
+================================================================================
+
+1. FLOW CONSERVATION:
+   - Demonstrates the closed nature of the cardiovascular system
+   - Confirms that blood cannot be created or destroyed
+   - Shows proper valve function and timing
+
+2. CARDIAC FUNCTION:
+   - All flows represent the same cardiac output
+   - Different timing reflects different phases of cardiac cycle
+   - Continuous venous return ensures adequate preload
+
+3. VALVE FUNCTION:
+   - Mitral valve: Diastolic filling (54.6% of cycle)
+   - Aortic valve: Systolic ejection (30.4% of cycle)
+   - No overlap ensures proper unidirectional flow
+
+4. SYSTEM INTEGRATION:
+   - Venous return provides continuous preload
+   - Mitral valve allows diastolic filling
+   - Aortic valve enables systolic ejection
+   - All components work together for effective circulation
+
+================================================================================
+                                CLINICAL IMPLICATIONS
+================================================================================
+
+1. NORMAL VALUES:
+   - Cardiac output: 5.6 L/min (normal range: 4-8 L/min)
+   - Heart rate: 80 bpm (normal resting rate)
+   - Stroke volume: 70 mL (normal range: 60-80 mL)
+
+2. FLOW CONSERVATION IN HEALTH:
+   - All flows must be equal in healthy individuals
+   - Imbalances indicate pathology (valvular disease, shunts, etc.)
+   - Monitoring flow relationships aids in diagnosis
+
+3. THERAPEUTIC IMPLICATIONS:
+   - Understanding flow conservation guides treatment
+   - Interventions must maintain flow balance
+   - Flow measurements aid in monitoring therapy
+
+================================================================================
+                                CONCLUSIONS
+================================================================================
+
+1. FLOW CONSERVATION CONFIRMED:
+   - All three flows are approximately equal (5.5-5.6 L/min)
+   - Demonstrates conservation of mass in cardiovascular system
+   - Confirms proper model function
+
+2. TIMING DIFFERENCES EXPLAINED:
+   - Mitral flow: Diastolic phase (54.6% of cycle)
+   - Aortic flow: Systolic phase (30.4% of cycle)
+   - Venous flow: Continuous (100% of cycle)
+   - Reflects proper cardiac cycle coordination
+
+3. PHYSIOLOGICAL VALIDATION:
+   - Model produces realistic cardiac output values
+   - Flow patterns match expected physiology
+   - Valve timing demonstrates proper function
+
+4. CLINICAL RELEVANCE:
+   - Understanding flow conservation aids diagnosis
+   - Flow measurements guide therapeutic decisions
+   - Model provides insight into cardiovascular function
+
+The analysis confirms that the LEFT HEART AND AORTA model accurately 
+represents cardiovascular physiology with proper flow conservation and 
+realistic timing relationships.
+
+================================================================================
+END OF ANALYSIS
+================================================================================
+

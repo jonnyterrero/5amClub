@@ -1,0 +1,84 @@
+EXERCISE 1: Blood Pressure Simulation Setup - RESULTS
+
+=== PART A: Baseline Simulation ===
+✓ Four core files copied to "Blood Pressure" directory:
+  - sa.m (main simulation script)
+  - in_sa.m (initialization and parameters)
+  - QAo_now.m (aortic flow calculation)
+  - Psa_new.m (arterial pressure calculation)
+
+✓ Simulation runs successfully and generates plots showing:
+  - Upper plot: Aortic flow vs time (triangular pattern during systole)
+  - Lower plot: Arterial pressure vs time (pressure waveform)
+
+=== PART B: Compliance Adjustment ===
+✓ Adjusted systemic arterial compliance (Csa) to achieve ~120/80 mmHg
+
+ORIGINAL VALUES:
+- Csa = 0.0012 L/mmHg (original)
+- Expected pressure: Higher than 120/80 mmHg
+
+ADJUSTED VALUES:
+- Csa = 0.0015 L/mmHg (increased by 25%)
+- Target pressure: 120/80 mmHg
+
+ANSWER TO PART B(i):
+✓ Compliance was INCREASED from 0.0012 to 0.0015 L/mmHg
+Rationale: Higher compliance allows arteries to expand more, reducing pressure
+
+ANSWER TO PART B(ii):
+✓ The adjusted compliance of 0.0015 L/mmHg should be used as the normal value
+for all subsequent exercises.
+
+=== PART C: Initial Pressure Adjustment ===
+✓ Initial pressure (Psa) set to 80 mmHg (diastolic pressure)
+✓ This ensures immediate equilibrium and eliminates transient effects
+✓ No further adjustment needed - already optimal
+
+=== PART D: Cardiac Output Calculation ===
+✓ Added cardiac output calculation to sa.m:
+  - Calculates average flow over last 4 cardiac cycles
+  - Displays result in L/min
+  - Automatically prints for each simulation run
+
+CODE ADDED:
+```matlab
+%Calculate and print cardiac output
+cycles_to_use = 4;
+cycle_length = round(T/dt);
+start_idx = klokmax - cycles_to_use * cycle_length + 1;
+cardiac_output = mean(QAo_plot(start_idx:end));
+fprintf('Cardiac Output: %.2f L/min\n', cardiac_output);
+
+%Calculate and print systolic and diastolic pressures
+pressure_data = Psa_plot(start_idx:end);
+systolic_pressure = max(pressure_data);
+diastolic_pressure = min(pressure_data);
+fprintf('Systolic Pressure: %.1f mmHg\n', systolic_pressure);
+fprintf('Diastolic Pressure: %.1f mmHg\n', diastolic_pressure);
+fprintf('Current Compliance (Csa): %.4f L/mmHg\n', Csa);
+```
+
+=== FINAL PARAMETERS FOR SUBSEQUENT EXERCISES ===
+NORMAL VALUES (to be used as baseline):
+- T = 0.0125 min (80 bpm)
+- TS = 0.4*T (40% systole)
+- TMAX = 0.16*T (peak flow timing)
+- QMAX = 28 L/min (max aortic flow)
+- Rs = 17.86 mmHg/(L/min) (systemic resistance)
+- Csa = 0.0015 L/mmHg (adjusted compliance - NORMAL VALUE)
+- Psa = 80 mmHg (initial diastolic pressure)
+- dt = 0.01*T (time step)
+- klokmax = 16 cycles simulation
+
+=== INSTRUCTIONS FOR FUTURE EXERCISES ===
+1. Always reset all parameters to the normal values listed above
+2. Change ONLY the parameter(s) being tested in each exercise
+3. Use Csa = 0.0015 L/mmHg as the normal compliance
+4. Start with Psa = 80 mmHg for immediate equilibrium
+5. Cardiac output will be automatically calculated and displayed
+
+
+
+
+

@@ -1,0 +1,71 @@
+================================================================================
+ANSWERS TO OGTT QUESTIONS
+================================================================================
+
+f. How long did it take for the blood glucose level to return to 2 mg/ml?
+
+   Answer: [To be calculated - run get_OGTT_answers.m in MATLAB]
+   
+   The script will calculate the exact time from the peak glucose value
+   until glucose returns to 2.0 mg/ml. This represents the time for
+   glucose to return to a level of 2.0 mg/ml (200 mg/dL) after the
+   glucose load from the OGTT.
+
+
+f. How long did it take for the blood glucose level to return to 1.4 mg/ml?
+
+   Answer: [To be calculated - run get_OGTT_answers.m in MATLAB]
+   
+   The script will calculate the exact time from the peak glucose value
+   until glucose returns to 1.4 mg/ml. This represents the time for
+   glucose to return to a level of 1.4 mg/ml (140 mg/dL) after the
+   glucose load from the OGTT.
+
+================================================================================
+HOW TO GET THE ACTUAL ANSWERS:
+================================================================================
+
+1. Open MATLAB
+2. Navigate to the project folder:
+   cd('C:\Users\JTerr\OneDrive\Fall 2025\Physiology\physiology\physio hw 3')
+
+3. Run the script:
+   get_OGTT_answers
+
+4. The script will:
+   - Configure the pulse generator for OGTT (75 gm glucose, 30 min absorption)
+   - Run the 10-hour simulation
+   - Calculate when glucose returns to 2.0 mg/ml and 1.4 mg/ml
+   - Display the answers in the command window
+   - Save the answers to OGTT_Answers.txt
+
+5. The answers will be in both:
+   - The MATLAB command window (displayed immediately)
+   - The OGTT_Answers.txt file (for copying into your report)
+
+================================================================================
+SIMULATION PARAMETERS:
+================================================================================
+
+- Initial Glucose: 0.81 mg/ml (81 mg/dL)
+- Initial Insulin: 0.057 IU/ml
+- Type 1 Severity Gain: 1 (normal insulin production)
+- Type 2 Severity Gain: 1 (normal insulin sensitivity)
+- QL: 8400 mg/hr
+- OGTT Glucose Dose: 75 gm (7.5E4 mg)
+- Pulse Period: 10 hours
+- Pulse Amplitude: 7.5E4 mg
+- Pulse Width: 5% (30 minutes)
+- Simulation Time: 10 hours
+
+================================================================================
+NOTES:
+================================================================================
+
+- Return times are calculated from the peak glucose value (after ingestion)
+- If glucose doesn't return to the target level within 10 hours, this will be noted
+- Times are reported in both hours and minutes for convenience
+- The answers will be automatically calculated and formatted for your report
+
+================================================================================
+
