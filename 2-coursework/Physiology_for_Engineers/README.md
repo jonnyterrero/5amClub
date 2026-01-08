@@ -5,6 +5,7 @@ This folder contains notes, presentations, and materials from Physiology for Eng
 ## Courses
 
 - **Physiology_for_Engineers_I** — Comprehensive Physiology for Engineers I coursework materials
+- **Physiology_for_Engineers_II** — Comprehensive Physiology for Engineers II coursework materials
 
 ## Purpose
 
