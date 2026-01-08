@@ -7,3 +7,4 @@ Problem sets and solutions, matching coursework structure.
 - **Chemistry**
 - **Computer_Science**
 - **Mathematics**
+- **Notes** — Digital and scanned notes from all subjects
