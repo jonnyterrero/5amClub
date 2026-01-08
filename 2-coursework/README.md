@@ -8,3 +8,4 @@ Notes organized by broad class categories.
 - **Computer_Science**
 - **Engineering_Mechanics**
 - **Mathematics**
+- **Physics**
