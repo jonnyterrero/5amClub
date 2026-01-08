@@ -6,4 +6,5 @@ Notes organized by broad class categories.
 - **Biomedical_Engineering**
 - **Chemistry**
 - **Computer_Science**
+- **Engineering_Mechanics**
 - **Mathematics**
