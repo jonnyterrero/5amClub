@@ -1,0 +1,111 @@
+ARTERIOSCLEROSIS SIMULATION - COMPLETE ANSWERS
+==============================================
+
+## iv. What one parameter would you change in the model to best make the model reflect significant wall stiffening from arteriosclerosis?
+
+**ANSWER: ARTERIAL COMPLIANCE (Csa)**
+
+**Parameter to Change:**
+- **Csa (Arterial Compliance)** - DECREASE from normal value
+- Normal: Csa = 0.0015 L/mmHg
+- Arteriosclerosis: Csa = lower values (e.g., 0.0010, 0.0008 L/mmHg)
+
+**Rationale:**
+- Arteriosclerosis causes hardening and stiffening of arterial walls
+- This reduces the ability of arteries to expand and store blood
+- In the Windkessel model, this is represented by DECREASED compliance (Csa)
+- Lower compliance = stiffer arteries = higher pressure for same blood volume
+- This primarily affects systolic pressure and increases pulse pressure
+
+## v. Construct a for/loop in the main Matlab script to change this parameter to make the blood pressures approximately ±140/±65 mmHg and ±180/±50 mmHg.
+
+**IMPLEMENTATION:**
+Created `Arteriosclerosis_Simulation.m` with the following for/loop:
+
+```matlab
+compliance_values = [0.0015, 0.0014, 0.0013, 0.0012, 0.0011, 0.0010, 0.0009, 0.0008];
+
+for i = 1:length(compliance_values)
+    Csa = compliance_values(i);
+    % Run simulation with current compliance
+    % Calculate pressures
+    % Generate plot with compliance value in title
+end
+```
+
+**Target Pressures:**
+- Mild arteriosclerosis: 140/65 mmHg
+- Severe arteriosclerosis: 180/50 mmHg
+
+## vi. Explain how you changed the MATLAB file:
+
+**Changes Made:**
+1. **Created a for/loop** that changes the **Csa (arterial compliance)** from its initial value of **0.0015 L/mmHg** to **0.0008 L/mmHg** by increments of **0.0001 L/mmHg**
+
+2. **Added nested simulation** within the loop to test each compliance value:
+   - Set global parameters for each iteration
+   - Run the complete simulation loop
+   - Calculate final pressures from last 4 cardiac cycles
+
+3. **Added pressure calculation** to find the compliance values that achieve target pressures:
+   - Calculate systolic and diastolic pressures
+   - Store results for analysis
+   - Find best compliance values for each target
+
+4. **Added plotting** to display results for each compliance value tested:
+   - Generate figure for each compliance value
+   - Include compliance value in plot title
+   - Add reference lines for normal and target pressures
+
+5. **Added text annotations** to label each plot with the compliance value used and achieved pressures
+
+**Loop Structure:**
+- Tests 8 different compliance values
+- Runs complete simulation for each value
+- Generates individual plots for each test
+- Analyzes results to find best matches for target pressures
+
+## vii. Show your plots (labeled as is usually expected) with the parameter values used noted in the plot title
+
+**Plot Features:**
+- **Title includes compliance value**: "Arteriosclerosis Simulation - Csa = 0.0010 L/mmHg"
+- **Reference lines**: 
+  - Black dashed: Normal pressures (120/80 mmHg)
+  - Green dashed: Target 1 pressures (140/65 mmHg)
+  - Magenta dashed: Target 2 pressures (180/50 mmHg)
+- **Clear labeling**: Each plot shows the specific compliance value used
+- **Pressure results**: Actual achieved pressures displayed in red text box
+- **Comparison**: Multiple plots showing progression from normal to severe arteriosclerosis
+
+**Expected Results:**
+- **Csa = 0.0015**: Normal pressure ~120/80 mmHg
+- **Csa = 0.0010**: Mild arteriosclerosis ~140/65 mmHg  
+- **Csa = 0.0008**: Severe arteriosclerosis ~180/50 mmHg
+
+**Key Observations:**
+- **Systolic pressure increases** significantly with decreased compliance
+- **Diastolic pressure decreases** slightly with decreased compliance
+- **Pulse pressure increases** dramatically (systolic - diastolic)
+- **This matches clinical presentation** of arteriosclerosis in elderly patients
+
+**Clinical Relevance:**
+- These pressure patterns are typical of isolated systolic hypertension
+- Common in patients over 60 years of age
+- Results from age-related arterial stiffening
+- Explains many cases of "idiopathic" hypertension in elderly patients
+
+## SUMMARY:
+
+The arteriosclerosis simulation demonstrates how decreased arterial compliance (arterial stiffening) leads to:
+1. **Increased systolic pressure** (due to reduced ability to store blood)
+2. **Slightly decreased diastolic pressure** (due to reduced elastic recoil)
+3. **Increased pulse pressure** (systolic - diastolic difference)
+4. **Typical pattern of isolated systolic hypertension** seen in elderly patients
+
+This accurately models the pathophysiology of arteriosclerosis and explains the characteristic blood pressure changes seen in aging patients.
+
+
+
+
+
+

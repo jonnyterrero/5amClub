@@ -146,9 +146,9 @@ log/
 
 *.tsv
 
-*.xlsx
+# *.xlsx  # Commented out - allowing Excel files for coursework
 
-*.xls
+# *.xls  # Commented out - allowing Excel files for coursework
 
 *.json
 

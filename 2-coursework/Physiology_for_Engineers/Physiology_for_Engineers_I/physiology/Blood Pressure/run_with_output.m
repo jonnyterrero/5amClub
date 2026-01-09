@@ -1,0 +1,16 @@
+% Script to run simulation and save output to file
+clear all
+close all
+clc
+
+% Redirect output to file
+diary('simulation_output.txt');
+
+% Run the main simulation
+sa
+
+% Close diary
+diary off;
+
+fprintf('Simulation complete. Output saved to simulation_output.txt\n');
+

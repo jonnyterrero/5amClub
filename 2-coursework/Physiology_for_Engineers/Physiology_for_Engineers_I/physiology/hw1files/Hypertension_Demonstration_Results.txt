@@ -1,0 +1,59 @@
+HYPERTENSION DEMONSTRATION - ARTERIOLOSCLEROSIS
+================================================
+
+PARAMETER CHANGED:
+- Parameter: Systemic Resistance (Rs)
+- Normal Value: 17.86 mmHg/(L/min)
+- Hypertensive Value: 25.0 mmHg/(L/min)
+- Increase: 40% increase in resistance
+
+PHYSIOLOGICAL RATIONALE:
+- Arteriolosclerosis causes hardening and narrowing of arterioles
+- This increases resistance to blood flow through the systemic circulation
+- According to Ohm's law: Pressure = Flow × Resistance
+- Higher resistance leads to higher blood pressure (hypertension)
+
+EXPECTED RESULTS:
+- Target Blood Pressure: 150/105 mmHg
+- Normal Blood Pressure: 120/80 mmHg
+- Cardiac Output: Should remain approximately the same (heart function unchanged)
+
+PLOT DESCRIPTION:
+The generated plot shows two panels:
+
+UPPER PANEL - Aortic Flow:
+- Shows the triangular flow pattern during systole
+- Zero flow during diastole
+- Flow pattern remains unchanged (heart function is normal)
+
+LOWER PANEL - Arterial Blood Pressure:
+- Shows increased blood pressure waveform
+- Red solid line: Hypertensive pressure curve
+- Black dashed lines: Normal systolic (120 mmHg) and diastolic (80 mmHg) for reference
+- Red dashed lines: Target hypertensive pressures (150/105 mmHg)
+- Text annotations explain the parameter change and results
+
+KEY ANNOTATIONS ON PLOT:
+1. "Parameter Changed: Rs = 25.0 mmHg/(L/min)"
+2. "Normal Rs = 17.86 mmHg/(L/min)"
+3. "Result: [Actual pressures] mmHg (Hypertensive)"
+4. "Arteriolosclerosis: Hardened arterioles increase resistance"
+
+INTERPRETATION:
+- The plot demonstrates how increased systemic resistance (arteriolosclerosis) 
+  leads to hypertension
+- The heart pumps the same amount of blood (same cardiac output)
+- But the increased resistance causes higher pressure throughout the system
+- This models the clinical condition of hypertension due to arteriolar disease
+
+CLINICAL RELEVANCE:
+- This simulation accurately models the pathophysiology of hypertension
+- Shows how arteriolosclerosis (common in aging and diabetes) causes high blood pressure
+- Demonstrates that the heart doesn't need to work harder - the resistance is the problem
+- Illustrates why antihypertensive medications often target reducing vascular resistance
+
+
+
+
+
+

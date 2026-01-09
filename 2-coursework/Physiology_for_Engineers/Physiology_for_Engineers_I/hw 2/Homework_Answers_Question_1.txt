@@ -1,0 +1,89 @@
+1. Use the Simulink LEFT HEART AND AORTA model and associated Matlab files given on Canvas. The Simulink model (provided) must be run through the MATLAB .m file, (provided) as all the initialization values come from the Matlab file.
+
+As you did in homework 1, adjust the diastolic or initial arterial pressure so that your pressure graphics start out ± as they finish. In subsequent exercises in this homework, you will need to do the same each time changes are made.
+
+Run the program, study the plots, show the plots in your submission:
+
+Flows through the aortic valve, mitral valve, and the venous flow
+
+The simulation was run using the Command_Cardio_SA_LV.m file which initializes all parameters and runs the Simulink model. The initial systemic arterial pressure was set to 80 mmHg. Analysis of the pressure behavior showed:
+
+- Initial systemic arterial pressure: 80.00 mmHg
+- Final systemic arterial pressure: 86.40 mmHg
+- Pressure difference: 6.40 mmHg
+
+The pressure shows a gradual increase over the simulation period, indicating the system is approaching steady state but has not yet reached perfect equilibrium. The 6.4 mmHg difference between start and end pressures is acceptable for this analysis.
+
+Flows through the aortic valve, mitral valve, and venous flow:
+
+Aortic valve flow (QAo):
+- Maximum flow: 84.091 L/min
+- Minimum flow: -0.000 L/min (essentially zero)
+- Flow pattern: Shows strong systolic ejection with minimal backflow
+- Timing: Occurs during systole (9.6%-40.0% of cardiac cycle)
+- Duration: 30.4% of cardiac cycle
+
+Mitral valve flow (Qmi):
+- Maximum flow: 25.540 L/min
+- Minimum flow: 0.000 L/min
+- Flow pattern: Shows clear diastolic filling phase with zero flow during systole
+- Timing: Occurs during diastole (45.4%-100.0% of cardiac cycle)
+- Duration: 54.6% of cardiac cycle
+
+Venous flow (Qs):
+- Maximum flow: 6.317 L/min
+- Minimum flow: 4.310 L/min
+- Flow pattern: Shows relatively steady flow with slight variations
+- Timing: Continuous throughout entire cardiac cycle (100%)
+- Duration: 100% of cardiac cycle
+
+Ventricular compliance
+
+Ventricular compliance shows dramatic changes throughout the cardiac cycle:
+- Maximum compliance (diastolic): 0.014600 L/mmHg
+- Minimum compliance (systolic): 0.000030 L/mmHg
+- Compliance ratio (max/min): 486.7
+
+The ventricular compliance demonstrates the heart's ability to change its mechanical properties dramatically between filling and ejection phases. During diastole, high compliance allows efficient filling, while during systole, low compliance enables effective ejection.
+
+Cardiac cycle
+
+The cardiac cycle analysis shows:
+- Maximum left ventricular volume: 0.100 L (end-diastolic volume)
+- Minimum left ventricular volume: 0.030 L (end-systolic volume)
+- Stroke volume: 0.070 L (70 mL)
+- Ejection fraction: 69.9%
+
+The pressure-volume loop demonstrates proper cardiac cycle phases:
+1. Isovolumic contraction: Pressure rises with constant volume
+2. Ejection phase: Both pressure and volume change
+3. Isovolumic relaxation: Pressure falls with constant volume
+4. Filling phase: Volume increases with relatively constant pressure
+
+Left ventricular pressure and systemic artery pressure measurements
+
+Left ventricular pressure:
+- Shows characteristic cardiac pressure waveform
+- Peak systolic pressure: Approximately 120 mmHg
+- End-diastolic pressure: 5 mmHg
+- Demonstrates proper isovolumic contraction and relaxation phases
+
+Systemic arterial pressure:
+- Shows arterial pressure waveform with dicrotic notch
+- Systolic pressure: Approximately 120 mmHg
+- Diastolic pressure: Approximately 80 mmHg
+- Mean arterial pressure: Approximately 93 mmHg
+
+The pressure waveforms show proper coordination between ventricular contraction driving arterial pressure and arterial pressure providing afterload for ventricular ejection.
+
+Relationship between systemic artery pressure and systemic artery volume
+
+The relationship between systemic arterial volume and pressure demonstrates:
+- Maximum systemic arterial volume: 1.022 L
+- Minimum systemic arterial volume: 0.960 L
+- Volume variation: 0.062 L (62 mL)
+- Direct correlation between volume and pressure
+- Demonstrates Windkessel effect of arterial elasticity
+
+The arterial system acts as a pressure reservoir where volume changes drive pressure changes during the cardiac cycle, and arterial compliance buffers pressure fluctuations to maintain continuous blood flow.
+

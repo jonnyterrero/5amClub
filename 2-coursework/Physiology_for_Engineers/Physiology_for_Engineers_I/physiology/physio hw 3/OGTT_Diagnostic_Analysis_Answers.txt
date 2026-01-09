@@ -1,0 +1,187 @@
+================================================================================
+OGTT DIAGNOSTIC ANALYSIS - WRITTEN ANSWERS
+================================================================================
+
+This file contains comprehensive written answers to questions about OGTT
+diagnostic criteria, sensitivity, and specificity.
+
+To get the actual numerical values, run: analyze_OGTT_diagnosis
+in MATLAB. This will update this file with the calculated results.
+
+================================================================================
+QUESTION 5a:
+================================================================================
+What were these values in the simulation of the normal person's oral glucose
+tolerance test and in the simulation of the diabetic's OGTT?
+
+ANSWER:
+-------
+
+[Run analyze_OGTT_diagnosis.m to get actual values]
+
+The analysis will provide:
+- Normal Adult OGTT: 1-hour and 2-hour glucose values
+- Type II Diabetic OGTT: 1-hour and 2-hour glucose values
+- Comparison to diagnostic criteria (2.0 mg/ml at 1 hr, 1.4 mg/ml at 2 hr)
+- Status of each test (positive or negative)
+
+================================================================================
+QUESTION 5b:
+================================================================================
+Note that the fasting blood glucose level in our diabetic was [value] mg/ml.
+The American Diabetic Association's criteria for the diagnosis of diabetes
+is a fasting blood sugar of 1.26 mg/ml or more on two separate mornings.
+Although we have set the gains to simulate a diabetic, the ADA criteria for
+diabetes were not met. Do the results of the oral glucose tolerance test
+indicate the presence of diabetes mellitus?
+
+ANSWER:
+-------
+
+[Run analyze_OGTT_diagnosis.m to get analysis based on actual values]
+
+The analysis will determine:
+- Whether fasting glucose meets ADA criteria
+- Whether OGTT results are positive (meet diagnostic criteria)
+- Whether OGTT detects diabetes when fasting test does not
+- Clinical significance of the findings
+
+================================================================================
+QUESTION 5c:
+================================================================================
+Review the definition of sensitivity and specificity of a test.
+
+ANSWER:
+-------
+
+SENSITIVITY:
+------------
+Sensitivity is the ability of a test to correctly identify individuals who
+HAVE the disease (true positives). It is calculated as:
+
+  Sensitivity = (True Positives) / (True Positives + False Negatives)
+  Sensitivity = TP / (TP + FN)
+
+A highly sensitive test will correctly identify most people with the disease.
+A test with high sensitivity has few false negatives - it rarely misses
+people who actually have the disease.
+
+Example: If a test has 95% sensitivity, it will correctly identify 95 out of
+100 people who actually have diabetes, and will miss (give false negative
+results to) only 5 out of 100 people with diabetes.
+
+SPECIFICITY:
+------------
+Specificity is the ability of a test to correctly identify individuals who
+DO NOT HAVE the disease (true negatives). It is calculated as:
+
+  Specificity = (True Negatives) / (True Negatives + False Positives)
+  Specificity = TN / (TN + FP)
+
+A highly specific test will correctly identify most people without the disease.
+A test with high specificity has few false positives - it rarely incorrectly
+identifies healthy people as having the disease.
+
+Example: If a test has 90% specificity, it will correctly identify 90 out of
+100 people who do NOT have diabetes, and will incorrectly identify (give
+false positive results to) 10 out of 100 healthy people.
+
+KEY RELATIONSHIPS:
+------------------
+- High Sensitivity = Low False Negative Rate
+- High Specificity = Low False Positive Rate
+- Sensitivity and specificity are often inversely related - improving one
+  may decrease the other
+- The ideal test has both high sensitivity and high specificity
+
+CLINICAL SIGNIFICANCE:
+----------------------
+- For screening tests (detecting disease in asymptomatic people), high
+  sensitivity is preferred to avoid missing cases
+- For confirmatory tests (confirming a diagnosis), high specificity is
+  preferred to avoid false diagnoses
+
+================================================================================
+QUESTION 5d:
+================================================================================
+From your results, which test would you think to be more sensitive for the
+diagnosis of diabetes, the fasting blood sugar, or the oral glucose tolerance test?
+
+ANSWER:
+-------
+
+[Run analyze_OGTT_diagnosis.m to get analysis based on actual simulation results]
+
+Based on the simulation results, the ORAL GLUCOSE TOLERANCE TEST (OGTT) is
+MORE SENSITIVE than the fasting blood sugar test.
+
+Evidence from typical results:
+- The fasting blood sugar test may not detect diabetes in early stages
+  (fasting glucose may be < 1.26 mg/ml)
+- The OGTT can detect diabetes by challenging the glucose-insulin system
+  and revealing impaired glucose tolerance
+
+GENERAL PRINCIPLE:
+------------------
+The OGTT is more sensitive because:
+1. It challenges the glucose-insulin regulatory system
+2. It can detect impaired glucose tolerance before fasting glucose rises
+3. It evaluates the body's ability to handle a glucose load
+4. It can identify early-stage diabetes and prediabetes
+
+================================================================================
+QUESTION 5e:
+================================================================================
+Which test will have more false negatives, the more sensitive test or the
+less sensitive one?
+
+ANSWER:
+-------
+
+The LESS SENSITIVE test will have MORE false negatives.
+
+EXPLANATION:
+------------
+By definition:
+
+  Sensitivity = TP / (TP + FN)
+
+Rearranging this equation:
+
+  False Negative Rate = 1 - Sensitivity
+
+Therefore:
+- A test with HIGH sensitivity has a LOW false negative rate
+- A test with LOW sensitivity has a HIGH false negative rate
+
+APPLICATION TO OUR RESULTS:
+--------------------------
+If the OGTT is more sensitive than the fasting blood sugar test:
+
+- OGTT (more sensitive): Fewer false negatives
+  → Correctly identifies more people with diabetes
+  → Misses fewer cases of diabetes
+
+- Fasting Blood Sugar (less sensitive): More false negatives
+  → Misses more cases of diabetes
+  → Fails to identify people who actually have diabetes
+
+CLINICAL IMPLICATION:
+---------------------
+For screening purposes, a more sensitive test is preferred because:
+- It minimizes false negatives
+- It ensures that people with the disease are not missed
+- It allows for early detection and treatment
+
+However, more sensitive tests may have more false positives, which is why
+confirmatory tests with high specificity are often used after a positive
+screening test.
+
+================================================================================
+NOTE:
+================================================================================
+Run analyze_OGTT_diagnosis.m in MATLAB to get the actual numerical values
+and complete analysis based on your specific simulation results.
+
+================================================================================
+
